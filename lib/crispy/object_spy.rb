@@ -1,15 +1,9 @@
 require 'crispy/spy_base'
+require 'crispy/delegate_helper'
 
 module Crispy
   class ObjectSpy < SpyBase
-
-    def initialize delegate
-      @delegate = delegate
-    end
-
-    def __crispy_execute_method__ method_name, *arguments, &attached_block
-      @delegate.__send__ method_name, *arguments, &attached_block
-    end
-
+    include DelegateHelper
+    alias execute_method delegate_send
   end
 end

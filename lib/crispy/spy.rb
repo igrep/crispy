@@ -3,7 +3,7 @@ require 'crispy/spy_base'
 module Crispy
   class Spy < SpyBase
 
-    def __crispy_execute_method__ _method_name, *_arguments, &_attached_block
+    def execute_method _method_name, *_arguments, &_attached_block
       self
     end
 

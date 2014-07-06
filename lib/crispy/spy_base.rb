@@ -4,19 +4,18 @@ module Crispy
   class SpyBase < ::BasicObject
 
     attr_reader :spied_messages
-    alias __crispy_spied_messages__ spied_messages
 
     def method_missing method_name, *arguments, &attached_block
       @spied_messages ||= []
       @spied_messages << SpiedMessage.new(method_name, *arguments, &attached_block)
 
-      __crispy_execute_method__ method_name, *arguments, &attached_block
+      execute_method method_name, *arguments, &attached_block
     end
 
-    def __crispy_execute_method__ method_name, *arguments, &attached_block
+    def execute_method method_name, *arguments, &attached_block
       raise ::NotImplementedError
     end
-    private :__crispy_execute_method__
+    private :execute_method
 
     def spied? method_name, *arguments, &attached_block
       if arguments.empty? and attached_block.nil?
@@ -25,7 +24,6 @@ module Crispy
         @spied_messages.include? SpiedMessage.new(method_name, *arguments, &attached_block)
       end
     end
-    alias __crispy_spied? spied?
 
     def spied_once? method_name, *arguments, &attached_block
       if arguments.empty? and attached_block.nil?
@@ -34,7 +32,6 @@ module Crispy
         @spied_messages.one? {|self_spied_messages| self_spied_messages == SpiedMessage.new(method_name, *arguments, &attached_block) }
       end
     end
-    alias __crispy_spied_once? spied_once?
 
     def count_spied method_name, *arguments, &attached_block
       if arguments.empty? and attached_block.nil?
@@ -43,7 +40,6 @@ module Crispy
         @spied_messages.count SpiedMessage.new(method_name, *arguments, &attached_block)
       end
     end
-    alias __crispy_count_spied count_spied
 
   end
 end
