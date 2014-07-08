@@ -1,4 +1,5 @@
 require 'crispy/spied_message'
+require 'crispy/stubber_mixin'
 
 module Crispy
   class SpyBase < ::BasicObject

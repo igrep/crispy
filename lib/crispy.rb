@@ -1,6 +1,8 @@
 require "crispy/version"
 require "crispy/spy"
 require "crispy/object_spy"
+require "crispy/spy_extension"
+require "crispy/stubber"
 
 if __FILE__ == $PROGRAM_NAME
 
@@ -84,42 +86,39 @@ if __FILE__ == $PROGRAM_NAME
 end
 
 module Crispy
-  @registered_spies = []
 end
 
 class << Crispy
 
   # Make and returns a Crispy::ObjectSpy's instance to log all spied messages of an object.
   def spy_on object
-    spy = self::ObjectSpy.new object
-    @registered_spies << spy
-    spy
+    self::ObjectSpy.new object
+  end
+
+  # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
+  def spy_on_any_instance_of klass
+    self::ClassSpy.new klass
   end
 
   # Returns a Crispy::Spy's instance.
   def spy
-    spy = self::Spy.new
-    @registered_spies << spy
-    spy
+    self::Spy.new
+  end
+
+  def stubber object
+    self::Stubber.new object
   end
 
   # Begins to log all instances and its spied messages of a class.
-  # _NOTE_: rewrites the +new+ method of the given class.
-  def spy_into_class klass
+  # _NOTE_: replace the constant containing the class
+  def spy_into_class! klass
     raise NotImplementedError, "Sorry, this feature is under construction :("
+    spy_class = spy_on_any_instance_of klass
+    stub_const! klass.name, spy_class
+    spy_class
   end
 
-  def erase_all_spied_logs
-    @registered_spies.each {|spy| self.erase_memories_of spy }
-  end
-
-  def erase_spied_logs_of spy_or_class
-    case spy_or_class
-    when self::Spyable
-      spy_or_class.spied_messages.clear
-    when ::Class
-      raise NotImplementedError, "Sorry, this feature is under construction :("
-    end
+  def stub_const! const_name, value
   end
 
 end

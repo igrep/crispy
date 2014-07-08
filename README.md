@@ -2,6 +2,8 @@
 
 Crispy - Test spy and stub for any object in Ruby.
 
+## Features
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -18,7 +20,50 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Spy on a Object
+
+```ruby
+object = YourCoolClass.new
+spy = Crispy.spy_on object
+
+spy.your_cool_method 1, 2, 3
+spy.your_method_without_argument
+spy.your_lovely_method 'great', 'arguments'
+spy.your_lovely_method 'great', 'arguments', 'again'
+spy.your_finalizer 'resource to release'
+
+# No arguments
+spy.spied? :your_cool_method # => true
+spy.spied? :your_method_without_argument # => true
+spy.spied? :your_lovely_method # => true
+spy.spied? :your_ugly_method # => false
+
+# With arguments (each argument is compared by == method)
+spy.spied? :your_cool_method 1, 2, 3 # => true
+spy.spied? :your_cool_method 0, 0, 0 # => false
+spy.spied? :your_method_without_argument, :not, :given, :arguments # => false
+spy.spied? :your_lovely_method 'great', 'arguments' # => true
+spy.spied? :your_ugly_method, 'off course', 'I gave no arguments' # => false
+
+# With arguments and block
+### Sorry, I'm still thinking of the specification for that case ###
+
+# Count method calls
+spy.count_spied :your_cool_method # => 1
+spy.count_spied :your_cool_method 1, 2, 3 # => 1
+spy.count_spied :your_cool_method 0, 0, 0 # => 0
+
+# More detailed log
+spy.spied_messages.any? do|m|
+  m.method_name == :your_cool_method \
+    && m.arguments.all {|arg| arg.is_a? Integer }
+end
+  # => true
+last_method_call = spy.spied_messages.last
+last_method_call.method_name == :your_finalizer \
+  && last_method_call.arguments == ['resource to release']
+  # => true
+```
 
 ## Contributing
 
