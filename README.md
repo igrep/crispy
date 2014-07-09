@@ -1,6 +1,6 @@
 # Crispy
 
-Crispy - Test spy and stub for any object in Ruby.
+Minimalistic test double library in Ruby - only privides Spy and Stub!
 
 ## Features
 
