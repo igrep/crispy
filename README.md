@@ -2,7 +2,15 @@
 
 Minimalistic test double library in Ruby - only privides Spy and Stub!
 
+But sorry, there're MANY features **not actually implemented**!
+
 ## Features
+
+- Less intrusive. Never directly changes other objects behavior: It just wraps them and spies/stubs their methods.
+    - **NOTE**: So remember, you have to pass the spy/stub objects to your methods or call your methods of the spy/stub objects.
+        NOT your objects you want to spy or stub their methods.
+        See the Usage below for details.
+- Extremely flexible query for spied (`have_received`) messages with `spied_messages` method.
 
 ## Installation
 
@@ -26,6 +34,7 @@ Or install it yourself as:
 object = YourCoolClass.new
 spy = Crispy.spy_on object
 
+# NOTE: Call method through the spy object, instead of YourCoolClass's instance itself.
 spy.your_cool_method 1, 2, 3
 spy.your_method_without_argument
 spy.your_lovely_method 'great', 'arguments'
