@@ -10,7 +10,7 @@ But sorry, there're MANY features **not actually implemented**!
     - **NOTE**: So remember, you have to pass the spy/stub objects to your methods or call your methods of the spy/stub objects.
         NOT your objects you want to spy or stub their methods.
         See the Usage below for details.
-- Extremely flexible query for spied (`have_received`) messages with `spied_messages` method.
+- Extremely flexible query for spied (called `have_received` by the other test double libraries) messages with `spied_messages` method.
 
 ## Installation
 
