@@ -52,7 +52,7 @@ spy.spied? :your_cool_method 1, 2, 3 # => true
 spy.spied? :your_cool_method 0, 0, 0 # => false
 spy.spied? :your_method_without_argument, :not, :given, :arguments # => false
 spy.spied? :your_lovely_method 'great', 'arguments' # => true
-spy.spied? :your_ugly_method, 'off course', 'I gave no arguments' # => false
+spy.spied? :your_ugly_method, 'of course', 'I gave no arguments' # => false
 
 # With arguments and block
 ### Sorry, I'm still thinking of the specification for that case ###
@@ -65,7 +65,7 @@ spy.count_spied :your_cool_method 0, 0, 0 # => 0
 # More detailed log
 spy.spied_messages.any? do|m|
   m.method_name == :your_cool_method \
-    && m.arguments.all {|arg| arg.is_a? Integer }
+    && m.arguments.all? {|arg| arg.is_a? Integer }
 end
   # => true
 last_method_call = spy.spied_messages.last
