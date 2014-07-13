@@ -97,6 +97,7 @@ class << Crispy
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
   def spy_on_any_instance_of klass
+    raise NotImplementedError, "Sorry, this feature is under construction :("
     self::ClassSpy.new klass
   end
 
@@ -119,6 +120,7 @@ class << Crispy
   end
 
   def stub_const! const_name, value
+    raise NotImplementedError, "Sorry, this feature is under construction :("
   end
 
 end
