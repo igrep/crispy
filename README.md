@@ -9,7 +9,7 @@ But sorry, there're MANY features **not actually implemented**!
 - Less intrusive. Never directly changes other objects behavior: It just wraps them and spies/stubs their methods.
     - **NOTE**: So remember, you have to pass the spy/stub objects to your methods or call your methods of the spy/stub objects.
         NOT your objects you want to spy or stub their methods.
-        See the Usage below for details.
+        See the usage below for details.
 - Extremely flexible query for spied (called `have_received` by the other test double libraries) messages with `spied_messages` method.
 
 ## Installation
