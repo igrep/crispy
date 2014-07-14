@@ -21,12 +21,20 @@ if __FILE__ == $PROGRAM_NAME
       def bar
         []
       end
+      def method_to_stub1
+        fail "Not stubbed actually! The test fails."
+      end
+      def method_to_stub2
+        fail "Not stubbed actually! The test fails."
+      end
     end
 
     def setup
       @object = ObjectClass.new
 
-      @subject = Crispy.spy_on @object
+      @subject = Crispy.spy_on(
+        @object, method_to_stub1: :stubbed1, method_to_stub2: :stubbed2
+      )
 
       @subject.hoge 1, 2, 3
       @subject.foo
@@ -74,12 +82,17 @@ if __FILE__ == $PROGRAM_NAME
       assert_equal(0, @subject.count_spied(:bar))
     end
 
-    def test_spy_does_not_change_objects_behavior
+    def test_spy_does_not_change_non_stubbed_method
       assert_equal(@object.hoge('a', 'b', 'c'), @subject.hoge('a', 'b', 'c'))
       assert_equal(@object.foo, @subject.foo)
       assert_equal(@object.bar, @subject.bar)
       assert_equal(@object.object_id, @subject.object_id)
       assert_equal(@object.class, @subject.class)
+    end
+
+    def test_spy_changes_stubbed_method
+      assert_equal(:stubbed1, @subject.method_to_stub1)
+      assert_equal(:stubbed2, @subject.method_to_stub2)
     end
 
   end
