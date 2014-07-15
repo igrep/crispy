@@ -3,6 +3,7 @@ require 'crispy/stubber_mixin'
 
 module Crispy
   class SpyBase < ::BasicObject
+    include StubberMixin
 
     attr_reader :spied_messages
 
