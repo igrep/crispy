@@ -6,7 +6,7 @@ module Crispy
     end
 
     def delegate_send method_name, *arguments, &attached_block
-      @delegate.__send__ method_name, *arguments, &attached_block
+      @delegate.public_send method_name, *arguments, &attached_block
     end
 
   end
