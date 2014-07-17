@@ -1,7 +1,7 @@
 module Crispy
   module DelegateHelper
 
-    def initialize delegate
+    def initialize_delegate delegate
       @delegate = delegate
     end
 
