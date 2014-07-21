@@ -11,6 +11,6 @@ module Crispy
       initialize_stubs stubs_map
     end
 
-    alias execute_method delegate_send!
+    alias execute_method delegate_send
   end
 end
