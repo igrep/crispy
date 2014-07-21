@@ -104,8 +104,8 @@ end
 class << Crispy
 
   # Make and returns a Crispy::ObjectSpy's instance to log all spied messages of an object.
-  def spy_on object
-    self::ObjectSpy.new object
+  def spy_on object, stubs_map = {}
+    self::ObjectSpy.new object, stubs_map
   end
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
