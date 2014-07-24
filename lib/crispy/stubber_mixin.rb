@@ -14,7 +14,8 @@ module Crispy
           stub method_name, value
         end
       when Symbol, String
-        self.singleton_class.class_exec method_name_or_hash do|method_name|
+        singleton_class = class << self; self ; end
+        singleton_class.class_exec method_name_or_hash do|method_name|
           define_method(method_name) { returned_value }
         end
       end
