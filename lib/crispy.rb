@@ -13,7 +13,6 @@ if __FILE__ == $PROGRAM_NAME
 
     class ObjectClass
       def hoge a, b, c
-        private_method a.to_s
         [a, b, c]
       end
       def foo
@@ -28,12 +27,6 @@ if __FILE__ == $PROGRAM_NAME
       def method_to_stub2
         fail "Not stubbed actually! The test fails."
       end
-
-      private
-        def private_method a
-          :private_method
-        end
-
     end
 
     def setup
@@ -52,10 +45,8 @@ if __FILE__ == $PROGRAM_NAME
       assert_equal(
         [
           Crispy::SpiedMessage[:hoge, 1, 2, 3],
-          Crispy::SpiedMessage[:private_method, '1'],
           Crispy::SpiedMessage[:foo],
           Crispy::SpiedMessage[:hoge, 3, 4, 5],
-          Crispy::SpiedMessage[:private_method, '3'],
         ],
         @subject.spied_messages
       )
@@ -64,28 +55,20 @@ if __FILE__ == $PROGRAM_NAME
     def test_spy_has_spied_messages_sent_to_an_object
       assert @subject.spied?(:hoge)
       assert @subject.spied?(:foo)
-      assert @subject.spied?(:private_method)
       assert not(@subject.spied?(:bar))
     end
 
     def test_spy_has_spied_messages_with_arguments_sent_to_an_object
       assert @subject.spied?(:hoge, 1, 2, 3)
       assert @subject.spied?(:hoge, 3, 4, 5)
-      assert @subject.spied?(:private_method, '1')
-      assert @subject.spied?(:private_method, '3')
       assert not(@subject.spied?(:hoge, 0, 0, 0))
       assert not(@subject.spied?(:foo, 1))
       assert not(@subject.spied?(:bar, nil))
-      assert not(@subject.spied?(:private_method, 1))
-      assert not(@subject.spied?(:private_method, '1', '2'))
-      assert not(@subject.spied?(:private_method, '3', '4'))
     end
 
     def test_spy_has_spied_messages_once_sent_to_an_object
       assert not(@subject.spied_once?(:hoge))
-      assert not(@subject.spied_once?(:private_method))
       assert @subject.spied_once?(:hoge, 3, 4, 5)
-      assert @subject.spied_once?(:private_method, '1')
       assert @subject.spied_once?(:foo)
       assert not(@subject.spied_once?(:bar))
     end
@@ -94,10 +77,7 @@ if __FILE__ == $PROGRAM_NAME
       assert_equal(1, @subject.count_spied(:hoge, 1, 2, 3))
       assert_equal(1, @subject.count_spied(:hoge, 3, 4, 5))
       assert_equal(0, @subject.count_spied(:hoge, 0, 0, 0))
-      assert_equal(1, @subject.count_spied(:private_method, '1'))
-      assert_equal(1, @subject.count_spied(:private_method, '3'))
       assert_equal(2, @subject.count_spied(:hoge))
-      assert_equal(2, @subject.count_spied(:private_method))
       assert_equal(1, @subject.count_spied(:foo))
       assert_equal(0, @subject.count_spied(:bar))
     end
@@ -108,7 +88,6 @@ if __FILE__ == $PROGRAM_NAME
       assert_equal(@object.bar, @subject.bar)
       assert_equal(@object.object_id, @subject.object_id)
       assert_equal(@object.class, @subject.class)
-      assert_raises(NoMethodError){ @subject.private_method }
     end
 
     def test_spy_changes_stubbed_method
