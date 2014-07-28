@@ -175,8 +175,8 @@ if __FILE__ == $PROGRAM_NAME
     end
 
     def test_spy_changes_stubbed_method
-      assert_equal(:stubbed1, @subject.method_to_stub1)
-      assert_equal(:stubbed2, @subject.method_to_stub2)
+      assert_equal(:stubbed1, @object.method_to_stub1)
+      assert_equal(:stubbed2, @object.method_to_stub2)
     end
 
   end
@@ -195,7 +195,7 @@ class << Crispy
 
   # Returns a SpyWrapper object to wrap all methods of the object.
   def spy_into object, stubs_map = {}
-    self::SpyWrapper.new object#, stubs_map
+    self::SpyWrapper.new object, stubs_map
   end
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
