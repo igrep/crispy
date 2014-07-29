@@ -6,10 +6,7 @@ But sorry, there're MANY features **not actually implemented**!
 
 ## Features
 
-- Less intrusive. Never directly changes other objects behavior: It just wraps them and spies/stubs their methods.
-    - **NOTE**: So remember, you have to pass the spy/stub objects to your methods or call your methods of the spy/stub objects.
-        NOT your objects you want to spy or stub their methods.
-        See the usage below for details.
+- Test spy for any object by using `prepend` (Sorry, it runs by Ruby 2.0 or higher!)
 - Extremely flexible query for spied (called `have_received` by the other test double libraries) messages with `spied_messages` method.
 
 ## Installation
@@ -32,14 +29,15 @@ Or install it yourself as:
 
 ```ruby
 object = YourCoolClass.new
-spy = Crispy.spy_on object
+spy = Crispy.spy_into object
 
-# NOTE: Call method through the spy object, instead of YourCoolClass's instance itself.
-spy.your_cool_method 1, 2, 3
-spy.your_method_without_argument
-spy.your_lovely_method 'great', 'arguments'
-spy.your_lovely_method 'great', 'arguments', 'again'
-spy.your_finalizer 'resource to release'
+object.your_cool_method 1, 2, 3
+object.your_method_without_argument
+object.your_lovely_method 'great', 'arguments'
+object.your_lovely_method 'great', 'arguments', 'again'
+object.your_finalizer 'resource to release'
+
+# NOTE: Call query methods through the spy object, instead of YourCoolClass's instance.
 
 # No arguments
 spy.spied? :your_cool_method # => true
