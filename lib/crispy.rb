@@ -1,6 +1,5 @@
 require "crispy/version"
 require "crispy/spy"
-require "crispy/object_spy"
 require "crispy/spy_wrapper"
 require "crispy/spy_extension"
 require "crispy/stubber"
@@ -32,76 +31,6 @@ if __FILE__ == $PROGRAM_NAME
       def private_foo a
         :private_foo
       end
-  end
-
-  class TestCrispySpyOn < MiniTest::Test
-
-    def setup
-      @object = ObjectClass.new
-
-      @subject = Crispy.spy_on(
-        @object, method_to_stub1: :stubbed1, method_to_stub2: :stubbed2
-      )
-
-      @subject.hoge 1, 2, 3
-      @subject.foo
-      @subject.hoge 3, 4, 5
-    end
-
-    def test_spy_logs_messages_sent_to_an_object
-      assert_equal(
-        [
-          Crispy::SpiedMessage[:hoge, 1, 2, 3],
-          Crispy::SpiedMessage[:foo],
-          Crispy::SpiedMessage[:hoge, 3, 4, 5],
-        ],
-        @subject.spied_messages
-      )
-    end
-
-    def test_spy_has_spied_messages_sent_to_an_object
-      assert @subject.spied?(:hoge)
-      assert @subject.spied?(:foo)
-      assert not(@subject.spied?(:bar))
-    end
-
-    def test_spy_has_spied_messages_with_arguments_sent_to_an_object
-      assert @subject.spied?(:hoge, 1, 2, 3)
-      assert @subject.spied?(:hoge, 3, 4, 5)
-      assert not(@subject.spied?(:hoge, 0, 0, 0))
-      assert not(@subject.spied?(:foo, 1))
-      assert not(@subject.spied?(:bar, nil))
-    end
-
-    def test_spy_has_spied_messages_once_sent_to_an_object
-      assert not(@subject.spied_once?(:hoge))
-      assert @subject.spied_once?(:hoge, 3, 4, 5)
-      assert @subject.spied_once?(:foo)
-      assert not(@subject.spied_once?(:bar))
-    end
-
-    def test_spy_counts_spied_messages_sent_to_an_object
-      assert_equal(1, @subject.count_spied(:hoge, 1, 2, 3))
-      assert_equal(1, @subject.count_spied(:hoge, 3, 4, 5))
-      assert_equal(0, @subject.count_spied(:hoge, 0, 0, 0))
-      assert_equal(2, @subject.count_spied(:hoge))
-      assert_equal(1, @subject.count_spied(:foo))
-      assert_equal(0, @subject.count_spied(:bar))
-    end
-
-    def test_spy_does_not_change_non_stubbed_method
-      assert_equal(@object.hoge('a', 'b', 'c'), @subject.hoge('a', 'b', 'c'))
-      assert_equal(@object.foo, @subject.foo)
-      assert_equal(@object.bar, @subject.bar)
-      assert_equal(@object.object_id, @subject.object_id)
-      assert_equal(@object.class, @subject.class)
-    end
-
-    def test_spy_changes_stubbed_method
-      assert_equal(:stubbed1, @subject.method_to_stub1)
-      assert_equal(:stubbed2, @subject.method_to_stub2)
-    end
-
   end
 
   class TestCrispySpyInto < MiniTest::Test
@@ -187,11 +116,6 @@ module Crispy
 end
 
 class << Crispy
-
-  # Make and returns a Crispy::ObjectSpy's instance to log all spied messages of an object.
-  def spy_on object, stubs_map = {}
-    self::ObjectSpy.new object, stubs_map
-  end
 
   # Returns a SpyWrapper object to wrap all methods of the object.
   def spy_into object, stubs_map = {}
