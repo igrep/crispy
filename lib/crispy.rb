@@ -2,7 +2,6 @@ require "crispy/version"
 require "crispy/spy"
 require "crispy/spy_wrapper"
 require "crispy/spy_extension"
-require "crispy/stubber"
 
 if __FILE__ == $PROGRAM_NAME
 
@@ -110,6 +109,35 @@ if __FILE__ == $PROGRAM_NAME
 
   end
 
+  class TestCrispyDouble < MiniTest::Test
+    def setup
+      @expected_hoge = Object.new
+      @expected_foo  = Object.new
+      @expected_bar  = Object.new
+      @expected_baz  = Object.new
+
+      @double = Crispy.double(hoge: @expected_hoge, foo: @expected_foo)
+      @double.stub(bar: @expected_bar, baz: @expected_baz)
+
+      @actual_hoge1 = @double.hoge :with, :any, :arguments do
+        'and a block'
+      end
+      @actual_hoge2 = @double.hoge
+      @actual_foo = @double.foo
+      @actual_bar = @double.bar
+      @actual_baz = @double.baz
+    end
+
+    def test_double_can_stub_specified_methods
+      assert_same @expected_hoge, @actual_hoge1
+      assert_same @expected_hoge, @actual_hoge2
+      assert_same @expected_foo, @actual_foo
+      assert_same @expected_bar, @actual_bar
+      assert_same @expected_baz, @actual_baz
+    end
+
+  end
+
 end
 
 module Crispy
@@ -131,10 +159,6 @@ class << Crispy
   # Returns a Crispy::Spy's instance.
   def spy
     self::Spy.new
-  end
-
-  def stubber object
-    self::Stubber.new object
   end
 
   # Begins to log all instances and its spied messages of a class.
