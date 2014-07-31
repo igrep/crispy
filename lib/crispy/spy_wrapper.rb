@@ -50,14 +50,13 @@ module Crispy
       self
     end
 
-    private
-      def define_wrapper method_name
-        define_method method_name do|*arguments, &attached_block|
-          @__CRISPY_SPY__.spied_messages << SpiedMessage.new(method_name, *arguments, &attached_block)
-          super(*arguments, &attached_block)
-        end
-        method_name
+    private def define_wrapper method_name
+      define_method method_name do|*arguments, &attached_block|
+        @__CRISPY_SPY__.spied_messages << SpiedMessage.new(method_name, *arguments, &attached_block)
+        super(*arguments, &attached_block)
       end
+      method_name
+    end
 
   end
 end

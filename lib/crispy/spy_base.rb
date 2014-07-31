@@ -16,10 +16,9 @@ module Crispy
       execute_method method_name, *arguments, &attached_block
     end
 
-    def execute_method method_name, *arguments, &attached_block
+    private def execute_method method_name, *arguments, &attached_block
       raise ::NotImplementedError
     end
-    private :execute_method
 
   end
 end

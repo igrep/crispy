@@ -26,10 +26,9 @@ if __FILE__ == $PROGRAM_NAME
       fail "Not stubbed actually! The test fails."
     end
 
-    private
-      def private_foo a
-        :private_foo
-      end
+    private def private_foo a
+      :private_foo
+    end
   end
 
   class TestCrispySpyInto < MiniTest::Test
