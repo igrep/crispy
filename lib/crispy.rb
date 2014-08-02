@@ -115,7 +115,7 @@ if __FILE__ == $PROGRAM_NAME
       @expected_bar  = Object.new
       @expected_baz  = Object.new
 
-      @double = Crispy.double(hoge: @expected_hoge, foo: @expected_foo)
+      @double = Crispy.double('some double', hoge: @expected_hoge, foo: @expected_foo)
       @double.stub(bar: @expected_bar, baz: @expected_baz)
 
       @actual_hoge1 = @double.hoge :with, :any, :arguments do
