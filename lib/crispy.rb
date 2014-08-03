@@ -1,6 +1,7 @@
 require "crispy/version"
 require "crispy/spy"
 require "crispy/spy_wrapper"
+require "crispy/double"
 require "crispy/spy_extension"
 
 if __FILE__ == $PROGRAM_NAME
@@ -115,7 +116,7 @@ if __FILE__ == $PROGRAM_NAME
       @expected_bar  = Object.new
       @expected_baz  = Object.new
 
-      @double = Crispy.double(hoge: @expected_hoge, foo: @expected_foo)
+      @double = Crispy.double('some double', hoge: @expected_hoge, foo: @expected_foo)
       @double.stub(bar: @expected_bar, baz: @expected_baz)
 
       @actual_hoge1 = @double.hoge :with, :any, :arguments do
@@ -147,6 +148,10 @@ class << Crispy
   # Returns a SpyWrapper object to wrap all methods of the object.
   def spy_into object, stubs_map = {}
     self::SpyWrapper.new object, stubs_map
+  end
+
+  def double name_or_stubs_map = nil, stubs_map = {}
+    self::Double.new name_or_stubs_map, stubs_map
   end
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
