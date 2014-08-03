@@ -5,6 +5,7 @@ require "crispy/double"
 require "crispy/spy_extension"
 
 if __FILE__ == $PROGRAM_NAME
+  $VERBOSE = true
 
   require 'crispy/spied_message'
   require 'minitest/autorun'
