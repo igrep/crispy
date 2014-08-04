@@ -11,7 +11,11 @@ module Crispy
         @name = name_or_stubs_map
         @__CRISPY_STUBBER__ = Stubber.new(stubs_map)
       end
-      @__CRISPY_STUBBER__.prepend_stubbed_methods self
+      singleton_class =
+        class << self
+          self
+        end
+      @__CRISPY_STUBBER__.prepend_features singleton_class
     end
 
     def stub stubs_map

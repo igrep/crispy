@@ -15,6 +15,8 @@ module Crispy
       target.instance_exec self do|spy|
         @__CRISPY_SPY__ = spy
       end
+      @__CRISPY_STUBBER__ = Stubber.new(stubs_map)
+      @__CRISPY_STUBBER__.prepend_features singleton_class
       prepend_features singleton_class
 
       stub stubs_map
@@ -35,18 +37,8 @@ module Crispy
 
     NOT_SPECIFIED = Object.new
 
-    def stub method_name_or_hash, returned_value = NOT_SPECIFIED, &definition
-      case method_name_or_hash
-      when Hash
-        hash = method_name_or_hash
-        hash.each do|method_name, value|
-          stub method_name, value
-        end
-      when Symbol, String
-        self.module_exec method_name_or_hash do|method_name|
-          define_method(method_name) { returned_value }
-        end
-      end
+    def stub *arguments, &definition
+      @__CRISPY_STUBBER__.stub(*arguments, &definition)
       self
     end
 

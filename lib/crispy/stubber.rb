@@ -1,17 +1,10 @@
 module Crispy
   class Stubber < Module
+    public :prepend_features
 
     def initialize stubs_map = {}
       super()
       stub stubs_map
-    end
-
-    def prepend_stubbed_methods target
-      singleton_class =
-        class << target
-          self
-        end
-      prepend_features singleton_class
     end
 
     NOT_SPECIFIED = Object.new
