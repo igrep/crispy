@@ -18,8 +18,6 @@ module Crispy
       @__CRISPY_STUBBER__ = Stubber.new(stubs_map)
       @__CRISPY_STUBBER__.prepend_features singleton_class
       prepend_features singleton_class
-
-      stub stubs_map
     end
 
     def prepend_features klass
