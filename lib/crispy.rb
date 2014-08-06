@@ -1,5 +1,4 @@
 require "crispy/version"
-require "crispy/spy"
 require "crispy/spy_wrapper"
 require "crispy/double"
 require "crispy/spy_extension"
@@ -10,7 +9,8 @@ if __FILE__ == $PROGRAM_NAME
   require 'crispy/spied_message'
   require 'minitest/autorun'
 
-  class ObjectClass
+  # Inherit BasicObject because it has fewer meta-programming methods than Object
+  class ObjectClass < BasicObject
     def hoge a, b, c
       private_foo a
       [a, b, c]
@@ -108,6 +108,10 @@ if __FILE__ == $PROGRAM_NAME
       assert_equal(:stubbed2, @object.method_to_stub2)
     end
 
+    def test_spy_is_accessible_with_crispy_spy_method
+      assert_same @subject, Crispy.spy(@object)
+    end
+
   end
 
   class TestCrispyDouble < MiniTest::Test
@@ -161,9 +165,8 @@ class << Crispy
     self::ClassSpy.new klass
   end
 
-  # Returns a Crispy::Spy's instance.
-  def spy
-    self::Spy.new
+  def spy object
+    object.instance_eval { @__CRISPY_SPY__ }
   end
 
   # Begins to log all instances and its spied messages of a class.
