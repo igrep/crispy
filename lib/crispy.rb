@@ -1,7 +1,6 @@
 require "crispy/version"
 require "crispy/spy_wrapper"
 require "crispy/double"
-require "crispy/spy_extension"
 
 if __FILE__ == $PROGRAM_NAME
   $VERBOSE = true
