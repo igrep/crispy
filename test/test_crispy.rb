@@ -4,7 +4,8 @@ require 'crispy'
 require 'crispy/spied_message'
 require 'minitest/autorun'
 
-module TestCrispy
+class TestCrispy < MiniTest::Test
+  include ::Crispy
 
   # Inherit BasicObject because it has fewer meta-programming methods than Object
   class ObjectClass < BasicObject
@@ -30,12 +31,12 @@ module TestCrispy
     end
   end
 
-  class TestCrispySpyInto < MiniTest::Test
+  class TestCrispySpyInto < TestCrispy
 
     def setup
       @object = ObjectClass.new
 
-      @subject = Crispy.spy_into(
+      @subject = spy_into(
         @object, method_to_stub1: :stubbed1, method_to_stub2: :stubbed2
       )
 
@@ -106,19 +107,19 @@ module TestCrispy
     end
 
     def test_spy_is_accessible_with_crispy_spy_method
-      assert_same @subject, Crispy.spy(@object)
+      assert_same @subject, spy(@object)
     end
 
   end
 
-  class TestCrispyDouble < MiniTest::Test
+  class TestCrispyDouble < TestCrispy
     def setup
       @expected_hoge = Object.new
       @expected_foo  = Object.new
       @expected_bar  = Object.new
       @expected_baz  = Object.new
 
-      @double = Crispy.double('some double', hoge: @expected_hoge, foo: @expected_foo)
+      @double = double('some double', hoge: @expected_hoge, foo: @expected_foo)
       @double.stub(bar: @expected_bar, baz: @expected_baz)
 
       @actual_hoge1 = @double.hoge :with, :any, :arguments do
