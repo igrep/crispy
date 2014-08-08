@@ -3,9 +3,8 @@ require "crispy/spy_wrapper"
 require "crispy/double"
 
 module Crispy
-end
-
-class << Crispy
+  # All methods of this module should be module_function.
+  module_function
 
   # Returns a SpyWrapper object to wrap all methods of the object.
   def spy_into object, stubs_map = {}

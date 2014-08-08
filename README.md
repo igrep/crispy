@@ -28,8 +28,10 @@ Or install it yourself as:
 ### Spy on a Object
 
 ```ruby
+include Crispy # import spy, spy_into and any other functions from Crispy namespace.
+
 object = YourCoolClass.new
-spy = Crispy.spy_into object
+spy = spy_into object
 
 object.your_cool_method 1, 2, 3
 object.your_method_without_argument
@@ -40,33 +42,33 @@ object.your_finalizer 'resource to release'
 # NOTE: Call query methods through the spy object, instead of YourCoolClass's instance.
 
 # No arguments
-spy.spied? :your_cool_method # => true
-spy.spied? :your_method_without_argument # => true
-spy.spied? :your_lovely_method # => true
-spy.spied? :your_ugly_method # => false
+spy(object).spied? :your_cool_method # => true
+spy(object).spied? :your_method_without_argument # => true
+spy(object).spied? :your_lovely_method # => true
+spy(object).spied? :your_ugly_method # => false
 
 # With arguments (each argument is compared by == method)
-spy.spied? :your_cool_method 1, 2, 3 # => true
-spy.spied? :your_cool_method 0, 0, 0 # => false
-spy.spied? :your_method_without_argument, :not, :given, :arguments # => false
-spy.spied? :your_lovely_method 'great', 'arguments' # => true
-spy.spied? :your_ugly_method, 'of course', 'I gave no arguments' # => false
+spy(object).spied? :your_cool_method 1, 2, 3 # => true
+spy(object).spied? :your_cool_method 0, 0, 0 # => false
+spy(object).spied? :your_method_without_argument, :not, :given, :arguments # => false
+spy(object).spied? :your_lovely_method 'great', 'arguments' # => true
+spy(object).spied? :your_ugly_method, 'of course', 'I gave no arguments' # => false
 
 # With arguments and block
 ### Sorry, I'm still thinking of the specification for that case ###
 
 # Count method calls
-spy.count_spied :your_cool_method # => 1
-spy.count_spied :your_cool_method 1, 2, 3 # => 1
-spy.count_spied :your_cool_method 0, 0, 0 # => 0
+spy(object).count_spied :your_cool_method # => 1
+spy(object).count_spied :your_cool_method 1, 2, 3 # => 1
+spy(object).count_spied :your_cool_method 0, 0, 0 # => 0
 
 # More detailed log
-spy.spied_messages.any? do|m|
+spy(object).spied_messages.any? do|m|
   m.method_name == :your_cool_method \
     && m.arguments.all? {|arg| arg.is_a? Integer }
 end
   # => true
-last_method_call = spy.spied_messages.last
+last_method_call = spy(object).spied_messages.last
 last_method_call.method_name == :your_finalizer \
   && last_method_call.arguments == ['resource to release']
   # => true
