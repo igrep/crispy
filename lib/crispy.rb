@@ -8,17 +8,17 @@ module Crispy
 
   # Returns a SpyWrapper object to wrap all methods of the object.
   def spy_into object, stubs_map = {}
-    self::SpyWrapper.new object, stubs_map
+    ::Crispy::SpyWrapper.new object, stubs_map
   end
 
   def double name_or_stubs_map = nil, stubs_map = {}
-    self::Double.new name_or_stubs_map, stubs_map
+    ::Crispy::Double.new name_or_stubs_map, stubs_map
   end
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
   def spy_on_any_instance_of klass
     raise NotImplementedError, "Sorry, this feature is under construction :("
-    self::ClassSpy.new klass
+    ::Crispy::ClassSpy.new klass
   end
 
   def spy object
