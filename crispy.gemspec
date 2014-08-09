@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Yamamoto Yuji"]
   spec.email         = ["whosekiteneverfly@gmail.com"]
   spec.summary       = %q{Test spy and stub for any object in Ruby.}
-  spec.description   = %q{Test spy and stub for any object in Ruby. It'll be indpendent from any testing framework.}
+  spec.description   = %q{Test spy and stub for any object in Ruby. Independent from any testing framework.}
   spec.homepage      = "https://github.com/igrep/crispy"
   spec.license       = "MIT"
 
