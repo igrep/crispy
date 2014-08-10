@@ -1,4 +1,4 @@
-require 'crispy/spied_message'
+require 'crispy/received_message'
 require 'crispy/spy_mixin'
 
 module Crispy
@@ -7,7 +7,7 @@ module Crispy
 
     def initialize target, stubs_map = {}
       super()
-      @spied_messages = []
+      @received_messages = []
       singleton_class =
         class << target
           self
@@ -42,7 +42,7 @@ module Crispy
 
     private def define_wrapper method_name
       define_method method_name do|*arguments, &attached_block|
-        @__CRISPY_SPY__.spied_messages << SpiedMessage.new(method_name, *arguments, &attached_block)
+        @__CRISPY_SPY__.received_messages << ReceivedMessage.new(method_name, *arguments, &attached_block)
         super(*arguments, &attached_block)
       end
       method_name

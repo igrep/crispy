@@ -25,7 +25,7 @@ module Crispy
     object.instance_eval { @__CRISPY_SPY__ }
   end
 
-  # Begins to log all instances and its spied messages of a class.
+  # Begins to log all instances and its received messages of a class.
   # _NOTE_: replace the constant containing the class
   def spy_into_class! klass
     raise NotImplementedError, "Sorry, this feature is under construction :("

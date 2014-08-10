@@ -1,5 +1,5 @@
 module Crispy
-  class SpiedMessage
+  class ReceivedMessage
 
     attr_reader :method_name, :arguments, :attached_block
 

@@ -1,7 +1,7 @@
 $VERBOSE = true # enable warnings
 
 require 'crispy'
-require 'crispy/spied_message'
+require 'crispy/received_message'
 require 'minitest/autorun'
 
 class TestCrispy < MiniTest::Test
@@ -48,57 +48,57 @@ class TestCrispy < MiniTest::Test
     def test_spy_logs_messages_sent_to_an_object
       assert_equal(
         [
-          Crispy::SpiedMessage[:hoge, 1, 2, 3],
-          Crispy::SpiedMessage[:private_foo, 1],
-          Crispy::SpiedMessage[:foo],
-          Crispy::SpiedMessage[:hoge, 3, 4, 5],
-          Crispy::SpiedMessage[:private_foo, 3],
+          Crispy::ReceivedMessage[:hoge, 1, 2, 3],
+          Crispy::ReceivedMessage[:private_foo, 1],
+          Crispy::ReceivedMessage[:foo],
+          Crispy::ReceivedMessage[:hoge, 3, 4, 5],
+          Crispy::ReceivedMessage[:private_foo, 3],
         ],
-        @subject.spied_messages
+        @subject.received_messages
       )
     end
 
-    def test_spy_has_spied_messages_sent_to_an_object
-      assert @subject.spied?(:hoge)
-      assert @subject.spied?(:foo)
-      assert not(@subject.spied?(:bar))
-      assert @subject.spied?(:private_foo)
+    def test_spy_has_received_messages_sent_to_an_object
+      assert @subject.received?(:hoge)
+      assert @subject.received?(:foo)
+      assert not(@subject.received?(:bar))
+      assert @subject.received?(:private_foo)
     end
 
-    def test_spy_has_spied_messages_with_arguments_sent_to_an_object
-      assert @subject.spied?(:hoge, 1, 2, 3)
-      assert @subject.spied?(:hoge, 3, 4, 5)
-      assert @subject.spied?(:private_foo, 1)
-      assert @subject.spied?(:private_foo, 3)
-      assert not(@subject.spied?(:hoge, 0, 0, 0))
-      assert not(@subject.spied?(:private_foo, 0, 0, 0))
-      assert not(@subject.spied?(:foo, 1))
-      assert not(@subject.spied?(:bar, nil))
+    def test_spy_has_received_messages_with_arguments_sent_to_an_object
+      assert @subject.received?(:hoge, 1, 2, 3)
+      assert @subject.received?(:hoge, 3, 4, 5)
+      assert @subject.received?(:private_foo, 1)
+      assert @subject.received?(:private_foo, 3)
+      assert not(@subject.received?(:hoge, 0, 0, 0))
+      assert not(@subject.received?(:private_foo, 0, 0, 0))
+      assert not(@subject.received?(:foo, 1))
+      assert not(@subject.received?(:bar, nil))
     end
 
-    def test_spy_has_spied_messages_once_sent_to_an_object
-      assert not(@subject.spied_once?(:hoge))
-      assert not(@subject.spied_once?(:private_foo))
-      assert @subject.spied_once?(:hoge, 3, 4, 5)
-      assert @subject.spied_once?(:private_foo, 3)
-      assert not(@subject.spied_once?(:private_foo, 3, 4))
-      assert @subject.spied_once?(:foo)
-      assert not(@subject.spied_once?(:bar))
+    def test_spy_has_received_messages_once_sent_to_an_object
+      assert not(@subject.received_once?(:hoge))
+      assert not(@subject.received_once?(:private_foo))
+      assert @subject.received_once?(:hoge, 3, 4, 5)
+      assert @subject.received_once?(:private_foo, 3)
+      assert not(@subject.received_once?(:private_foo, 3, 4))
+      assert @subject.received_once?(:foo)
+      assert not(@subject.received_once?(:bar))
     end
 
-    def test_spy_counts_spied_messages_sent_to_an_object
-      assert_equal(1, @subject.count_spied(:hoge, 1, 2, 3))
-      assert_equal(1, @subject.count_spied(:hoge, 3, 4, 5))
-      assert_equal(0, @subject.count_spied(:hoge, 0, 0, 0))
-      assert_equal(2, @subject.count_spied(:hoge))
+    def test_spy_counts_received_messages_sent_to_an_object
+      assert_equal(1, @subject.count_received(:hoge, 1, 2, 3))
+      assert_equal(1, @subject.count_received(:hoge, 3, 4, 5))
+      assert_equal(0, @subject.count_received(:hoge, 0, 0, 0))
+      assert_equal(2, @subject.count_received(:hoge))
 
-      assert_equal(1, @subject.count_spied(:private_foo, 1))
-      assert_equal(1, @subject.count_spied(:private_foo, 3))
-      assert_equal(0, @subject.count_spied(:private_foo, 0))
-      assert_equal(2, @subject.count_spied(:private_foo))
+      assert_equal(1, @subject.count_received(:private_foo, 1))
+      assert_equal(1, @subject.count_received(:private_foo, 3))
+      assert_equal(0, @subject.count_received(:private_foo, 0))
+      assert_equal(2, @subject.count_received(:private_foo))
 
-      assert_equal(1, @subject.count_spied(:foo))
-      assert_equal(0, @subject.count_spied(:bar))
+      assert_equal(1, @subject.count_received(:foo))
+      assert_equal(0, @subject.count_received(:bar))
     end
 
     def test_spy_changes_stubbed_method
