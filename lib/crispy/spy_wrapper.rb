@@ -33,8 +33,6 @@ module Crispy
       end
     end
 
-    NOT_SPECIFIED = Object.new
-
     def stub *arguments, &definition
       @__CRISPY_STUBBER__.stub(*arguments, &definition)
       self
