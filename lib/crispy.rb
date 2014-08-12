@@ -1,14 +1,14 @@
 require "crispy/version"
-require "crispy/spy_wrapper"
+require "crispy/spy"
 require "crispy/double"
 
 module Crispy
   # All methods of this module should be module_function.
   module_function
 
-  # Returns a SpyWrapper object to wrap all methods of the object.
+  # Returns a Spy object to wrap all methods of the object.
   def spy_into object, stubs_map = {}
-    ::Crispy::SpyWrapper.new object, stubs_map
+    ::Crispy::Spy.new object, stubs_map
   end
 
   def double name_or_stubs_map = nil, stubs_map = {}
