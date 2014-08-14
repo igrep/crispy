@@ -74,6 +74,10 @@ last_method_call.method_name == :your_finalizer \
   # => true
 ```
 
+### Stub Methods of a Spy
+
+### Stub Methods of a Double
+
 ## Contributing
 
 1. Fork it ( https://github.com/igrep/crispy/fork )
