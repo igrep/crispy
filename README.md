@@ -25,6 +25,11 @@ Or install it yourself as:
 
 ## Usage
 
+<!--
+# Sample class for doctest.
+doctest_require: './test/doctest-fixtures/your_cool_class.rb'
+-->
+
 ### Spy on a Object
 
 ```ruby
