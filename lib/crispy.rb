@@ -22,7 +22,7 @@ module Crispy
   end
 
   def spy object
-    object.instance_eval { @__CRISPY_SPY__ }
+    object.__CRISPY_SPY__
   end
 
   # Begins to log all instances and its received messages of a class.

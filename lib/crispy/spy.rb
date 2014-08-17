@@ -1,9 +1,11 @@
 require 'crispy/received_message'
 require 'crispy/spy_mixin'
+require 'crispy/with_stubber'
 
 module Crispy
   class Spy < Module
     include SpyMixin
+    include WithStubber
 
     def initialize target, stubs_map = {}
       super()
@@ -12,12 +14,11 @@ module Crispy
         class << target
           self
         end
-      target.instance_exec self do|spy|
-        @__CRISPY_SPY__ = spy
-      end
-      @__CRISPY_STUBBER__ = Stubber.new(stubs_map)
-      @__CRISPY_STUBBER__.prepend_features singleton_class
+      initialize_stubber stubs_map
+      prepend_stubber singleton_class
+
       prepend_features singleton_class
+      target.__CRISPY_SPY__ = self
     end
 
     def prepend_features klass
@@ -31,11 +32,9 @@ module Crispy
       klass.private_instance_methods.each do|method_name|
         self.module_eval { private define_wrapper(method_name) }
       end
-    end
 
-    def stub *arguments, &definition
-      @__CRISPY_STUBBER__.stub(*arguments, &definition)
-      self
+      # define accessor after prepending to avoid to spy unexpectedly.
+      module_eval { attr_accessor :__CRISPY_SPY__ }
     end
 
     private def define_wrapper method_name

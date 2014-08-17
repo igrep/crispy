@@ -1,25 +1,22 @@
-require 'crispy/stubber'
+require 'crispy/with_stubber'
 
 module Crispy
   class Double
+    include WithStubber
 
     def initialize name_or_stubs_map = nil, stubs_map = {}
       if name_or_stubs_map.is_a? Hash
         @name = ''.freeze
-        @__CRISPY_STUBBER__ = Stubber.new(name_or_stubs_map)
+        initialize_stubber(name_or_stubs_map)
       else
         @name = name_or_stubs_map
-        @__CRISPY_STUBBER__ = Stubber.new(stubs_map)
+        initialize_stubber(stubs_map)
       end
       singleton_class =
         class << self
           self
         end
-      @__CRISPY_STUBBER__.prepend_features singleton_class
-    end
-
-    def stub stubs_map
-      @__CRISPY_STUBBER__.stub stubs_map
+      prepend_stubber singleton_class
     end
 
   end
