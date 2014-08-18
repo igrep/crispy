@@ -90,7 +90,7 @@ doctest_require: './test/doctest-fixtures/your_cool_class.rb'
 >> last_method_call = spy(object).received_messages.last
 >>
   last_method_call.method_name == :your_finalizer &&
-    p(last_method_call.arguments) == ['resource to release']
+    last_method_call.arguments == ['resource to release']
 => true
 ```
 
