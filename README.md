@@ -96,6 +96,18 @@ doctest_require: './test/doctest-fixtures/your_cool_class.rb'
 
 ### Stub Methods of a Spy
 
+```ruby
+>> spy(object).stub(:your_cool_method, 'Awesome!')
+>> object.your_cool_method
+=> "Awesome!"
+
+>> spy(object).stub(your_lovely_method: 'I love this method!', your_finalizer: 'Finalized!')
+>> object.your_lovely_method
+=> "I love this method!"
+>> object.your_finalizer
+=> "Finalized!"
+```
+
 ### Stub Methods of a Double
 
 ## Contributing
