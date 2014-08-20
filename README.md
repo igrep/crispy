@@ -110,6 +110,18 @@ doctest_require: './test/doctest-fixtures/your_cool_class.rb'
 
 ### Stub Methods of a Double
 
+```ruby
+>> your_awesome_double = double('your awesome double', nice!: '+1!', sexy?: true)
+>> your_awesome_double.nice!
+=> "+1!"
+>> your_awesome_double.sexy?
+=> true
+
+>> your_awesome_double.stub(:another_method, 'can be stubbed.')
+>> your_awesome_double.another_method
+=> "can be stubbed."
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/igrep/crispy/fork )
