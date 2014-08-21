@@ -44,10 +44,13 @@ doctest_require: './test/doctest-fixtures/your_cool_class.rb'
 >> object.your_lovely_method 'great', 'arguments'
 >> object.your_lovely_method 'great', 'arguments', 'again'
 >> object.your_finalizer 'resource to release'
+```
 
-# NOTE: Call query methods through the spy object, instead of YourCoolClass's instance.
+#### Spy methods with no arguments
 
-# No arguments
+Call query methods through the spy object, instead of YourCoolClass's instance.
+
+```ruby
 >> spy(object).received? :your_cool_method
 => true
 >> spy(object).received? :your_method_without_argument
@@ -56,8 +59,13 @@ doctest_require: './test/doctest-fixtures/your_cool_class.rb'
 => true
 >> spy(object).received? :your_ugly_method
 => false
+```
 
-# With arguments (each argument is compared by == method)
+#### Spy methods with arguments
+
+Each argument is compared by `==` method.
+
+```ruby
 >> spy(object).received? :your_cool_method, 1, 2, 3
 => true
 >> spy(object).received? :your_cool_method, 0, 0, 0
@@ -68,19 +76,30 @@ doctest_require: './test/doctest-fixtures/your_cool_class.rb'
 => true
 >> spy(object).received? :your_ugly_method, 'of course', 'I gave no arguments'
 => false
+```
 
-# With arguments and block
-### Sorry, I'm still thinking of the specification for that case ###
+#### Spy methods with arguments and a block
 
-# Count method calls
+*Sorry, I'm still thinking of the specification for that case.*
+
+#### Count method calls
+
+```ruby
 >> spy(object).count_received :your_cool_method
 => 1
 >> spy(object).count_received :your_cool_method, 1, 2, 3
 => 1
 >> spy(object).count_received :your_cool_method, 0, 0, 0
 => 0
+```
 
-# More detailed log
+#### Get more detailed log
+
+You can check arbitrary received methods with the familliar Array's (and of course including Enumerable's!) methods such as `any?`, `all`, `first`, `[]`, `index`.
+Because `spy(object).received_messages` returns an array of `Crispy::ReceivedMessage` instances.
+**You don't have to remember the tons of matchers for received arguments any more!!**
+
+```ruby
 >>
   spy(object).received_messages.any? do|m|
     m.method_name == :your_cool_method && m.arguments.all? {|arg| arg.is_a? Integer }
