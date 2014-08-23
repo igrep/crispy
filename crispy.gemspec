@@ -8,7 +8,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Yamamoto Yuji"]
   spec.email         = ["whosekiteneverfly@gmail.com"]
   spec.summary       = %q{Test spy for any object in Ruby.}
-  spec.description   = %q{Test spy for any object in Ruby. Independent from any testing framework.}
+  spec.description   =
+    "Test spy for any object in Ruby.\n" \
+    "It makes mocks obsolete so you don't have to be worried about " \
+    "where to put the expectations (i.e. before or after the subject method)."
   spec.homepage      = "https://github.com/igrep/crispy"
   spec.license       = "MIT"
 
