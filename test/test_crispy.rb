@@ -546,6 +546,18 @@ class TestCrispy < MiniTest::Test
       assert_same @expected_baz, @actual_baz
     end
 
+    def test_double_can_be_spied
+      assert spy(@double).received?(:hoge)
+      assert not(spy(@double).received_once?(:hoge))
+      assert_equal 2, spy(@double).count_received?(:hoge)
+
+      assert spy(@double).received?(:bar)
+      assert spy(@double).received_once?(:bar)
+
+      assert spy(@double).received?(:foo)
+      assert_equal 1, spy(@double).count_received?(:foo)
+    end
+
   end
 
 end
