@@ -1,7 +1,6 @@
 $VERBOSE = true # enable warnings
 
 require 'crispy'
-require 'crispy/received_message'
 require 'minitest/autorun'
 
 class TestCrispy < MiniTest::Test

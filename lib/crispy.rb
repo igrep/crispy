@@ -1,6 +1,6 @@
 require "crispy/version"
-require "crispy/spy"
-require "crispy/double"
+require "crispy/crispy_internal/spy"
+require "crispy/crispy_internal/double"
 
 module Crispy
   # All methods of this module should be module_function.
@@ -8,17 +8,17 @@ module Crispy
 
   # Returns a Spy object to wrap all methods of the object.
   def spy_into object, stubs_map = {}
-    ::Crispy::Spy.new object, stubs_map
+    ::Crispy::CrispyInternal::Spy.new object, stubs_map
   end
 
   def double name_or_stubs_map = nil, stubs_map = {}
-    ::Crispy::Double.new name_or_stubs_map, stubs_map
+    ::Crispy::CrispyInternal::Double.new name_or_stubs_map, stubs_map
   end
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
   def spy_on_any_instance_of klass
     raise NotImplementedError, "Sorry, this feature is under construction :("
-    ::Crispy::ClassSpy.new klass
+    ::Crispy::CrispyInternal::ClassSpy.new klass
   end
 
   def spy object
