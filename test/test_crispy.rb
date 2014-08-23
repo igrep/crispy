@@ -36,13 +36,15 @@ class TestCrispy < MiniTest::Test
     def setup
       @object = ObjectClass.new
 
-      @subject = spy_into(
+      @returned_spy = spy_into(
         @object, method_to_stub1: :stubbed1, method_to_stub2: :stubbed2
       )
 
       @object.hoge 1, 2, 3
       @object.foo
       @object.hoge 3, 4, 5
+
+      @subject = spy(@object)
     end
 
     def test_spy_logs_messages_sent_to_an_object
@@ -106,8 +108,8 @@ class TestCrispy < MiniTest::Test
       assert_equal(:stubbed2, @object.method_to_stub2)
     end
 
-    def test_spy_is_accessible_with_crispy_spy_method
-      assert_same @subject, spy(@object)
+    def test_spy_is_also_returned_by_spy_into_method
+      assert_same @subject, @returned_spy
     end
 
   end
