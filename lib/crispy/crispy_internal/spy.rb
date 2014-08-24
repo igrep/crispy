@@ -38,7 +38,7 @@ module Crispy
         module_eval { attr_accessor :__CRISPY_SPY__ }
       end
 
-      private def define_wrapper method_name
+      def define_wrapper method_name
         define_method method_name do|*arguments, &attached_block|
           @__CRISPY_SPY__.received_messages <<
             ::Crispy::Crispy::ReceivedMessage.new(method_name, *arguments, &attached_block)
@@ -46,6 +46,7 @@ module Crispy
         end
         method_name
       end
+      private :define_wrapper
 
     end
   end

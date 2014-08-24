@@ -25,9 +25,11 @@ class TestCrispy < MiniTest::Test
       fail "Not stubbed actually! The test fails."
     end
 
-    private def private_foo a
+    def private_foo a
       :private_foo
     end
+    private :private_foo
+
   end
 
   class TestCrispySpyInto < TestCrispy
