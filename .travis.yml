@@ -9,3 +9,9 @@ rvm:
 script:
   - bundle exec ruby test/test_crispy.rb
   - bundle exec rubydoctest README.md
+notifications:
+  email:
+    recipients:
+      - whosekiteneverfly@gmail.com
+    on_success: never
+    on_failure: never
