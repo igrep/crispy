@@ -1,6 +1,7 @@
 # Crispy
 
 [![Code Climate](https://codeclimate.com/github/igrep/crispy/badges/gpa.svg)](https://codeclimate.com/github/igrep/crispy)
+[![Test Coverage](https://codeclimate.com/github/igrep/crispy/badges/coverage.svg)](https://codeclimate.com/github/igrep/crispy)
 [![Build Status](https://travis-ci.org/igrep/crispy.svg?branch=master)](https://travis-ci.org/igrep/crispy)
 [![Gem Version](https://badge.fury.io/rb/crispy.svg)](http://badge.fury.io/rb/crispy)
 
