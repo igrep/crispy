@@ -7,9 +7,9 @@ Gem::Specification.new do |spec|
   spec.version       = Crispy::VERSION
   spec.authors       = ["Yamamoto Yuji"]
   spec.email         = ["whosekiteneverfly@gmail.com"]
-  spec.summary       = %q{Test spy for any object in Ruby.}
+  spec.summary       = %q{Test spy for any object.}
   spec.description   =
-    "Test spy for any object in Ruby.\n" \
+    "Test spy for any object.\n" \
     "It makes mocks obsolete so you don't have to be worried about " \
     "where to put the expectations (i.e. before or after the subject method)."
   spec.homepage      = "https://github.com/igrep/crispy"
