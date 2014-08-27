@@ -9,6 +9,9 @@ class TestCrispy < MiniTest::Test
 
   # Inherit BasicObject because it has fewer meta-programming methods than Object
   class ObjectClass < BasicObject
+
+    CONSTANT_TO_STUB = CONSTANT_TO_STUB_SAVE = ::Object.new
+
     def hoge a, b, c
       private_foo a
       [a, b, c]
@@ -141,6 +144,13 @@ class TestCrispy < MiniTest::Test
       assert_same @expected_foo, @actual_foo
       assert_same @expected_bar, @actual_bar
       assert_same @expected_baz, @actual_baz
+    end
+
+  end
+
+  class TestCrispyStubConst < TestCrispy
+
+    def setup
     end
 
   end
