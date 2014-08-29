@@ -4,6 +4,7 @@ module Crispy
       class << self
 
         def reset
+          ::Crispy::CrispyInternal::ConstChanger.recover_all
         end
 
       end
