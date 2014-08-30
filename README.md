@@ -31,8 +31,6 @@ Or install it yourself as:
 ## Usage
 
 <!--
-doctest_require: './test/test_helper.rb'
-
 # Sample class for doctest.
 doctest_require: './test/doctest-fixtures/your_cool_class.rb'
 -->
