@@ -146,6 +146,28 @@ Because `spy(object).received_messages` returns an array of `Crispy::ReceivedMes
 => "can be stubbed."
 ```
 
+### Stub Constants
+
+Specify the **fully qualified name of the constant** instead of the constant itself.
+
+```ruby
+>> YourCoolClass::YOUR_COOL_CONST
+=> "value before stubbed"
+
+>> stub_const 'YourCoolClass::YOUR_COOL_CONST', 'more cool value!'
+>> YourCoolClass::YOUR_COOL_CONST
+=> "more cool value!"
+```
+
+Then you can recover the stubbed constant value by `Crispy::Crispy::World.reset`.
+
+```ruby
+>> Crispy::Crispy::World.reset
+
+>> YourCoolClass::YOUR_COOL_CONST
+=> "value before stubbed"
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/igrep/crispy/fork )

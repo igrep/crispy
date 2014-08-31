@@ -1,4 +1,5 @@
 class YourCoolClass
+  YOUR_COOL_CONST = 'value before stubbed'.freeze
   def your_cool_method *args
   end
   def your_method_without_argument
