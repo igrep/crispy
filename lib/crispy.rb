@@ -37,20 +37,8 @@ module Crispy
   end
 
   def stub_const full_const_name, value
-    const_names = full_const_name.split('::'.freeze)
-
-    const_names.shift if const_names.first.empty?
-
-    target_const_name = const_names.pop
-
-    module_containing_target_const = const_names.inject(::Kernel) do|const_value, const_name|
-      const_value.const_get const_name
-    end
-    const_value_save = module_containing_target_const.module_eval do
-      remove_const target_const_name
-    end
-    module_containing_target_const.const_set target_const_name, value
-    ::Crispy::CrispyInternal::ConstChanger.register full_const_name, const_value_save
+    saved_value = ::Crispy::CrispyInternal::ConstChanger.change_by_full_name full_const_name, value
+    ::Crispy::CrispyInternal::ConstChanger.save full_const_name, saved_value
   end
 
 end
