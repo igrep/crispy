@@ -49,7 +49,7 @@ class TestCrispy < MiniTest::Test
     end
 
     def test_stubbed_const_value_changes_back_after_resetting
-      Crispy::World.reset
+      CrispyWorld.reset
       assert_same @saved_value, ::TestCrispy::ObjectClass::CONSTANT_TO_STUB
     end
 
@@ -74,11 +74,11 @@ class TestCrispy < MiniTest::Test
     def test_spy_logs_messages_sent_to_an_object
       assert_equal(
         [
-          Crispy::ReceivedMessage[:hoge, 1, 2, 3],
-          Crispy::ReceivedMessage[:private_foo, 1],
-          Crispy::ReceivedMessage[:foo],
-          Crispy::ReceivedMessage[:hoge, 3, 4, 5],
-          Crispy::ReceivedMessage[:private_foo, 3],
+          CrispyReceivedMessage[:hoge, 1, 2, 3],
+          CrispyReceivedMessage[:private_foo, 1],
+          CrispyReceivedMessage[:foo],
+          CrispyReceivedMessage[:hoge, 3, 4, 5],
+          CrispyReceivedMessage[:private_foo, 3],
         ],
         @subject.received_messages
       )

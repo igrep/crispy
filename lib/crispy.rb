@@ -1,8 +1,7 @@
 require "crispy/version"
 require "crispy/crispy_internal/spy"
 require "crispy/crispy_internal/double"
-require "crispy/crispy_internal/const_changer"
-require "crispy/crispy/world"
+require "crispy/crispy_world"
 
 module Crispy
   # All methods of this module should be module_function.

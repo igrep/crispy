@@ -1,4 +1,4 @@
-require 'crispy/crispy/received_message'
+require 'crispy/crispy_received_message'
 require 'crispy/crispy_internal/spy_mixin'
 require 'crispy/crispy_internal/with_stubber'
 
@@ -41,7 +41,7 @@ module Crispy
       def define_wrapper method_name
         define_method method_name do|*arguments, &attached_block|
           @__CRISPY_SPY__.received_messages <<
-            ::Crispy::Crispy::ReceivedMessage.new(method_name, *arguments, &attached_block)
+            ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
           super(*arguments, &attached_block)
         end
         method_name

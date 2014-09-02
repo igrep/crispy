@@ -101,7 +101,7 @@ Each argument is compared by `==` method.
 #### Get more detailed log
 
 You can check arbitrary received methods with the familliar Array's (and of course including Enumerable's!) methods such as `any?`, `all`, `first`, `[]`, `index`.
-Because `spy(object).received_messages` returns an array of `Crispy::ReceivedMessage` instances.
+Because `spy(object).received_messages` returns an array of `CrispyReceivedMessage` instances.
 **You don't have to remember the tons of matchers for received arguments any more!!**
 
 ```ruby
@@ -159,10 +159,10 @@ Specify the **fully qualified name of the constant** instead of the constant its
 => "more cool value!"
 ```
 
-Then you can recover the stubbed constant value by `Crispy::Crispy::World.reset`.
+Then you can recover the stubbed constant value by `CrispyWorld.reset`.
 
 ```ruby
->> Crispy::Crispy::World.reset
+>> CrispyWorld.reset
 
 >> YourCoolClass::YOUR_COOL_CONST
 => "value before stubbed"
