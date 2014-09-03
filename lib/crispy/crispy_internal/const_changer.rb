@@ -1,7 +1,9 @@
 module Crispy
   module CrispyInternal
     module ConstChanger
+
       @registry = {}
+
       class << self
 
         def change_by_full_name full_const_name, value
@@ -38,4 +40,3 @@ module Crispy
     end
   end
 end
-
