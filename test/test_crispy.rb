@@ -138,6 +138,36 @@ class TestCrispy < MiniTest::Test
 
   end
 
+  class TestCrispySpyIntoInstances < TestCrispy
+
+    def setup
+      @returned_spy = spy_into_instances(
+        ObjectClass, method_to_stub1: :stubbed_instance_method1, method_to_stub2: :stubbed_instance_method2
+      )
+
+      @subject = spy_of_instances(ObjectClass)
+
+      @object_instances = Array.new(3){ ObjectClass.new }
+
+      @object_instances[0].hoge 1, 2, 3
+      @object_instances[0].foo
+      @object_instances[0].hoge 3, 4, 5
+
+      @object_instances[1].hoge 1, 2, 3
+      @object_instances[1].foo
+      @object_instances[1].foo
+      @object_instances[1].bar
+      @object_instances[1].foo
+
+      @object_instances[1].bar
+      @object_instances[2].hoge 1, 2, 3
+      @object_instances[1].bar
+      @object_instances[2].hoge 7, 8, 9
+      @object_instances[2].hoge 7, 8, 9
+    end
+
+  end
+
   class TestCrispyDouble < TestCrispy
     def setup
       @expected_hoge = Object.new
