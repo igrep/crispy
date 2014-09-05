@@ -1,4 +1,4 @@
-require 'crispy/crispy/received_message'
+require 'crispy/crispy_received_message'
 
 module Crispy
   module CrispyInternal
@@ -10,7 +10,7 @@ module Crispy
         if arguments.empty? and attached_block.nil?
           @received_messages.map(&:method_name).include? method_name
         else
-          @received_messages.include? ::Crispy::Crispy::ReceivedMessage.new(method_name, *arguments, &attached_block)
+          @received_messages.include? ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
         end
       end
 
@@ -19,7 +19,7 @@ module Crispy
           @received_messages.map(&:method_name).one? {|self_method_name| self_method_name == method_name }
         else
           @received_messages.one? do |self_received_message|
-            self_received_message == ::Crispy::Crispy::ReceivedMessage.new(method_name, *arguments, &attached_block)
+            self_received_message == ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
           end
         end
       end
@@ -28,7 +28,7 @@ module Crispy
         if arguments.empty? and attached_block.nil?
           @received_messages.map(&:method_name).count method_name
         else
-          @received_messages.count ::Crispy::Crispy::ReceivedMessage.new(method_name, *arguments, &attached_block)
+          @received_messages.count ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
         end
       end
 

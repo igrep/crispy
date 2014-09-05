@@ -9,6 +9,9 @@ class TestCrispy < MiniTest::Test
 
   # Inherit BasicObject because it has fewer meta-programming methods than Object
   class ObjectClass < BasicObject
+
+    CONSTANT_TO_STUB = ::Crispy.double('value_before_stubbed')
+
     def hoge a, b, c
       private_foo a
       [a, b, c]
@@ -33,6 +36,25 @@ class TestCrispy < MiniTest::Test
 
   end
 
+  class TestCrispyStubConst < TestCrispy
+
+    def setup
+      @saved_value = ::TestCrispy::ObjectClass::CONSTANT_TO_STUB
+      @stubbbed_value = double('value_after_stubbed')
+      stub_const '::TestCrispy::ObjectClass::CONSTANT_TO_STUB', @stubbbed_value
+    end
+
+    def test_stubbed_const_value_changes_into_2nd_argument_value
+      assert_same @stubbbed_value, ::TestCrispy::ObjectClass::CONSTANT_TO_STUB
+    end
+
+    def test_stubbed_const_value_changes_back_after_resetting
+      CrispyWorld.reset
+      assert_same @saved_value, ::TestCrispy::ObjectClass::CONSTANT_TO_STUB
+    end
+
+  end
+
   class TestCrispySpyInto < TestCrispy
 
     def setup
@@ -52,11 +74,11 @@ class TestCrispy < MiniTest::Test
     def test_spy_logs_messages_sent_to_an_object
       assert_equal(
         [
-          Crispy::ReceivedMessage[:hoge, 1, 2, 3],
-          Crispy::ReceivedMessage[:private_foo, 1],
-          Crispy::ReceivedMessage[:foo],
-          Crispy::ReceivedMessage[:hoge, 3, 4, 5],
-          Crispy::ReceivedMessage[:private_foo, 3],
+          CrispyReceivedMessage[:hoge, 1, 2, 3],
+          CrispyReceivedMessage[:private_foo, 1],
+          CrispyReceivedMessage[:foo],
+          CrispyReceivedMessage[:hoge, 3, 4, 5],
+          CrispyReceivedMessage[:private_foo, 3],
         ],
         @subject.received_messages
       )
