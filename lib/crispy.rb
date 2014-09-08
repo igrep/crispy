@@ -17,7 +17,7 @@ module Crispy
   end
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
-  def spy_on_any_instance_of klass
+  def spy_into_instances klass
     raise NotImplementedError, "Sorry, this feature is under construction :("
     ::Crispy::CrispyInternal::ClassSpy.new klass
   end
