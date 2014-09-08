@@ -148,22 +148,55 @@ class TestCrispy < MiniTest::Test
       @subject = spy_of_instances(ObjectClass)
 
       @object_instances = Array.new(3){ ObjectClass.new }
+      received_message_by_method_call = {
+        -> { @object_instances[0].foo } =>
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :foo],
+        -> { @object_instances[0].hoge 1, 2, 3 } => [
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :hoge, 1, 2, 3],
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :private_foo, 1],
+        ],
+        -> { @object_instances[0].hoge 3, 4, 5 } => [
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :hoge, 3, 4, 5],
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :private_foo, 3],
+        ],
+        -> { @object_instances[1].bar } =>
+          CrispyReceivedMessageWithReceiver[@object_instances[1], :bar],
+        -> { @object_instances[1].foo } =>
+          ([CrispyReceivedMessageWithReceiver[@object_instances[1], :foo]] * 3),
+        -> { @object_instances[1].hoge 1, 2, 3 } => [
+          CrispyReceivedMessageWithReceiver[@object_instances[1], :hoge, 1, 2, 3],
+          CrispyReceivedMessageWithReceiver[@object_instances[1], :private_foo, 1],
+        ],
+        -> { @object_instances[2].bar } =>
+          ([CrispyReceivedMessageWithReceiver[@object_instances[2], :bar]] * 2),
+        -> { @object_instances[2].hoge 1, 2, 3 } => [
+          CrispyReceivedMessageWithReceiver[@object_instances[2], :hoge, 1, 2, 3],
+          CrispyReceivedMessageWithReceiver[@object_instances[2], :private_foo, 1],
+        ],
+        -> { @object_instances[2].hoge 7, 8, 9 } => [
+          CrispyReceivedMessageWithReceiver[@object_instances[2], :hoge, 7, 8, 9],
+          CrispyReceivedMessageWithReceiver[@object_instances[2], :private_foo, 7],
+        ],
+        -> { @object_instances[2].hoge 7, 8, 9 } => [
+          CrispyReceivedMessageWithReceiver[@object_instances[2], :hoge, 7, 8, 9],
+          CrispyReceivedMessageWithReceiver[@object_instances[2], :private_foo, 7],
+        ],
+      }.each_pair.map {|method_call, received_message| [method_call, Array(received_message)] }.shuffle!
 
-      @object_instances[0].hoge 1, 2, 3
-      @object_instances[0].foo
-      @object_instances[0].hoge 3, 4, 5
+      received_message_by_method_call.each {|method_call, _| method_call.call }
+    end
 
-      @object_instances[1].hoge 1, 2, 3
-      @object_instances[1].foo
-      @object_instances[1].foo
-      @object_instances[1].bar
-      @object_instances[1].foo
-
-      @object_instances[1].bar
-      @object_instances[2].hoge 1, 2, 3
-      @object_instances[1].bar
-      @object_instances[2].hoge 7, 8, 9
-      @object_instances[2].hoge 7, 8, 9
+    def test_spy_logs_messages_sent_to_instances_of_a_class
+      assert_equal(
+        [
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :hoge, 1, 2, 3],
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :private_foo, 1],
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :foo],
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :hoge, 3, 4, 5],
+          CrispyReceivedMessageWithReceiver[@object_instances[0], :private_foo, 3],
+        ],
+        @subject.received_messages
+      )
     end
 
   end
