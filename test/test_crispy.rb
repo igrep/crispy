@@ -181,9 +181,14 @@ class TestCrispy < MiniTest::Test
           CrispyReceivedMessageWithReceiver[@object_instances[2], :hoge, 7, 8, 9],
           CrispyReceivedMessageWithReceiver[@object_instances[2], :private_foo, 7],
         ],
-      }.each_pair.map {|method_call, received_message| [method_call, Array(received_message)] }.shuffle!
+      }.each_pair.flat_map do|method_call, same_received_messages|
+        same_received_messages = Array(same_received_messages)
+        Array.new same_received_messages.length, [method_call, same_received_messages.first]
+      end.shuffle!
 
-      received_message_by_method_call.each {|method_call, _| method_call.call }
+      received_message_by_method_call.each do|method_call, _|
+        method_call.call
+      end
     end
 
     def test_spy_logs_messages_sent_to_instances_of_a_class
