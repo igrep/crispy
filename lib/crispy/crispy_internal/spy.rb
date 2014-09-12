@@ -18,24 +18,7 @@ module Crispy
         initialize_stubber stubs_map
         prepend_stubber singleton_class
 
-        prepend_features singleton_class
-        target.__CRISPY_SPY__ = self
-      end
-
-      def prepend_features klass
-        super
-        klass.public_instance_methods.each do|method_name|
-          self.module_eval { public define_wrapper(method_name) }
-        end
-        klass.protected_instance_methods.each do|method_name|
-          self.module_eval { protected define_wrapper(method_name) }
-        end
-        klass.private_instance_methods.each do|method_name|
-          self.module_eval { private define_wrapper(method_name) }
-        end
-
-        # define accessor after prepending to avoid to spy unexpectedly.
-        module_eval { attr_accessor :__CRISPY_SPY__ }
+        sneak_into Target.new(target, singleton_class)
       end
 
       def define_wrapper method_name
@@ -47,6 +30,24 @@ module Crispy
         method_name
       end
       private :define_wrapper
+
+      class Target
+
+        def initialize object, object_singleton_class
+          @target_object = object
+          @target_object_singleton_class = object_singleton_class
+        end
+
+        def as_class
+          @target_object_singleton_class
+        end
+
+        def pass_spy_through spy
+          spy.module_eval { attr_accessor :__CRISPY_SPY__ }
+          @target_object.__CRISPY_SPY__ = spy
+        end
+
+      end
 
     end
   end
