@@ -32,6 +32,27 @@ module Crispy
         end
       end
 
+      def prepend_features klass
+        super
+
+        klass.public_instance_methods.each do|method_name|
+          self.module_eval { public define_wrapper(method_name) }
+        end
+        klass.protected_instance_methods.each do|method_name|
+          self.module_eval { protected define_wrapper(method_name) }
+        end
+        klass.private_instance_methods.each do|method_name|
+          self.module_eval { private define_wrapper(method_name) }
+        end
+      end
+      private :prepend_features
+
+      def sneak_into target
+        prepend_features target.as_class
+        target.pass_spy_through self
+      end
+      private :sneak_into
+
     end
   end
 end
