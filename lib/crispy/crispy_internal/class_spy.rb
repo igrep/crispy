@@ -4,6 +4,8 @@ module Crispy
       include SpyMixin
       include WithStubber
 
+      @registry = {}
+
       def initialize klass, stubs_map = {}
         super()
         @received_messages = []
@@ -16,7 +18,7 @@ module Crispy
 
       def define_wrapper method_name
         define_method method_name do|*arguments, &attached_block|
-          self.class.__CRISPY_CLASS_SPY__.received_messages <<
+          ::Crispy::CrispyInternal::ClassSpy.of_class(self.class).received_messages <<
             ::Crispy::CrispyReceivedMessageWithReceiver.new(self, method_name, *arguments, &attached_block)
           super(*arguments, &attached_block)
         end
@@ -36,13 +38,17 @@ module Crispy
 
         # define accessor after prepending to avoid to spy unexpectedly.
         def pass_spy_through spy
-          class << @target_class
-            attr_accessor :__CRISPY_CLASS_SPY__
-          end
-
-          @target_class.__CRISPY_CLASS_SPY__ = spy
+          ::Crispy::CrispyInternal::ClassSpy.register spy: spy, of_class: @target_class
         end
 
+      end
+
+      def self.register(spy: nil, of_class: nil)
+        @registry[of_class] = spy
+      end
+
+      def self.of_class(klass)
+        @registry[klass]
       end
 
     end
