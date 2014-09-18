@@ -17,8 +17,12 @@ module Crispy
       end
 
       def define_wrapper method_name
+        #return method_name if method_name == :initialize
+        return method_name if method_name == :method_missing
+        p method_name
         define_method method_name do|*arguments, &attached_block|
-          ::Crispy::CrispyInternal::ClassSpy.of_class(self.class).received_messages <<
+          #::Kernel.print "e" # <= with this statement, prepend-ing :method_missing doesn't cause the segfault.
+          ::Crispy::CrispyInternal::ClassSpy.of_class(::Kernel.p self.class).received_messages <<
             ::Crispy::CrispyReceivedMessageWithReceiver.new(self, method_name, *arguments, &attached_block)
           super(*arguments, &attached_block)
         end
