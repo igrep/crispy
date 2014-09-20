@@ -14,3 +14,15 @@ describe GreatClass do
     end
   end
 end
+
+__END__
+before do
+  spy_into SomeModule
+  subject.some_subject_method
+end
+
+...
+
+it 'remembers to do the important thing!' do
+  expect(spy(SomeModule).received(:some_important_method)).to be true
+end
