@@ -2,7 +2,7 @@ describe GreatClass do
   describe 'some_subject_method' do
     subject { described_class.new }
     before do
-      spy_into SomeModule
+      spy_into SomeModule, some_important_method: 'stubbed_value'
       subject.some_subject_method
     end
     it 'makes itself special!' do
