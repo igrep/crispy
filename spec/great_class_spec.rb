@@ -9,7 +9,7 @@ describe GreatClass do
       is_expected.to be_some_special_state 
     end
     it 'remembers to do the important thing!' do
-      expect(spy(SomeModule).received(:some_important_method)).to be true
+      expect(spy(SomeModule).received?(:some_important_method)).to be true
     end
   end
 end
