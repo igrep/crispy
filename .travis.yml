@@ -3,6 +3,8 @@ install:
   - gem install bundler
   - bundle
 rvm:
+  - ruby-head
+  - 2.2.0-preview1
   - 2.1.1
   - 2.0.0
   - rbx-2
@@ -18,3 +20,7 @@ notifications:
 addons:
   code_climate:
     repo_token: 4329c1e131ef79de66f8ba2f605fa2fd352bbbd61fed5024cb6eaaba73
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+    - rvm: 2.2.0-preview1
