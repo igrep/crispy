@@ -146,11 +146,7 @@ class TestCrispy < MiniTest::Test
       )
 
       @subject = spy_of_instances(ObjectClass)
-
-      puts "Making an ObjectClass's instance"
-      p ObjectClass.new
-      puts "Making ObjectClass's instances"
-      @object_instances = p Array.new(3){ p ObjectClass.new }
+      @object_instances = Array.new(3){ ObjectClass.new }
 
       @object_instances[0].hoge 3, 4, 5
       @object_instances[1].hoge 1, 2, 3
