@@ -18,7 +18,7 @@ module Crispy
 
       def define_wrapper method_name
         define_method method_name do|*arguments, &attached_block|
-          ::Crispy::CrispyInternal::ClassSpy.of_class(self.class).received_messages <<
+          self.__CRISPY_CLASS_SPY__.received_messages <<
             ::Crispy::CrispyReceivedMessageWithReceiver.new(self, method_name, *arguments, &attached_block)
           super(*arguments, &attached_block)
         end
@@ -38,6 +38,9 @@ module Crispy
 
         # define accessor after prepending to avoid to spy unexpectedly.
         def pass_spy_through spy
+          spy.module_eval do
+            define_method(:__CRISPY_CLASS_SPY__) { spy }
+          end
           ::Crispy::CrispyInternal::ClassSpy.register spy: spy, of_class: @target_class
         end
 
