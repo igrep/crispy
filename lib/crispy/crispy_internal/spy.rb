@@ -22,6 +22,7 @@ module Crispy
       end
 
       def define_wrapper method_name
+        return nil if method_name == :__CRISPY_CLASS_SPY__
         define_method method_name do|*arguments, &attached_block|
           @__CRISPY_SPY__.received_messages <<
             ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
