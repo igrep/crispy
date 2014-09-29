@@ -1,3 +1,7 @@
+require 'crispy/crispy_received_message_with_receiver'
+require 'crispy/crispy_internal/spy_mixin'
+require 'crispy/crispy_internal/with_stubber'
+
 module Crispy
   module CrispyInternal
     class ClassSpy < ::Module
