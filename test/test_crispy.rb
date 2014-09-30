@@ -161,18 +161,18 @@ class TestCrispy < MiniTest::Test
     def test_spy_logs_messages_sent_to_instances_of_a_class
       assert_equal(
         [
-          CrispyReceivedMessageWithReceiver[@object_instances[0], :hoge, 3, 4, 5],
-          CrispyReceivedMessageWithReceiver[@object_instances[0], :private_foo, 3],
-          CrispyReceivedMessageWithReceiver[@object_instances[1], :hoge, 1, 2, 3],
-          CrispyReceivedMessageWithReceiver[@object_instances[1], :private_foo, 1],
-          CrispyReceivedMessageWithReceiver[@object_instances[0], :foo],
-          CrispyReceivedMessageWithReceiver[@object_instances[2], :hoge, 3, 4, 5],
-          CrispyReceivedMessageWithReceiver[@object_instances[2], :private_foo, 3],
-          CrispyReceivedMessageWithReceiver[@object_instances[1], :bar],
-          CrispyReceivedMessageWithReceiver[@object_instances[2], :hoge, 7, 8, 9],
-          CrispyReceivedMessageWithReceiver[@object_instances[2], :private_foo, 7],
-          CrispyReceivedMessageWithReceiver[@object_instances[1], :bar],
-          CrispyReceivedMessageWithReceiver[@object_instances[0], :bar],
+          CrispyReceivedMessage[:hoge, 3, 4, 5],
+          CrispyReceivedMessage[:private_foo, 3],
+          CrispyReceivedMessage[:hoge, 1, 2, 3],
+          CrispyReceivedMessage[:private_foo, 1],
+          CrispyReceivedMessage[:foo],
+          CrispyReceivedMessage[:hoge, 3, 4, 5],
+          CrispyReceivedMessage[:private_foo, 3],
+          CrispyReceivedMessage[:bar],
+          CrispyReceivedMessage[:hoge, 7, 8, 9],
+          CrispyReceivedMessage[:private_foo, 7],
+          CrispyReceivedMessage[:bar],
+          CrispyReceivedMessage[:bar],
         ],
         @subject.received_messages
       )
