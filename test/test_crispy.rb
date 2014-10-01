@@ -161,6 +161,9 @@ class TestCrispy < MiniTest::Test
     def test_spy_logs_messages_sent_to_instances_of_a_class
       assert_equal(
         [
+          CrispyReceivedMessage[:initialize],
+          CrispyReceivedMessage[:initialize],
+          CrispyReceivedMessage[:initialize],
           CrispyReceivedMessage[:hoge, 3, 4, 5],
           CrispyReceivedMessage[:private_foo, 3],
           CrispyReceivedMessage[:hoge, 1, 2, 3],
