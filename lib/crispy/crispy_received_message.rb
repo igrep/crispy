@@ -1,7 +1,9 @@
 module Crispy
   class CrispyReceivedMessage
 
-    attr_reader :method_name, :arguments, :attached_block
+    DELEGATABLE_METHODS = [:method_name, :arguments, :attached_block]
+
+    attr_reader(*DELEGATABLE_METHODS)
 
     class << self
       alias [] new
