@@ -10,9 +10,11 @@ module Crispy
 
       @registry = {}
 
+      attr_reader :received_messages_with_receiver
+
       def initialize klass, stubs_map = {}
         super()
-        @received_messages = []
+        @received_messages_with_receiver = []
 
         initialize_stubber stubs_map
         prepend_stubber klass
@@ -20,9 +22,13 @@ module Crispy
         sneak_into Target.new(klass)
       end
 
+      def received_messages
+        @received_messages_with_receiver.map {|m| m.received_message }
+      end
+
       def define_wrapper method_name
         define_method method_name do|*arguments, &attached_block|
-          self.__CRISPY_CLASS_SPY__.received_messages <<
+          self.__CRISPY_CLASS_SPY__.received_messages_with_receiver <<
             ::Crispy::CrispyReceivedMessageWithReceiver.new(self, method_name, *arguments, &attached_block)
           super(*arguments, &attached_block)
         end
