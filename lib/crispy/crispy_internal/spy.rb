@@ -9,7 +9,15 @@ module Crispy
       include WithStubber
 
       def initialize target, stubs_map = {}
-        super()
+        super() do
+          spy = self
+          define_method(:__CRISPY_SPY__) { spy }
+          def __CRISPY_APPEND_RECEIVED_MESSAGE__ _receiver, method_name, *arguments, &attached_block
+            __CRISPY_SPY__.received_messages <<
+              ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
+          end
+        end
+
         @received_messages = []
         singleton_class =
           class << target
@@ -18,19 +26,8 @@ module Crispy
         initialize_stubber stubs_map
         prepend_stubber singleton_class
 
-        sneak_into Target.new(target, singleton_class)
+        prepend_features singleton_class
       end
-
-      def define_wrapper method_name
-        return nil if method_name == :__CRISPY_CLASS_SPY__
-        define_method method_name do|*arguments, &attached_block|
-          @__CRISPY_SPY__.received_messages <<
-            ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
-          super(*arguments, &attached_block)
-        end
-        method_name
-      end
-      private :define_wrapper
 
       class Target
 

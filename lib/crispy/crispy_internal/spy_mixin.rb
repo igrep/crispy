@@ -4,6 +4,12 @@ module Crispy
   module CrispyInternal
     module SpyMixin
 
+      BLACK_LISTED_METHODS = [
+        :__CRISPY_CLASS_SPY__,
+        :__CRISPY_SPY__,
+        :__CRISPY_APPEND_RECEIVED_MESSAGE__,
+      ]
+
       attr_reader :received_messages
 
       def received? method_name, *arguments, &attached_block
@@ -32,11 +38,20 @@ module Crispy
         end
       end
 
+      def define_wrapper method_name
+        define_method method_name do|*arguments, &attached_block|
+          __CRISPY_APPEND_RECEIVED_MESSAGE__(self, method_name, *arguments, &attached_block)
+          super(*arguments, &attached_block)
+        end
+        method_name
+      end
+      private :define_wrapper
+
       def prepend_features klass
         super
 
-        klass.public_instance_methods.each do|method_name|
-          self.module_eval { public define_wrapper(method_name) }
+        without_black_listed_methods(klass.public_instance_methods).each do|method_name|
+          self.module_eval { define_wrapper(method_name) }
         end
         klass.protected_instance_methods.each do|method_name|
           self.module_eval { protected define_wrapper(method_name) }
@@ -52,6 +67,11 @@ module Crispy
         target.pass_spy_through self
       end
       private :sneak_into
+
+      def without_black_listed_methods method_names
+        method_names.reject {|method_name| BLACK_LISTED_METHODS.include? method_name }
+      end
+      private :without_black_listed_methods
 
     end
   end
