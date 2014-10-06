@@ -7,7 +7,6 @@ module Crispy
       BLACK_LISTED_METHODS = [
         :__CRISPY_CLASS_SPY__,
         :__CRISPY_SPY__,
-        :__CRISPY_APPEND_RECEIVED_MESSAGE__,
       ]
 
       attr_reader :received_messages
@@ -37,15 +36,6 @@ module Crispy
           @received_messages.count ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
         end
       end
-
-      def define_wrapper method_name
-        define_method method_name do|*arguments, &attached_block|
-          __CRISPY_APPEND_RECEIVED_MESSAGE__(self, method_name, *arguments, &attached_block)
-          super(*arguments, &attached_block)
-        end
-        method_name
-      end
-      private :define_wrapper
 
       def prepend_features klass
         super

@@ -12,10 +12,6 @@ module Crispy
         super() do
           spy = self
           define_method(:__CRISPY_SPY__) { spy }
-          def __CRISPY_APPEND_RECEIVED_MESSAGE__ _receiver, method_name, *arguments, &attached_block
-            __CRISPY_SPY__.received_messages <<
-              ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
-          end
         end
 
         @received_messages = []
@@ -28,6 +24,17 @@ module Crispy
 
         prepend_features singleton_class
       end
+
+      def define_wrapper method_name
+        define_method method_name do|*arguments, &attached_block|
+          __CRISPY_SPY__.received_messages <<
+            ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
+
+          super(*arguments, &attached_block)
+        end
+        method_name
+      end
+      private :define_wrapper
 
       class Target
 

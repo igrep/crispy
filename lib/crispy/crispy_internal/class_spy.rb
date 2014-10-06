@@ -16,10 +16,6 @@ module Crispy
         spy = self
         super() do
           define_method(:__CRISPY_CLASS_SPY__) { spy }
-          def __CRISPY_APPEND_RECEIVED_MESSAGE__ receiver, method_name, *arguments, &attached_block
-            __CRISPY_CLASS_SPY__.received_messages_with_receiver <<
-              ::Crispy::CrispyReceivedMessageWithReceiver.new(receiver, method_name, *arguments, &attached_block)
-          end
         end
 
         @received_messages_with_receiver = []
@@ -34,6 +30,17 @@ module Crispy
       def received_messages
         @received_messages_with_receiver.map {|m| m.received_message }
       end
+
+      def define_wrapper method_name
+        define_method method_name do|*arguments, &attached_block|
+          __CRISPY_CLASS_SPY__.received_messages_with_receiver <<
+            ::Crispy::CrispyReceivedMessageWithReceiver.new(self, method_name, *arguments, &attached_block)
+
+          super(*arguments, &attached_block)
+        end
+        method_name
+      end
+      private :define_wrapper
 
       class Target
 
