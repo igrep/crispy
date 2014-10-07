@@ -22,6 +22,8 @@ class TestCrispy < MiniTest::Test
     def bar
       []
     end
+    def baz
+    end
     def method_to_stub1
       fail "Not stubbed actually! The test fails."
     end
@@ -179,6 +181,50 @@ class TestCrispy < MiniTest::Test
         ],
         @subject.received_messages
       )
+    end
+
+    def test_spy_has_received_messages_sent_to_an_object
+      assert @subject.received?(:hoge)
+      assert @subject.received?(:foo)
+      assert not(@subject.received?(:baz))
+      assert @subject.received?(:private_foo)
+    end
+
+    def test_spy_has_received_messages_with_arguments_sent_to_an_object
+      assert @subject.received?(:hoge, 1, 2, 3)
+      assert @subject.received?(:hoge, 3, 4, 5)
+      assert @subject.received?(:private_foo, 1)
+      assert @subject.received?(:private_foo, 3)
+      assert not(@subject.received?(:hoge, 0, 0, 0))
+      assert not(@subject.received?(:private_foo, 0, 0, 0))
+      assert not(@subject.received?(:foo, 1))
+      assert not(@subject.received?(:bar, nil))
+      assert not(@subject.received?(:baz, nil))
+    end
+
+    def test_spy_has_received_messages_once_sent_to_an_object
+      assert not(@subject.received_once?(:hoge))
+      assert not(@subject.received_once?(:private_foo))
+      assert @subject.received_once?(:hoge, 3, 4, 5)
+      assert @subject.received_once?(:private_foo, 3)
+      assert not(@subject.received_once?(:private_foo, 3, 4))
+      assert @subject.received_once?(:foo)
+      assert not(@subject.received_once?(:bar))
+    end
+
+    def test_spy_counts_received_messages_sent_to_an_object
+      assert_equal(1, @subject.count_received(:hoge, 1, 2, 3))
+      assert_equal(1, @subject.count_received(:hoge, 3, 4, 5))
+      assert_equal(0, @subject.count_received(:hoge, 0, 0, 0))
+      assert_equal(2, @subject.count_received(:hoge))
+
+      assert_equal(1, @subject.count_received(:private_foo, 1))
+      assert_equal(1, @subject.count_received(:private_foo, 3))
+      assert_equal(0, @subject.count_received(:private_foo, 0))
+      assert_equal(2, @subject.count_received(:private_foo))
+
+      assert_equal(1, @subject.count_received(:foo))
+      assert_equal(0, @subject.count_received(:bar))
     end
 
   end
