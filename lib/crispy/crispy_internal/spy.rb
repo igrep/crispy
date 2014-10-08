@@ -8,6 +8,8 @@ module Crispy
       include SpyMixin
       include WithStubber
 
+      attr_reader :received_messages
+
       def initialize target, stubs_map = {}
         super() do
           spy = self
