@@ -205,26 +205,27 @@ class TestCrispy < MiniTest::Test
     def test_spy_has_received_messages_once_sent_to_an_object
       assert not(@subject.received_once?(:hoge))
       assert not(@subject.received_once?(:private_foo))
-      assert @subject.received_once?(:hoge, 3, 4, 5)
-      assert @subject.received_once?(:private_foo, 3)
+      assert not(@subject.received_once?(:hoge, 3, 4, 5))
+      assert not(@subject.received_once?(:private_foo, 3))
       assert not(@subject.received_once?(:private_foo, 3, 4))
       assert @subject.received_once?(:foo)
       assert not(@subject.received_once?(:bar))
+      assert not(@subject.received_once?(:baz))
     end
 
     def test_spy_counts_received_messages_sent_to_an_object
       assert_equal(1, @subject.count_received(:hoge, 1, 2, 3))
-      assert_equal(1, @subject.count_received(:hoge, 3, 4, 5))
+      assert_equal(2, @subject.count_received(:hoge, 3, 4, 5))
       assert_equal(0, @subject.count_received(:hoge, 0, 0, 0))
-      assert_equal(2, @subject.count_received(:hoge))
+      assert_equal(4, @subject.count_received(:hoge))
 
       assert_equal(1, @subject.count_received(:private_foo, 1))
-      assert_equal(1, @subject.count_received(:private_foo, 3))
+      assert_equal(2, @subject.count_received(:private_foo, 3))
       assert_equal(0, @subject.count_received(:private_foo, 0))
-      assert_equal(2, @subject.count_received(:private_foo))
+      assert_equal(4, @subject.count_received(:private_foo))
 
       assert_equal(1, @subject.count_received(:foo))
-      assert_equal(0, @subject.count_received(:bar))
+      assert_equal(3, @subject.count_received(:bar))
     end
 
   end
