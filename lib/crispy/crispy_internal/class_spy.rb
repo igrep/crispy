@@ -31,6 +31,10 @@ module Crispy
         @received_messages_with_receiver.map {|m| m.received_message }
       end
 
+      def erase_log
+        @received_messages_with_receiver.clear
+      end
+
       def define_wrapper method_name
         define_method method_name do|*arguments, &attached_block|
           __CRISPY_CLASS_SPY__.received_messages_with_receiver <<
@@ -62,12 +66,20 @@ module Crispy
 
       end
 
+      def self.new klass, stubs_map = {}
+        self.of_class(klass) || super
+      end
+
       def self.register(spy: nil, of_class: nil)
         @registry[of_class] = spy
       end
 
       def self.of_class(klass)
         @registry[klass]
+      end
+
+      def self.erase_all_logs
+        @registry.each_value(&:erase_log)
       end
 
     end

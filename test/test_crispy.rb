@@ -160,6 +160,10 @@ class TestCrispy < MiniTest::Test
       @object_instances[0].bar
     end
 
+    def teardown
+      CrispyWorld.reset
+    end
+
     def test_spy_logs_messages_sent_to_instances_of_a_class
       assert_equal(
         [

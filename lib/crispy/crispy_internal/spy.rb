@@ -27,6 +27,10 @@ module Crispy
         prepend_features singleton_class
       end
 
+      def erase_log
+        @received_messages.clear
+      end
+
       def define_wrapper method_name
         define_method method_name do|*arguments, &attached_block|
           __CRISPY_SPY__.received_messages <<

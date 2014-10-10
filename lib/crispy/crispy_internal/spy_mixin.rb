@@ -13,6 +13,10 @@ module Crispy
         raise NotImplementedError
       end
 
+      def erase_log
+        raise NotImplementedError
+      end
+
       def received? method_name, *arguments, &attached_block
         if arguments.empty? and attached_block.nil?
           received_messages.map(&:method_name).include? method_name

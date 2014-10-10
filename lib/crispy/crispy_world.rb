@@ -6,6 +6,7 @@ module Crispy
 
       def reset
         ::Crispy::CrispyInternal::ConstChanger.recover_all
+        ::Crispy::CrispyInternal::ClassSpy.erase_all_logs
       end
 
     end
