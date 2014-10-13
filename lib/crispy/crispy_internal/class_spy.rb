@@ -24,7 +24,7 @@ module Crispy
         prepend_stubber klass
 
         prepend_features klass
-        ::Crispy::CrispyInternal::ClassSpy.register spy: spy, of_class: klass
+        self.class.register spy: spy, of_class: klass
       end
 
       def received_messages
