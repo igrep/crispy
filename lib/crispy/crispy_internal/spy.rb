@@ -42,24 +42,6 @@ module Crispy
       end
       private :define_wrapper
 
-      class Target
-
-        def initialize object, object_singleton_class
-          @target_object = object
-          @target_object_singleton_class = object_singleton_class
-        end
-
-        def as_class
-          @target_object_singleton_class
-        end
-
-        def pass_spy_through spy
-          spy.module_eval { attr_accessor :__CRISPY_SPY__ }
-          @target_object.__CRISPY_SPY__ = spy
-        end
-
-      end
-
     end
   end
 end
