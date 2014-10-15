@@ -10,8 +10,6 @@ module Crispy
 
       @registry = {}
 
-      attr_reader :received_messages_with_receiver
-
       def initialize klass, stubs_map = {}
         spy = self
         super() do
@@ -19,6 +17,7 @@ module Crispy
         end
 
         @received_messages_with_receiver = []
+        initialize_spy
 
         initialize_stubber stubs_map
         prepend_stubber klass
@@ -31,14 +30,26 @@ module Crispy
         @received_messages_with_receiver.map {|m| m.received_message }
       end
 
+      def received_messages_with_receiver
+        # stop spying in advance to prevent from unexpectedly spying receiver's methods in test code.
+        self.stop
+        @received_messages_with_receiver
+      end
+
       def erase_log
         @received_messages_with_receiver.clear
       end
 
+      def append_received_message_with_receiver receiver, method_name, *arguments, &attached_block
+        if @spying
+          @received_messages_with_receiver <<
+            ::Crispy::CrispyReceivedMessageWithReceiver.new(receiver, method_name, *arguments, &attached_block)
+        end
+      end
+
       def define_wrapper method_name
         define_method method_name do|*arguments, &attached_block|
-          __CRISPY_CLASS_SPY__.received_messages_with_receiver <<
-            ::Crispy::CrispyReceivedMessageWithReceiver.new(self, method_name, *arguments, &attached_block)
+          __CRISPY_CLASS_SPY__.append_received_message_with_receiver self, method_name, *arguments, &attached_block
 
           super(*arguments, &attached_block)
         end
@@ -46,28 +57,14 @@ module Crispy
       end
       private :define_wrapper
 
-      class Target
-
-        def initialize klass
-          @target_class = klass
-        end
-
-        def as_class
-          @target_class
-        end
-
-        # define accessor after prepending to avoid to spy unexpectedly.
-        def pass_spy_through spy
-          spy.module_eval do
-            define_method(:__CRISPY_CLASS_SPY__) { spy }
-          end
-          ::Crispy::CrispyInternal::ClassSpy.register spy: spy, of_class: @target_class
-        end
-
-      end
-
       def self.new klass, stubs_map = {}
-        self.of_class(klass) || super
+        spy = self.of_class(klass)
+        if spy
+          spy.restart
+          spy
+        else
+          super
+        end
       end
 
       def self.register(spy: nil, of_class: nil)

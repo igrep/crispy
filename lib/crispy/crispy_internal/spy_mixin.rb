@@ -17,6 +17,14 @@ module Crispy
         raise NotImplementedError
       end
 
+      def stop
+        @spying = false
+      end
+
+      def restart
+        @spying = true
+      end
+
       def received? method_name, *arguments, &attached_block
         if arguments.empty? and attached_block.nil?
           received_messages.map(&:method_name).include? method_name
@@ -68,6 +76,11 @@ module Crispy
         method_names.reject {|method_name| BLACK_LISTED_METHODS.include? method_name }
       end
       private :without_black_listed_methods
+
+      def initialize_spy
+        @spying = true
+      end
+      private :initialize_spy
 
     end
   end
