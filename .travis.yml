@@ -7,7 +7,6 @@ rvm:
   - 2.2.0-preview1
   - 2.1.3
   - 2.0.0
-  - rbx-2
 script:
   - CODECLIMATE_REPO_TOKEN=fe75ea4329c1e131ef79de66f8ba2f605fa2fd352bbbd61fed5024cb6eaaba73 bundle exec rubydoctest README.md
   - CODECLIMATE_REPO_TOKEN=fe75ea4329c1e131ef79de66f8ba2f605fa2fd352bbbd61fed5024cb6eaaba73 bundle exec ruby test/test_crispy.rb
@@ -24,4 +23,3 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: 2.2.0-preview1
-    - rvm: rbx-2
