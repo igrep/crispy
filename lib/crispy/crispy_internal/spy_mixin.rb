@@ -25,30 +25,25 @@ module Crispy
         @spying = true
       end
 
-      def received? method_name, *arguments, &attached_block
-        if arguments.empty? and attached_block.nil?
-          received_messages.map(&:method_name).include? method_name
-        else
-          received_messages.include? ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
-        end
-      end
+      COMMON_RECEIVED_MESSAGE_METHODS_DEFINITION = {
+        'received?'      => 'include? %s',
+        'received_once?' => 'one? {|self_thing| self_thing == %s }',
+        'count_received' => 'count %s',
+      }
 
-      def received_once? method_name, *arguments, &attached_block
-        if arguments.empty? and attached_block.nil?
-          received_messages.map(&:method_name).one? {|self_method_name| self_method_name == method_name }
-        else
-          received_messages.one? do |self_received_message|
-            self_received_message == ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
+      COMMON_RECEIVED_MESSAGE_METHODS_DEFINITION.each do|method_name, core_definition|
+        binding.eval(<<-END, __FILE__, (__LINE__ + 1))
+          def #{method_name} received_method_name, *received_arguments, &received_block
+            if received_arguments.empty? and received_block.nil?
+              received_messages.map(&:method_name).#{sprintf(core_definition, 'received_method_name')}
+            else
+              received_message = ::Crispy::CrispyReceivedMessage.new(
+                received_method_name, *received_arguments, &received_block
+              )
+              received_messages.#{sprintf(core_definition, 'received_message')}
+            end
           end
-        end
-      end
-
-      def count_received method_name, *arguments, &attached_block
-        if arguments.empty? and attached_block.nil?
-          received_messages.map(&:method_name).count method_name
-        else
-          received_messages.count ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
-        end
+        END
       end
 
       def prepend_features klass
