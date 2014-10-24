@@ -306,15 +306,15 @@ class TestCrispy < MiniTest::Test
         assert @subject.received_with_receiver?(@object_instances[0], :private_foo)
 
         assert @subject.received_with_receiver?(@object_instances[1], :hoge)
-        assert @subject.received_with_receiver?(@object_instances[1], :foo)
+        assert not(@subject.received_with_receiver?(@object_instances[1], :foo))
         assert not(@subject.received_with_receiver?(@object_instances[1], :baz))
         assert @subject.received_with_receiver?(@object_instances[1], :bar)
         assert @subject.received_with_receiver?(@object_instances[1], :private_foo)
 
         assert @subject.received_with_receiver?(@object_instances[2], :hoge)
-        assert @subject.received_with_receiver?(@object_instances[2], :foo)
+        assert not(@subject.received_with_receiver?(@object_instances[2], :foo))
         assert not(@subject.received_with_receiver?(@object_instances[2], :baz))
-        assert @subject.received_with_receiver?(@object_instances[2], :bar)
+        assert not(@subject.received_with_receiver?(@object_instances[2], :bar))
         assert @subject.received_with_receiver?(@object_instances[2], :private_foo)
       end
 
