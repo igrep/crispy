@@ -83,6 +83,7 @@ module Crispy
         spy = self.of_class(klass)
         if spy
           spy.restart
+          spy.erase_log
           spy
         else
           super
@@ -95,10 +96,6 @@ module Crispy
 
       def self.of_class(klass)
         @registry[klass]
-      end
-
-      def self.erase_all_logs
-        @registry.each_value(&:erase_log)
       end
 
     end
