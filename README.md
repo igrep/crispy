@@ -35,7 +35,7 @@ Or install it yourself as:
 doctest_require: './test/doctest-fixtures/your_cool_class.rb'
 -->
 
-### Spy on a Object
+### Spy on an Object
 
 ```ruby
 >> require 'crispy'
