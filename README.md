@@ -118,6 +118,19 @@ Because `spy(object).received_messages` returns an array of `CrispyReceivedMessa
 => true
 ```
 
+### Spy on Instances of a Class
+
+```ruby
+>> spy_into_instances(YourCoolClass)
+>> instance1 = YourCoolClass.new
+>> instance2 = YourCoolClass.new
+
+>> instance1.your_cool_method 'and', 'args'
+>> instance2.your_lovely_method
+>> instance2.your_lovely_method 'again!'
+>> instance1.your_finalizer 'cleaning up...'
+```
+
 ### Stub Methods of a Spy
 
 ```ruby
