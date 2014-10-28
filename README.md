@@ -129,6 +129,15 @@ Because `spy(object).received_messages` returns an array of `CrispyReceivedMessa
 >> instance2.your_lovely_method
 >> instance2.your_lovely_method 'again!'
 >> instance1.your_finalizer 'cleaning up...'
+
+>> spy_of_instances(YourCoolClass).received? :your_cool_method, 'and', 'args'
+=> true
+
+>> spy_of_instances(YourCoolClass).count_received :your_lovely_method
+=> 2
+
+>> spy_of_instances(YourCoolClass).received_messages.last.method_name == :your_finalizer
+=> true
 ```
 
 ### Stub Methods of a Spy
