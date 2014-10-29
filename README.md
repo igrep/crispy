@@ -129,7 +129,11 @@ Because `spy(object).received_messages` returns an array of `CrispyReceivedMessa
 >> instance2.your_lovely_method
 >> instance2.your_lovely_method 'again!'
 >> instance1.your_finalizer 'cleaning up...'
+```
 
+You can check methods called by all instances of a class by the same query methods wth spy.
+
+```ruby
 >> spy_of_instances(YourCoolClass).received? :your_cool_method, 'and', 'args'
 => true
 
