@@ -144,6 +144,23 @@ You can check methods called by all instances of a class by the same query metho
 => true
 ```
 
+In addition, you can check which instance calles a method as well as its arguments.
+
+```ruby
+>> spy_of_instances(YourCoolClass).received_with_receiver? instance1, :your_cool_method
+=> true
+>> spy_of_instances(YourCoolClass).received_with_receiver? instance2, :your_cool_method
+=> false
+
+>> spy_of_instances(YourCoolClass).count_received_with_receiver instance1, :your_lovely_method
+=> 0
+>> spy_of_instances(YourCoolClass).count_received_with_receiver instance2, :your_lovely_method
+=> 2
+
+>> spy_of_instances(YourCoolClass).received_messages_with_receiver.last.receiver == instance1
+=> true
+```
+
 ### Stub Methods of a Spy
 
 ```ruby
