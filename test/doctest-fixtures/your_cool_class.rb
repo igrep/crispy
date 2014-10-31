@@ -8,4 +8,11 @@ class YourCoolClass
   end
   def your_finalizer *args
   end
+
+  class Again < self
+    def your_another_method *args
+    end
+    def some_method_for_testing
+    end
+  end
 end

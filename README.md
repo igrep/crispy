@@ -161,6 +161,33 @@ In addition, you can check which instance calles a method as well as its argumen
 => true
 ```
 
+Note that `spy_of_instances` stops to spy after called methods with `with_receiver` (or `with_receiver?`) prefix.
+This is to prevent the spy from unexpectedly logging methods used to compare its receiver (such as `==`).
+
+```ruby
+>> spy_into_instances(YourCoolClass::Again)
+>> instance = YourCoolClass::Again.new
+
+>> instance.your_another_method
+>> # Stops spying here.
+>> spy_of_instances(YourCoolClass::Again).received_with_receiver? instance, :your_another_method
+
+>> # Perhaps you don't want to log methods in test code.
+>> instance.some_method_for_testing
+>> spy_of_instances(YourCoolClass::Again).received? :some_method_for_testing
+>> false
+```
+
+If you want to restart spying, use `restart` method literally.
+
+```ruby
+>> spy_into_instances(YourCoolClass::Again).restart
+
+>> instance.some_method_for_testing
+>> spy_of_instances(YourCoolClass::Again).received? :some_method_for_testing
+>> true
+```
+
 ### Stub Methods of a Spy
 
 ```ruby
