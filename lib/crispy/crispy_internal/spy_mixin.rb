@@ -61,12 +61,6 @@ module Crispy
       end
       private :prepend_features
 
-      def sneak_into target
-        prepend_features target.as_class
-        target.pass_spy_through self
-      end
-      private :sneak_into
-
       def without_black_listed_methods method_names
         method_names.reject {|method_name| BLACK_LISTED_METHODS.include? method_name }
       end
