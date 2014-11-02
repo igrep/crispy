@@ -148,7 +148,7 @@ class TestCrispy < MiniTest::Test
 
     def setup
       @returned_spy = spy_into_instances(
-        object_class, method_to_stub1: :stubbed_instance_method1, method_to_stub2: :stubbed_instance_method2
+        object_class#, method_to_stub1: :stubbed_instance_method1, method_to_stub2: :stubbed_instance_method2
       )
 
       @subject = spy_of_instances(object_class)

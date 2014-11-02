@@ -6,11 +6,11 @@ module Crispy
   module CrispyInternal
     class ClassSpy < ::Module
       include SpyMixin
-      include WithStubber
+      #include WithStubber
 
       @registry = {}
 
-      def initialize klass, stubs_map = {}
+      def initialize klass#, stubs_map = {}
         spy = self
         super() do
           define_method(:__CRISPY_CLASS_SPY__) { spy }
@@ -19,8 +19,8 @@ module Crispy
         @received_messages_with_receiver = []
         initialize_spy
 
-        initialize_stubber stubs_map
-        prepend_stubber klass
+        #initialize_stubber stubs_map
+        #prepend_stubber klass
 
         prepend_features klass
         self.class.register spy: spy, of_class: klass
@@ -79,7 +79,7 @@ module Crispy
       end
       private :define_wrapper
 
-      def self.new klass, stubs_map = {}
+      def self.new klass#, stubs_map = {}
         spy = self.of_class(klass)
         if spy
           spy.restart
