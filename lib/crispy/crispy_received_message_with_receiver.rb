@@ -1,5 +1,3 @@
-require 'pp'
-
 require 'crispy/crispy_received_message'
 
 module Crispy

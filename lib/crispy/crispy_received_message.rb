@@ -1,5 +1,3 @@
-require 'pp'
-
 module Crispy
   class CrispyReceivedMessage
 
