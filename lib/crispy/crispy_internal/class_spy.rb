@@ -43,6 +43,7 @@ module Crispy
 
         binding.eval(<<-END, __FILE__, (__LINE__ + 1))
           def #{method_name_with_receiver} receiver, received_method_name, *received_arguments, &received_block
+            assert_symbol! received_method_name
             if received_arguments.empty? and received_block.nil?
               recevier_and_received_method_name = [receiver, received_method_name]
               received_messages_with_receiver.map do|received_message_with_receiver|

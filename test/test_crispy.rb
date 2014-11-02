@@ -138,6 +138,12 @@ class TestCrispy < MiniTest::Test
       assert_same @subject, @returned_spy
     end
 
+    def test_spy_raises_error_given_non_symbol_as_method_name
+      assert_raises(::TypeError){ @subject.received_once?(nil) }
+      assert_raises(::TypeError){ @subject.received_once?(nil) }
+      assert_raises(::TypeError){ @subject.count_received(nil) }
+    end
+
   end
 
   class TestCrispySpyIntoInstances < TestCrispy
@@ -238,6 +244,12 @@ class TestCrispy < MiniTest::Test
 
         assert_equal(1, @subject.count_received(:foo))
         assert_equal(2, @subject.count_received(:bar))
+      end
+
+      def test_spy_raises_error_given_non_symbol_as_method_name
+        assert_raises(::TypeError){ @subject.received_once?(nil) }
+        assert_raises(::TypeError){ @subject.received_once?(nil) }
+        assert_raises(::TypeError){ @subject.count_received(nil) }
       end
 
     end
@@ -421,6 +433,12 @@ class TestCrispy < MiniTest::Test
         assert_equal(0, @subject.count_received_with_receiver(@object_instances[2], :foo))
         assert_equal(0, @subject.count_received_with_receiver(@object_instances[2], :bar))
         assert_equal(0, @subject.count_received_with_receiver(@object_instances[2], :baz))
+      end
+
+      def test_spy_raises_error_given_non_symbol_as_method_name
+        assert_raises(::TypeError){ @subject.received_once?(@object_instances[0], nil) }
+        assert_raises(::TypeError){ @subject.received_once?(@object_instances[0], nil) }
+        assert_raises(::TypeError){ @subject.count_received(@object_instances[0], nil) }
       end
 
     end

@@ -34,6 +34,7 @@ module Crispy
       COMMON_RECEIVED_MESSAGE_METHODS_DEFINITION.each do|method_name, core_definition|
         binding.eval(<<-END, __FILE__, (__LINE__ + 1))
           def #{method_name} received_method_name, *received_arguments, &received_block
+            assert_symbol! received_method_name
             if received_arguments.empty? and received_block.nil?
               received_messages.map(&:method_name).#{sprintf(core_definition, 'received_method_name')}
             else
@@ -70,6 +71,12 @@ module Crispy
         @spying = true
       end
       private :initialize_spy
+
+      def assert_symbol! maybe_symbol
+        unless maybe_symbol.respond_to?(:to_sym) && maybe_symbol.to_sym.instance_of?(::Symbol)
+          raise TypeError, "TypeError: no implicit conversion from #{maybe_symbol.inspect} to symbol"
+        end
+      end
 
     end
   end
