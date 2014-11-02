@@ -4,31 +4,77 @@ module Crispy
   module CrispyInternal
     module SpyMixin
 
-      attr_reader :received_messages
+      BLACK_LISTED_METHODS = [
+        :__CRISPY_CLASS_SPY__,
+        :__CRISPY_SPY__,
+      ]
 
-      def received? method_name, *arguments, &attached_block
-        if arguments.empty? and attached_block.nil?
-          @received_messages.map(&:method_name).include? method_name
-        else
-          @received_messages.include? ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
-        end
+      def received_messages
+        raise NotImplementedError
       end
 
-      def received_once? method_name, *arguments, &attached_block
-        if arguments.empty? and attached_block.nil?
-          @received_messages.map(&:method_name).one? {|self_method_name| self_method_name == method_name }
-        else
-          @received_messages.one? do |self_received_message|
-            self_received_message == ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
+      def erase_log
+        raise NotImplementedError
+      end
+
+      def stop
+        @spying = false
+      end
+
+      def restart
+        @spying = true
+      end
+
+      COMMON_RECEIVED_MESSAGE_METHODS_DEFINITION = {
+        'received?'      => 'include? %s',
+        'received_once?' => 'one? {|self_thing| self_thing == %s }',
+        'count_received' => 'count %s',
+      }
+
+      COMMON_RECEIVED_MESSAGE_METHODS_DEFINITION.each do|method_name, core_definition|
+        binding.eval(<<-END, __FILE__, (__LINE__ + 1))
+          def #{method_name} received_method_name, *received_arguments, &received_block
+            assert_symbol! received_method_name
+            if received_arguments.empty? and received_block.nil?
+              received_messages.map(&:method_name).#{sprintf(core_definition, 'received_method_name')}
+            else
+              received_message = ::Crispy::CrispyReceivedMessage.new(
+                received_method_name, *received_arguments, &received_block
+              )
+              received_messages.#{sprintf(core_definition, 'received_message')}
+            end
           end
-        end
+        END
       end
 
-      def count_received method_name, *arguments, &attached_block
-        if arguments.empty? and attached_block.nil?
-          @received_messages.map(&:method_name).count method_name
-        else
-          @received_messages.count ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
+      def prepend_features klass
+        super
+
+        without_black_listed_methods(klass.public_instance_methods).each do|method_name|
+          self.module_eval { define_wrapper(method_name) }
+        end
+        klass.protected_instance_methods.each do|method_name|
+          self.module_eval { protected define_wrapper(method_name) }
+        end
+        klass.private_instance_methods.each do|method_name|
+          self.module_eval { private define_wrapper(method_name) }
+        end
+      end
+      private :prepend_features
+
+      def without_black_listed_methods method_names
+        method_names.reject {|method_name| BLACK_LISTED_METHODS.include? method_name }
+      end
+      private :without_black_listed_methods
+
+      def initialize_spy
+        @spying = true
+      end
+      private :initialize_spy
+
+      def assert_symbol! maybe_symbol
+        unless maybe_symbol.respond_to?(:to_sym) && maybe_symbol.to_sym.instance_of?(::Symbol)
+          raise TypeError, "TypeError: no implicit conversion from #{maybe_symbol.inspect} to symbol"
         end
       end
 

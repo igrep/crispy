@@ -1,5 +1,6 @@
 require "crispy/version"
 require "crispy/crispy_internal/spy"
+require "crispy/crispy_internal/class_spy"
 require "crispy/crispy_internal/double"
 require "crispy/crispy_world"
 
@@ -17,8 +18,7 @@ module Crispy
   end
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
-  def spy_on_any_instance_of klass
-    raise NotImplementedError, "Sorry, this feature is under construction :("
+  def spy_into_instances klass#, stubs_map = {}
     ::Crispy::CrispyInternal::ClassSpy.new klass
   end
 
@@ -26,13 +26,8 @@ module Crispy
     object.__CRISPY_SPY__
   end
 
-  # Begins to log all instances and its received messages of a class.
-  # _NOTE_: replace the constant containing the class
-  def spy_into_class klass
-    raise NotImplementedError, "Sorry, this feature is under construction :("
-    spy_class = spy_on_any_instance_of klass
-    stub_const! klass.name, spy_class
-    spy_class
+  def spy_of_instances klass
+    ::Crispy::CrispyInternal::ClassSpy.of_class(klass)
   end
 
   def stub_const full_const_name, value
