@@ -42,7 +42,7 @@ doctest_require: './test/doctest-fixtures/your_cool_class.rb'
 >> include Crispy # import spy, spy_into and any other functions from Crispy namespace.
 
 >> object = YourCoolClass.new
->> spy = spy_into object
+>> spy_into object
 
 >> object.your_cool_method 1, 2, 3
 >> object.your_method_without_argument
