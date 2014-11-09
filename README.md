@@ -9,7 +9,7 @@ Test Spy for Any Object in Ruby.
 
 ## Features
 
-- Test spy for any object by using `prepend` (Sorry, it runs by Ruby 2.0 or higher!)
+- Test spy for **ANY** object by using `prepend` (Sorry, it runs by Ruby 2.0 or higher!)
 - Extremely flexible query for received messages with `received_messages` method.
     - By using Array and Enumerable's methods, you never have to remember the complex API and tons of the argument matchers in RSpec anymore!
 - Makes mocks obsolete so you don't have to be worried about where to put the expectations (i.e. *before or after the subject method*).
