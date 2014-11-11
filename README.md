@@ -162,7 +162,7 @@ In addition, you can check which instance calles a method as well as its argumen
 => true
 ```
 
-Note that `spy_of_instances` stops to spy after called methods with `with_receiver` (or `with_receiver?`) prefix.
+Note that `spy_of_instances` stops spying after called methods with `with_receiver` (or `with_receiver?`) prefix.
 This is to prevent the spy from unexpectedly logging methods used to compare its receiver (such as `==`).
 
 ```ruby
