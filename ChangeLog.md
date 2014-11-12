@@ -1,3 +1,7 @@
+# Next version (Unreleased)
+
+- Minor document enhancements.
+
 # 0.2.0 (2014.11.1)
 
 - New Feature: `stub_const`. [#11](https://github.com/igrep/crispy/pull/11)
