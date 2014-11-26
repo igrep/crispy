@@ -176,17 +176,17 @@ This is to prevent the spy from unexpectedly logging methods used to compare its
 >> # Perhaps you don't want to log methods in test code.
 >> instance.some_method_for_testing
 >> spy_of_instances(YourCoolClass::Again).received? :some_method_for_testing
->> false
+=> false
 ```
 
 If you want to restart spying, use `restart` method literally.
 
 ```ruby
->> spy_into_instances(YourCoolClass::Again).restart
+>> spy_of_instances(YourCoolClass::Again).restart
 
 >> instance.some_method_for_testing
 >> spy_of_instances(YourCoolClass::Again).received? :some_method_for_testing
->> true
+=> true
 ```
 
 ### Stub Methods of a Spy
