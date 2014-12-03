@@ -38,6 +38,18 @@ class TestCrispy < MiniTest::Test
 
   end
 
+  class TestCrispySpied < TestCrispy
+
+    def test_spied_object_is_spied
+      assert spied?(spy_into(Object.new))
+    end
+
+    def test_non_spied_object_is_not_spied
+      assert_not spied?(Object.new)
+    end
+
+  end
+
   class TestCrispyStubConst < TestCrispy
 
     def setup
