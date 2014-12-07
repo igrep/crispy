@@ -1,5 +1,6 @@
 # Next version (Unreleased)
 
+- Fix Bug: reset spy log when `spy_into`-ing an already spied object. e.g. Class.[#20](https://github.com/igrep/crispy/pull/20)
 - New Feature: `spied?`. [#18](https://github.com/igrep/crispy/pull/18)
 - Minor document enhancements.
 
