@@ -5,7 +5,7 @@ install:
 rvm:
   - ruby-head
   - 2.2.0-preview1
-  - 2.1.3
+  - 2.1.5
   - 2.0.0
 script:
   - CODECLIMATE_REPO_TOKEN=fe75ea4329c1e131ef79de66f8ba2f605fa2fd352bbbd61fed5024cb6eaaba73 bundle exec rubydoctest README.md
