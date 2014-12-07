@@ -50,6 +50,17 @@ module Crispy
       end
       private :define_wrapper
 
+      def self.new target, stubs_map = {}
+        if defined? target.__CRISPY_SPY__
+          spy = target.__CRISPY_SPY__
+          spy.restart
+          spy.erase_log
+          spy
+        else
+          super
+        end
+      end
+
     end
   end
 end
