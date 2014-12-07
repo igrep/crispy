@@ -36,7 +36,7 @@ module Crispy
   end
 
   def spied? object
-    object.respond_to? :__CRISPY_SPY__
+    defined? object.__CRISPY_SPY__
   end
 
 end
