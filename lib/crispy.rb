@@ -35,4 +35,8 @@ module Crispy
     ::Crispy::CrispyInternal::ConstChanger.save full_const_name, saved_value
   end
 
+  def spied? object
+    object.respond_to? :__CRISPY_SPY__
+  end
+
 end
