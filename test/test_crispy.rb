@@ -36,6 +36,19 @@ class TestCrispy < MiniTest::Test
     end
     private :private_foo
 
+    def self.hoge a, b, c
+      private_foo a
+      [a, b, c]
+    end
+    def self.foo
+      123
+    end
+
+    def self.private_foo a
+      :private_foo
+    end
+    private_class_method :private_foo
+
   end
 
   class TestCrispySpied < TestCrispy
@@ -156,6 +169,35 @@ class TestCrispy < MiniTest::Test
       assert_raises(::TypeError){ @subject.received_once?(nil) }
       assert_raises(::TypeError){ @subject.received_once?(nil) }
       assert_raises(::TypeError){ @subject.count_received(nil) }
+    end
+
+  end
+
+  class TestCrispySpyIntoClass < TestCrispy
+
+    def setup
+      spy_into ObjectClass
+
+      ObjectClass.hoge 1, 2, 3
+      ObjectClass.foo
+      ObjectClass.hoge 3, 4, 5
+
+      @subject = spy(ObjectClass)
+    end
+
+    def test_spy_logs_received_messages_not_twice_by_spy_into_twice
+      setup
+
+      assert_equal(
+        [
+          CrispyReceivedMessage[:hoge, 1, 2, 3],
+          CrispyReceivedMessage[:private_foo, 1],
+          CrispyReceivedMessage[:foo],
+          CrispyReceivedMessage[:hoge, 3, 4, 5],
+          CrispyReceivedMessage[:private_foo, 3],
+        ],
+        @subject.received_messages
+      )
     end
 
   end
