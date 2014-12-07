@@ -45,7 +45,7 @@ class TestCrispy < MiniTest::Test
     end
 
     def test_non_spied_object_is_not_spied
-      assert_not spied?(Object.new)
+      assert not(spied?(Object.new))
     end
 
   end
