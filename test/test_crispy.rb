@@ -547,15 +547,27 @@ class TestCrispy < MiniTest::Test
     end
 
     def test_double_can_be_spied
+      assert spied? @double
+
       assert spy(@double).received?(:hoge)
+      assert spy(@double).received_once?(:hoge, :with, :any, :arguments)
+      assert not(spy(@double).received?(:hoge, 0, 0, 0))
+      assert not(spy(@double).received_once?(:hoge, 0, 0, 0))
       assert not(spy(@double).received_once?(:hoge))
-      assert_equal 2, spy(@double).count_received?(:hoge)
+      assert_equal 0, spy(@double).count_received(:hoge, 0, 0, 0)
+      assert_equal 1, spy(@double).count_received(:hoge, :with, :any, :arguments)
+      assert_equal 2, spy(@double).count_received(:hoge)
 
       assert spy(@double).received?(:bar)
       assert spy(@double).received_once?(:bar)
 
+      assert spy(@double).received_once?(:foo)
       assert spy(@double).received?(:foo)
       assert_equal 1, spy(@double).count_received?(:foo)
+
+      assert not(spy(@double).received?(:non_used_method))
+      assert not(spy(@double).received_once?(:non_used_method))
+      assert_equal 0, spy(@double).count_received?(:non_used_method)
     end
 
   end
