@@ -44,6 +44,16 @@ class TestCrispy < MiniTest::Test
       123
     end
 
+    def self.stubbed_method1
+      'before stubbed 1'
+    end
+    def self.stubbed_method2
+      'before stubbed 2'
+    end
+    def self.stubbed_method3
+      'before stubbed 3'
+    end
+
     def self.private_foo a
       :private_foo
     end
@@ -176,7 +186,7 @@ class TestCrispy < MiniTest::Test
   class TestCrispySpyIntoClass < TestCrispy
 
     def setup
-      spy_into ObjectClass
+      spy_into ObjectClass, stubbed_method1: 1, stubbed_method2: 2
 
       ObjectClass.hoge 1, 2, 3
       ObjectClass.foo
@@ -198,6 +208,14 @@ class TestCrispy < MiniTest::Test
         ],
         @subject.received_messages
       )
+    end
+
+    def test_spy_overrides_stubbed_methods
+      spy_into ObjectClass, stubbed_method2: 'xx', stubbed_method3: 'xxx'
+
+      assert_equal 'before stubbed 1', ObjectClass.stubbed_method1
+      assert_equal 'xx'              , ObjectClass.stubbed_method2
+      assert_equal 'xxx'             , ObjectClass.stubbed_method3
     end
 
   end

@@ -14,6 +14,10 @@ module Crispy
       end
       private :prepend_stubber
 
+      def reinitialize_stubber stubs_map = {}
+        @__CRISPY_STUBBER__.reinitialize stubs_map
+      end
+
       def stub *arguments, &definition
         @__CRISPY_STUBBER__.stub(*arguments, &definition)
         self

@@ -55,6 +55,7 @@ module Crispy
           spy = target.__CRISPY_SPY__
           spy.restart
           spy.erase_log
+          spy.reinitialize_stubber stubs_map
           spy
         else
           super

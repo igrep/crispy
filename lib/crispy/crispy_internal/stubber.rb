@@ -8,6 +8,11 @@ module Crispy
         stub stubs_map
       end
 
+      def reinitialize stubs_map = {}
+        remove_method(*self.instance_methods(false))
+        stub stubs_map
+      end
+
       NOT_SPECIFIED = ::Object.new
 
       def stub method_name_or_hash, returned_value = NOT_SPECIFIED, &definition
