@@ -18,6 +18,8 @@ module Crispy
             self
           end
         prepend_stubber singleton_class
+
+        ::Crispy.spy_into self
       end
 
     end
