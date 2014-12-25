@@ -24,7 +24,7 @@ module Crispy
     CLASS_NAME = self.name
 
     def to_s
-      "#<#{CLASS_NAME}[#{(@method_name).inspect}, *#{@arguments.inspect}]>"
+      "#<#{CLASS_NAME}[#{@method_name.inspect}, *#{@arguments.inspect}]>"
     end
 
     alias inspect to_s
