@@ -563,11 +563,11 @@ class TestCrispy < MiniTest::Test
 
       assert spy(@double).received_once?(:foo)
       assert spy(@double).received?(:foo)
-      assert_equal 1, spy(@double).count_received?(:foo)
+      assert_equal 1, spy(@double).count_received(:foo)
 
       assert not(spy(@double).received?(:non_used_method))
       assert not(spy(@double).received_once?(:non_used_method))
-      assert_equal 0, spy(@double).count_received?(:non_used_method)
+      assert_equal 0, spy(@double).count_received(:non_used_method)
     end
 
   end
