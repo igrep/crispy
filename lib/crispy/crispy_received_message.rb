@@ -17,8 +17,8 @@ module Crispy
 
     def == other
       @method_name == other.method_name &&
-      @arguments == other.arguments &&
-      @attached_block == other.attached_block
+      @arguments == other.arguments # &&
+      # @attached_block == other.attached_block
     end
 
     CLASS_NAME = self.name
