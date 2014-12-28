@@ -1,5 +1,3 @@
-require 'crispy/crispy_internal/with_stubber'
-
 module Crispy
   module CrispyInternal
     class Double

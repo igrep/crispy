@@ -1,11 +1,9 @@
 require 'crispy/crispy_received_message_with_receiver'
 require 'crispy/crispy_internal/spy_base'
-require 'crispy/crispy_internal/with_stubber'
 
 module Crispy
   module CrispyInternal
     class ClassSpy < SpyBase
-      #include WithStubber
 
       @registry = {}
 
