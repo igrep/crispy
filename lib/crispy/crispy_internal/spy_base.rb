@@ -2,12 +2,30 @@ require 'crispy/crispy_received_message'
 
 module Crispy
   module CrispyInternal
-    module SpyMixin
+    class SpyBase < ::Module
+
+      public :remove_method
 
       BLACK_LISTED_METHODS = [
         :__CRISPY_CLASS_SPY__,
         :__CRISPY_SPY__,
       ]
+
+      def initialize target, stubs_map = {}
+        super() do
+          spy = self
+          define_method(self.class.method_name_to_retrieve_spy) { spy }
+        end
+
+        @stubbed_methods = []
+        stub stubs_map
+
+        @spying = true
+      end
+
+      def self.method_name_to_retrieve_spy
+        raise NotImplementedError
+      end
 
       def received_messages
         raise NotImplementedError
@@ -51,6 +69,37 @@ module Crispy
         END
       end
 
+      NOT_SPECIFIED = ::Object.new
+
+      def stub method_name_or_hash, returned_value = NOT_SPECIFIED, &definition
+        case method_name_or_hash
+        when Hash
+          hash = method_name_or_hash
+          hash.each do|method_name, value|
+            stub method_name, value
+          end
+        when ::Symbol, ::String
+          @stubbed_methods << method_name_or_hash
+
+          self.module_exec method_name_or_hash do|method_name|
+            spy = self
+
+            # TODO: should not ignore arguments?
+            define_method(method_name) do|*arguments, &block|
+              spy.append_received_message method_name, *arguments, &block
+              returned_value
+            end
+          end
+        end
+        self
+      end
+
+      def reinitialize_stubber stubs_map = {}
+        remove_method(*@stubbed_methods)
+        @stubbed_methods.clear
+        stub stubs_map
+      end
+
       def prepend_features klass
         super
 
@@ -70,11 +119,6 @@ module Crispy
         method_names.reject {|method_name| BLACK_LISTED_METHODS.include? method_name }
       end
       private :without_black_listed_methods
-
-      def initialize_spy
-        @spying = true
-      end
-      private :initialize_spy
 
       def assert_symbol! maybe_symbol
         unless maybe_symbol.respond_to?(:to_sym) && maybe_symbol.to_sym.instance_of?(::Symbol)

@@ -1,32 +1,26 @@
 require 'crispy/crispy_received_message'
-require 'crispy/crispy_internal/spy_mixin'
-require 'crispy/crispy_internal/with_stubber'
+require 'crispy/crispy_internal/spy_base'
 
 module Crispy
   module CrispyInternal
-    class Spy < ::Module
-      include SpyMixin
-      include WithStubber
+    class Spy < SpyBase
 
       attr_reader :received_messages
 
       def initialize target, stubs_map = {}
-        super() do
-          spy = self
-          define_method(:__CRISPY_SPY__) { spy }
-        end
-
         @received_messages = []
-        initialize_spy
 
         singleton_class =
           class << target
             self
           end
-        initialize_stubber stubs_map
-        prepend_stubber singleton_class
-
         prepend_features singleton_class
+
+        super
+      end
+
+      def self.method_name_to_retrieve_spy
+        :__CRISPY_SPY__
       end
 
       def erase_log
