@@ -17,6 +17,10 @@ module Crispy
         raise NotImplementedError
       end
 
+      def define_wrapper
+        raise NotImplementedError
+      end
+
       def stop
         @spying = false
       end
