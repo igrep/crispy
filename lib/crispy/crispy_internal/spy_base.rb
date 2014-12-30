@@ -84,6 +84,9 @@ module Crispy
           self.module_exec method_name_or_hash do|method_name|
             spy = self
 
+            # remove methods already defined (maybe by define_wrapper) to avoid warning.
+            remove_method method_name if public_method_defined? method_name
+
             # TODO: should not ignore arguments?
             define_method(method_name) do|*arguments, &block|
               spy.append_received_message method_name, *arguments, &block
