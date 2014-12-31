@@ -7,6 +7,20 @@ require 'minitest/autorun'
 class TestCrispy < MiniTest::Test
   include ::Crispy
 
+  module CommonSpiedTests
+
+    def test_spy_is_also_returned_by_spy_into_method
+      assert_same @subject, @returned_spy
+    end
+
+    def test_spy_raises_error_given_non_symbol_as_method_name
+      assert_raises(::TypeError){ @subject.received?(nil) }
+      assert_raises(::TypeError){ @subject.received_once?(nil) }
+      assert_raises(::TypeError){ @subject.count_received(nil) }
+    end
+
+  end
+
   # Inherit BasicObject because it has fewer meta-programming methods than Object
   class ObjectClass < BasicObject
 
@@ -95,6 +109,7 @@ class TestCrispy < MiniTest::Test
   end
 
   class TestCrispySpyInto < TestCrispy
+    include CommonSpiedTests
 
     def setup
       @object = ObjectClass.new
@@ -171,16 +186,6 @@ class TestCrispy < MiniTest::Test
       assert_equal(:stubbed2, @object.method_to_stub2)
     end
 
-    def test_spy_is_also_returned_by_spy_into_method
-      assert_same @subject, @returned_spy
-    end
-
-    def test_spy_raises_error_given_non_symbol_as_method_name
-      assert_raises(::TypeError){ @subject.received_once?(nil) }
-      assert_raises(::TypeError){ @subject.received_once?(nil) }
-      assert_raises(::TypeError){ @subject.count_received(nil) }
-    end
-
   end
 
   class TestCrispySpyIntoClass < TestCrispy
@@ -248,6 +253,7 @@ class TestCrispy < MiniTest::Test
     end
 
     class TestReceivedMessage < self
+      include CommonSpiedTests
 
       def object_class
         ObjectClass
@@ -318,12 +324,6 @@ class TestCrispy < MiniTest::Test
 
         assert_equal(1, @subject.count_received(:foo))
         assert_equal(2, @subject.count_received(:bar))
-      end
-
-      def test_spy_raises_error_given_non_symbol_as_method_name
-        assert_raises(::TypeError){ @subject.received_once?(nil) }
-        assert_raises(::TypeError){ @subject.received_once?(nil) }
-        assert_raises(::TypeError){ @subject.count_received(nil) }
       end
 
     end
@@ -510,9 +510,9 @@ class TestCrispy < MiniTest::Test
       end
 
       def test_spy_raises_error_given_non_symbol_as_method_name
-        assert_raises(::TypeError){ @subject.received_once?(@object_instances[0], nil) }
-        assert_raises(::TypeError){ @subject.received_once?(@object_instances[0], nil) }
-        assert_raises(::TypeError){ @subject.count_received(@object_instances[0], nil) }
+        assert_raises(::TypeError){ @subject.received_with_receiver?(@object_instances[0], nil) }
+        assert_raises(::TypeError){ @subject.received_once_with_receiver?(@object_instances[0], nil) }
+        assert_raises(::TypeError){ @subject.count_received_with_receiver(@object_instances[0], nil) }
       end
 
     end
@@ -520,6 +520,7 @@ class TestCrispy < MiniTest::Test
   end
 
   class TestCrispyDouble < TestCrispy
+
     def setup
       @expected_hoge = Object.new
       @expected_foo  = Object.new
