@@ -7,16 +7,10 @@ module Crispy
       public :remove_method
 
       BLACK_LISTED_METHODS = [
-        :__CRISPY_CLASS_SPY__,
         :__CRISPY_SPY__,
       ]
 
       def initialize target, stubs_map = {}
-        super() do
-          spy = self
-          define_method(self.class.method_name_to_retrieve_spy) { spy }
-        end
-
         prepend_features target_to_class(target)
 
         @stubbed_methods = []
@@ -35,10 +29,6 @@ module Crispy
         else
           super
         end
-      end
-
-      def self.method_name_to_retrieve_spy
-        raise NotImplementedError
       end
 
       def self.of_target target

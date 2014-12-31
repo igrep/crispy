@@ -15,10 +15,6 @@ module Crispy
         self.class.register spy: self, of_class: klass
       end
 
-      def self.method_name_to_retrieve_spy
-        :__CRISPY_CLASS_SPY__
-      end
-
       def self.of_target klass
         @registry[klass]
       end

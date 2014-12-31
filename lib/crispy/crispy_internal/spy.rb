@@ -8,12 +8,13 @@ module Crispy
       attr_reader :received_messages
 
       def initialize target, stubs_map = {}
+        spy = self
+        module_eval do
+          define_method(:__CRISPY_SPY__) { spy }
+        end
+
         @received_messages = []
         super
-      end
-
-      def self.method_name_to_retrieve_spy
-        :__CRISPY_SPY__
       end
 
       def target_to_class target
