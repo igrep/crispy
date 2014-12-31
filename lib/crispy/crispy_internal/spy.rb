@@ -27,23 +27,15 @@ module Crispy
         @received_messages.clear
       end
 
+      def self.of_target target
+        (defined? target.__CRISPY_SPY__) && target.__CRISPY_SPY__
+      end
+
       def append_received_message receiver, method_name, *arguments, &attached_block
         @received_messages <<
           ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
       end
       private :append_received_message
-
-      def self.new target, stubs_map = {}
-        if defined? target.__CRISPY_SPY__
-          spy = target.__CRISPY_SPY__
-          spy.restart
-          spy.erase_log
-          spy.reinitialize_stubber stubs_map
-          spy
-        else
-          super
-        end
-      end
 
     end
   end

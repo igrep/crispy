@@ -21,6 +21,10 @@ module Crispy
         :__CRISPY_CLASS_SPY__
       end
 
+      def self.of_target klass
+        @registry[klass]
+      end
+
       def received_messages
         @received_messages_with_receiver.map {|m| m.received_message }
       end
@@ -63,18 +67,6 @@ module Crispy
           ::Crispy::CrispyReceivedMessageWithReceiver.new(receiver, method_name, *arguments, &attached_block)
       end
       private :append_received_message
-
-      def self.new klass, stubs_map = {}
-        spy = self.of_class(klass)
-        if spy
-          spy.restart
-          spy.erase_log
-          spy.reinitialize_stubber stubs_map
-          spy
-        else
-          super
-        end
-      end
 
       def self.register(spy: nil, of_class: nil)
         @registry[of_class] = spy

@@ -23,7 +23,23 @@ module Crispy
         @spying = true
       end
 
+      def self.new target, stubs_map = {}
+        spy = self.of_target(target)
+        if spy
+          spy.restart
+          spy.erase_log
+          spy.reinitialize_stubber stubs_map
+          spy
+        else
+          super
+        end
+      end
+
       def self.method_name_to_retrieve_spy
+        raise NotImplementedError
+      end
+
+      def self.of_target target
         raise NotImplementedError
       end
 
