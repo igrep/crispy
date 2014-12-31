@@ -7,7 +7,7 @@ require 'minitest/autorun'
 class TestCrispy < MiniTest::Test
   include ::Crispy
 
-  module CommonSpiedTests
+  module CommonSpyTests
 
     def test_spy_is_also_returned_by_spy_into_method
       assert_same @subject, @returned_spy
@@ -109,7 +109,7 @@ class TestCrispy < MiniTest::Test
   end
 
   class TestCrispySpyInto < TestCrispy
-    include CommonSpiedTests
+    include CommonSpyTests
 
     def setup
       @object = ObjectClass.new
@@ -253,7 +253,7 @@ class TestCrispy < MiniTest::Test
     end
 
     class TestReceivedMessage < self
-      include CommonSpiedTests
+      include CommonSpyTests
 
       def object_class
         ObjectClass
