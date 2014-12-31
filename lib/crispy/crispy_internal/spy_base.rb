@@ -133,7 +133,8 @@ module Crispy
       def prepend_features klass
         super
 
-        without_black_listed_methods(klass.public_instance_methods).each do|method_name|
+        klass.public_instance_methods.each do|method_name|
+          next if method_name == :__CRISPY_SPY__
           self.module_eval { define_wrapper(method_name) }
         end
         klass.protected_instance_methods.each do|method_name|
@@ -144,11 +145,6 @@ module Crispy
         end
       end
       private :prepend_features
-
-      def without_black_listed_methods method_names
-        method_names.reject {|method_name| BLACK_LISTED_METHODS.include? method_name }
-      end
-      private :without_black_listed_methods
 
       def assert_symbol! maybe_symbol
         unless maybe_symbol.respond_to?(:to_sym) && maybe_symbol.to_sym.instance_of?(::Symbol)
