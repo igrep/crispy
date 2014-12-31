@@ -1,5 +1,6 @@
 # Next version (Unreleased)
 
+- New Feature: Now double is automatically spied without `spy_into`. [#21](https://github.com/igrep/crispy/pull/21)
 - Fix Bug: now `spy_into` replaces all stubber's methods with given stub spec when reinitialize a spy.[0f91579decbe27e6b05bec4b779dd1c3ede24380](https://github.com/igrep/crispy/commit/0f91579decbe27e6b05bec4b779dd1c3ede24380)
 - Fix Bug: reset spy log when `spy_into`-ing an already spied object. e.g. Class.[#20](https://github.com/igrep/crispy/pull/20)
 - New Feature: `spied?`. [#18](https://github.com/igrep/crispy/pull/18)
