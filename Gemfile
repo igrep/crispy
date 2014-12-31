@@ -4,4 +4,3 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'codeclimate-test-reporter', group: :test, require: nil
-gem 'rubydoctest', github: 'tablatom/rubydoctest', group: [:development, :test]
