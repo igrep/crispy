@@ -217,7 +217,7 @@ If you want to restart spying, use `restart` method literally.
 ### Stub Methods of a Double
 
 Double can call Spy's method directly.
-You do NOT need to write code such as `spy(your_double).stub(...)`. \
+You do NOT need to write code such as `spy(your_double).stub(...)`.  
 Just `your_double.stub(...)`.
 
 ```ruby
@@ -234,7 +234,7 @@ Just `your_double.stub(...)`.
 
 ### Spy on a Double
 
-A double is spied without `spy_into`-ing. \
+A double is spied without `spy_into`-ing.  
 And as `double.stub(...)`, Double can also call Spy's method such as `received?`
 
 ```ruby
