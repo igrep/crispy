@@ -27,22 +27,11 @@ module Crispy
         @received_messages.clear
       end
 
-      def append_received_message method_name, *arguments, &attached_block
-        if @spying
-          @received_messages <<
-            ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
-        end
+      def append_received_message receiver, method_name, *arguments, &attached_block
+        @received_messages <<
+          ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
       end
-
-      def define_wrapper method_name
-        define_method method_name do|*arguments, &attached_block|
-          __CRISPY_SPY__.append_received_message(method_name, *arguments, &attached_block)
-
-          super(*arguments, &attached_block)
-        end
-        method_name
-      end
-      private :define_wrapper
+      private :append_received_message
 
       def self.new target, stubs_map = {}
         if defined? target.__CRISPY_SPY__

@@ -58,22 +58,11 @@ module Crispy
         @received_messages_with_receiver.clear
       end
 
-      def append_received_message_with_receiver receiver, method_name, *arguments, &attached_block
-        if @spying
-          @received_messages_with_receiver <<
-            ::Crispy::CrispyReceivedMessageWithReceiver.new(receiver, method_name, *arguments, &attached_block)
-        end
+      def append_received_message receiver, method_name, *arguments, &attached_block
+        @received_messages_with_receiver <<
+          ::Crispy::CrispyReceivedMessageWithReceiver.new(receiver, method_name, *arguments, &attached_block)
       end
-
-      def define_wrapper method_name
-        define_method method_name do|*arguments, &attached_block|
-          __CRISPY_CLASS_SPY__.append_received_message_with_receiver self, method_name, *arguments, &attached_block
-
-          super(*arguments, &attached_block)
-        end
-        method_name
-      end
-      private :define_wrapper
+      private :append_received_message
 
       def self.new klass, stubs_map = {}
         spy = self.of_class(klass)
