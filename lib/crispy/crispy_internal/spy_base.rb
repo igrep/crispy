@@ -17,6 +17,8 @@ module Crispy
           define_method(self.class.method_name_to_retrieve_spy) { spy }
         end
 
+        prepend_features target_to_class(target)
+
         @stubbed_methods = []
         stub stubs_map
 
@@ -40,6 +42,10 @@ module Crispy
       end
 
       def self.of_target target
+        raise NotImplementedError
+      end
+
+      def target_to_class target
         raise NotImplementedError
       end
 
