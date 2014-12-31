@@ -329,7 +329,6 @@ class TestCrispy < MiniTest::Test
     end
 
     class TestReceivedMessageWithReceiver < self
-      include CommonSpiedTests
 
       def object_class
         ObjectClassNonBasic
