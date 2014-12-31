@@ -252,8 +252,18 @@ class TestCrispy < MiniTest::Test
       CrispyWorld.reset
     end
 
+    module CommonClassSpyTests
+      def test_spy_changes_stubbed_method
+        @object_instances.each do|object|
+          assert_equal(:stubbed_instance_method1, object.method_to_stub1)
+          assert_equal(:stubbed_instance_method2, object.method_to_stub2)
+        end
+      end
+    end
+
     class TestReceivedMessage < self
       include CommonSpyTests
+      include CommonClassSpyTests
 
       def object_class
         ObjectClass
@@ -329,6 +339,7 @@ class TestCrispy < MiniTest::Test
     end
 
     class TestReceivedMessageWithReceiver < self
+      include CommonClassSpyTests
 
       def object_class
         ObjectClassNonBasic
