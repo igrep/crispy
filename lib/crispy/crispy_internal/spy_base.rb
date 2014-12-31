@@ -7,15 +7,11 @@ module Crispy
       public :remove_method
 
       BLACK_LISTED_METHODS = [
-        :__CRISPY_CLASS_SPY__,
         :__CRISPY_SPY__,
       ]
 
       def initialize target, stubs_map = {}
-        super() do
-          spy = self
-          define_method(self.class.method_name_to_retrieve_spy) { spy }
-        end
+        prepend_features target_to_class(target)
 
         @stubbed_methods = []
         stub stubs_map
@@ -35,11 +31,11 @@ module Crispy
         end
       end
 
-      def self.method_name_to_retrieve_spy
+      def self.of_target target
         raise NotImplementedError
       end
 
-      def self.of_target target
+      def target_to_class target
         raise NotImplementedError
       end
 
@@ -102,9 +98,7 @@ module Crispy
         END
       end
 
-      NOT_SPECIFIED = ::Object.new
-
-      def stub method_name_or_hash, returned_value = NOT_SPECIFIED, &definition
+      def stub method_name_or_hash, returned_value = nil, &definition
         case method_name_or_hash
         when Hash
           hash = method_name_or_hash
@@ -139,7 +133,8 @@ module Crispy
       def prepend_features klass
         super
 
-        without_black_listed_methods(klass.public_instance_methods).each do|method_name|
+        klass.public_instance_methods.each do|method_name|
+          next if method_name == :__CRISPY_SPY__
           self.module_eval { define_wrapper(method_name) }
         end
         klass.protected_instance_methods.each do|method_name|
@@ -150,11 +145,6 @@ module Crispy
         end
       end
       private :prepend_features
-
-      def without_black_listed_methods method_names
-        method_names.reject {|method_name| BLACK_LISTED_METHODS.include? method_name }
-      end
-      private :without_black_listed_methods
 
       def assert_symbol! maybe_symbol
         unless maybe_symbol.respond_to?(:to_sym) && maybe_symbol.to_sym.instance_of?(::Symbol)
