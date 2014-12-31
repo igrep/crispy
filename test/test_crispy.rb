@@ -549,6 +549,8 @@ class TestCrispy < MiniTest::Test
     def test_double_can_be_spied
       assert spied? @double
 
+      assert_same @double.received_messages, spy(@double).received_messages
+
       assert @double.received?(:hoge)
       assert @double.received_once?(:hoge, :with, :any, :arguments)
       assert not(@double.received?(:hoge, 0, 0, 0))
