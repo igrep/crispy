@@ -119,6 +119,31 @@ Because `spy(object).received_messages` returns an array of `CrispyReceivedMessa
 => true
 ```
 
+### Stub Methods of a Spy
+
+```ruby
+>> spy(object).stub(:your_cool_method, 'Awesome!')
+>> object.your_cool_method
+=> "Awesome!"
+
+>> spy(object).stub(your_lovely_method: 'I love this method!', your_finalizer: 'Finalized!')
+>> object.your_lovely_method
+=> "I love this method!"
+>> object.your_finalizer
+=> "Finalized!"
+```
+
+Of cource stubbed methods are spied as well.
+
+```ruby
+>> spy(object).received? :your_cool_method
+=> true
+
+# `spy(object)` keeps its spied log of a method even after stubbing the method.
+>> spy(object).count_received :your_lovely_method
+=> 3
+```
+
 ### Spy on Instances of a Class
 
 ```ruby
@@ -187,31 +212,6 @@ If you want to restart spying, use `restart` method literally.
 >> instance.some_method_for_testing
 >> spy_of_instances(YourCoolClass::Again).received? :some_method_for_testing
 => true
-```
-
-### Stub Methods of a Spy
-
-```ruby
->> spy(object).stub(:your_cool_method, 'Awesome!')
->> object.your_cool_method
-=> "Awesome!"
-
->> spy(object).stub(your_lovely_method: 'I love this method!', your_finalizer: 'Finalized!')
->> object.your_lovely_method
-=> "I love this method!"
->> object.your_finalizer
-=> "Finalized!"
-```
-
-Of cource stubbed methods are spied as well.
-
-```ruby
->> spy(object).received? :your_cool_method
-=> true
-
-# `spy(object)` keeps its spied log of a method even after stubbing the method.
->> spy(object).count_received :your_lovely_method
-=> 3
 ```
 
 ### Stub Methods of a Double
