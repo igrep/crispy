@@ -1,29 +1,26 @@
 require 'crispy/crispy_received_message_with_receiver'
-require 'crispy/crispy_internal/spy_mixin'
-require 'crispy/crispy_internal/with_stubber'
+require 'crispy/crispy_internal/spy_base'
 
 module Crispy
   module CrispyInternal
-    class ClassSpy < ::Module
-      include SpyMixin
-      #include WithStubber
+    class ClassSpy < SpyBase
 
       @registry = {}
 
       def initialize klass#, stubs_map = {}
-        spy = self
-        super() do
-          define_method(:__CRISPY_CLASS_SPY__) { spy }
-        end
+        super
 
         @received_messages_with_receiver = []
-        initialize_spy
 
         #initialize_stubber stubs_map
         #prepend_stubber klass
 
         prepend_features klass
-        self.class.register spy: spy, of_class: klass
+        self.class.register spy: self, of_class: klass
+      end
+
+      def self.method_name_to_retrieve_spy
+        :__CRISPY_CLASS_SPY__
       end
 
       def received_messages

@@ -17,14 +17,14 @@ module Crispy
 
     def == other
       @method_name == other.method_name &&
-      @arguments == other.arguments &&
-      @attached_block == other.attached_block
+      @arguments == other.arguments # &&
+      # @attached_block == other.attached_block
     end
 
     CLASS_NAME = self.name
 
     def to_s
-      "#<#{CLASS_NAME}[#{(@method_name).inspect}, *#{@arguments.inspect}]>"
+      "#<#{CLASS_NAME}[#{@method_name.inspect}, *#{@arguments.inspect}]>"
     end
 
     alias inspect to_s
