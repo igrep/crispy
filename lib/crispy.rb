@@ -19,7 +19,7 @@ module Crispy
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
   def spy_into_instances klass, stubs_map = {}
-    ::Crispy::CrispyInternal::ClassSpy.new klass
+    ::Crispy::CrispyInternal::ClassSpy.new klass, stubs_map
   end
 
   def spy object

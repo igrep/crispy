@@ -74,7 +74,7 @@ module Crispy
       end
       private :define_wrapper
 
-      def self.new klass
+      def self.new klass, stubs_map = {}
         spy = self.of_class(klass)
         if spy
           spy.restart
