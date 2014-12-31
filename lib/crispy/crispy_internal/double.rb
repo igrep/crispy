@@ -16,6 +16,14 @@ module Crispy
         @spy.stub(*arguments, &definition)
       end
 
+      SpyBase::COMMON_RECEIVED_MESSAGE_METHODS_DEFINITION.each_key do|method_name|
+        binding.eval(<<-END, __FILE__, (__LINE__ + 1))
+          def #{method_name} received_method_name, *received_arguments, &received_block
+            @spy.#{method_name} received_method_name, *received_arguments, &received_block
+          end
+        END
+      end
+
     end
   end
 end
