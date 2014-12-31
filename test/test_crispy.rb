@@ -39,10 +39,13 @@ class TestCrispy < MiniTest::Test
     def baz
     end
     def method_to_stub1
-      fail "Not stubbed actually! The test fails."
+      'method to stub 1 (before stubbed)'
     end
     def method_to_stub2
-      fail "Not stubbed actually! The test fails."
+      'method to stub 2 (before stubbed)'
+    end
+    def method_to_stub3
+      'method to stub 3 (before stubbed)'
     end
 
     def private_foo a
@@ -253,12 +256,24 @@ class TestCrispy < MiniTest::Test
     end
 
     module CommonClassSpyTests
+
       def test_spy_changes_stubbed_method
         @object_instances.each do|object|
           assert_equal(:stubbed_instance_method1, object.method_to_stub1)
           assert_equal(:stubbed_instance_method2, object.method_to_stub2)
         end
       end
+
+      def test_spy_overrides_stubbed_methods
+        spy_into_instances object_class, method_to_stub2: 'xx', method_to_stub3: 'xxx'
+
+        @object_instances.each do|object|
+          assert_equal 'method to stub 1 (before stubbed)', object.method_to_stub1
+          assert_equal 'xx'                               , object.method_to_stub2
+          assert_equal 'xxx'                              , object.method_to_stub3
+        end
+      end
+
     end
 
     class TestReceivedMessage < self
@@ -360,10 +375,13 @@ class TestCrispy < MiniTest::Test
         def baz
         end
         def method_to_stub1
-          fail "Not stubbed actually! The test fails."
+          'method to stub 1 (before stubbed)'
         end
         def method_to_stub2
-          fail "Not stubbed actually! The test fails."
+          'method to stub 2 (before stubbed)'
+        end
+        def method_to_stub3
+          'method to stub 3 (before stubbed)'
         end
 
         def private_foo a

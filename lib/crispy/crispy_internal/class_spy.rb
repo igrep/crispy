@@ -69,6 +69,7 @@ module Crispy
         if spy
           spy.restart
           spy.erase_log
+          spy.reinitialize_stubber stubs_map
           spy
         else
           super
