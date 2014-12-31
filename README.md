@@ -216,6 +216,10 @@ If you want to restart spying, use `restart` method literally.
 
 ### Stub Methods of a Double
 
+Double can call Spy's method directly.
+You do NOT need to write code such as `spy(your_double).stub(...)`.
+Just `your_double.stub(...)`.
+
 ```ruby
 >> your_awesome_double = double('your awesome double', nice!: '+1!', sexy?: true)
 >> your_awesome_double.nice!
@@ -226,6 +230,18 @@ If you want to restart spying, use `restart` method literally.
 >> your_awesome_double.stub(:another_method, 'can be stubbed.')
 >> your_awesome_double.another_method
 => "can be stubbed."
+```
+
+### Spy on a Double
+
+A double is spied without `spy_into`-ing.
+And as `double.stub(...)`, Double can also call Spy's method such as `received?`
+
+```ruby
+>> your_awesome_double.received? :nice!
+=> true
+>> your_awesome_double.count_received :another_method
+=> 1
 ```
 
 ### Stub Constants
