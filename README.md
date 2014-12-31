@@ -203,6 +203,17 @@ If you want to restart spying, use `restart` method literally.
 => "Finalized!"
 ```
 
+Of cource stubbed methods are spied as well.
+
+```ruby
+>> spy(object).received? :your_cool_method
+=> true
+
+# `spy(object)` keeps its spied log of a method even after stubbing the method.
+>> spy(object).count_received :your_lovely_method
+=> 3
+```
+
 ### Stub Methods of a Double
 
 ```ruby
