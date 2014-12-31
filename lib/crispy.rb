@@ -27,7 +27,7 @@ module Crispy
   end
 
   def spy_of_instances klass
-    ::Crispy::CrispyInternal::ClassSpy.of_class(klass)
+    ::Crispy::CrispyInternal::ClassSpy.of_target(klass)
   end
 
   def stub_const full_const_name, value

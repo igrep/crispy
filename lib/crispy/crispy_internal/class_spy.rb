@@ -72,10 +72,6 @@ module Crispy
         @registry[of_class] = spy
       end
 
-      def self.of_class(klass)
-        @registry[klass]
-      end
-
     end
   end
 end
