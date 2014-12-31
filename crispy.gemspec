@@ -2,11 +2,6 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'crispy/version'
 
-# Define deprecated Config for rubydoctest, which dosen't work on Ruby 2.2 because using Config.
-if File.basename($PROGRAM_NAME) == 'rubydoctest'
-  Config = RbConfig
-end
-
 Gem::Specification.new do |spec|
   spec.name          = "crispy"
   spec.version       = Crispy::VERSION
@@ -30,7 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.4"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "byebug"
-  spec.add_development_dependency "rubydoctest"
 
   spec.required_ruby_version = '>= 2.0'
 end
