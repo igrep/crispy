@@ -7,20 +7,22 @@ module Crispy
 
       @registry = {}
 
-      def initialize klass#, stubs_map = {}
-        super
-
+      def initialize klass, stubs_map = {}
         @received_messages_with_receiver = []
 
-        #initialize_stubber stubs_map
-        #prepend_stubber klass
-
         prepend_features klass
+
+        super
+
         self.class.register spy: self, of_class: klass
       end
 
       def self.method_name_to_retrieve_spy
         :__CRISPY_CLASS_SPY__
+      end
+
+      def self.of_target klass
+        @registry[klass]
       end
 
       def received_messages
@@ -60,33 +62,11 @@ module Crispy
         @received_messages_with_receiver.clear
       end
 
-      def append_received_message_with_receiver receiver, method_name, *arguments, &attached_block
-        if @spying
-          @received_messages_with_receiver <<
-            ::Crispy::CrispyReceivedMessageWithReceiver.new(receiver, method_name, *arguments, &attached_block)
-        end
+      def append_received_message receiver, method_name, *arguments, &attached_block
+        @received_messages_with_receiver <<
+          ::Crispy::CrispyReceivedMessageWithReceiver.new(receiver, method_name, *arguments, &attached_block)
       end
-
-      def define_wrapper method_name
-        define_method method_name do|*arguments, &attached_block|
-          __CRISPY_CLASS_SPY__.append_received_message_with_receiver self, method_name, *arguments, &attached_block
-
-          super(*arguments, &attached_block)
-        end
-        method_name
-      end
-      private :define_wrapper
-
-      def self.new klass#, stubs_map = {}
-        spy = self.of_class(klass)
-        if spy
-          spy.restart
-          spy.erase_log
-          spy
-        else
-          super
-        end
-      end
+      private :append_received_message
 
       def self.register(spy: nil, of_class: nil)
         @registry[of_class] = spy

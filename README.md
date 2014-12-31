@@ -214,6 +214,17 @@ If you want to restart spying, use `restart` method literally.
 => true
 ```
 
+### Stub Methods of Instances of a Class
+
+```ruby
+>> spy_of_instances(YourCoolClass).stub(your_lovely_method: 'Even more lovely!', your_cool_method: 'much cooler!')
+
+>> instance1.your_lovely_method
+=> "Even more lovely!"
+>> instance2.your_cool_method
+=> "much cooler!"
+```
+
 ### Stub Methods of a Double
 
 Double can call Spy's method directly.

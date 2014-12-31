@@ -23,7 +23,23 @@ module Crispy
         @spying = true
       end
 
+      def self.new target, stubs_map = {}
+        spy = self.of_target(target)
+        if spy
+          spy.restart
+          spy.erase_log
+          spy.reinitialize_stubber stubs_map
+          spy
+        else
+          super
+        end
+      end
+
       def self.method_name_to_retrieve_spy
+        raise NotImplementedError
+      end
+
+      def self.of_target target
         raise NotImplementedError
       end
 
@@ -35,7 +51,7 @@ module Crispy
         raise NotImplementedError
       end
 
-      def define_wrapper
+      def append_received_message receiver, method_name, *arguments, &attached_block
         raise NotImplementedError
       end
 
@@ -45,6 +61,23 @@ module Crispy
 
       def restart
         @spying = true
+      end
+
+      def define_wrapper method_name
+        spy = self
+        define_method method_name do|*arguments, &attached_block|
+          spy.append_received_message_when_spying(self, method_name, *arguments, &attached_block)
+
+          super(*arguments, &attached_block)
+        end
+        method_name
+      end
+      private :define_wrapper
+
+      def append_received_message_when_spying receiver, method_name, *arguments, &attached_block
+        if @spying
+          append_received_message receiver, method_name, *arguments, &attached_block
+        end
       end
 
       COMMON_RECEIVED_MESSAGE_METHODS_DEFINITION = {
@@ -89,7 +122,7 @@ module Crispy
 
             # TODO: should not ignore arguments?
             define_method(method_name) do|*arguments, &block|
-              spy.append_received_message method_name, *arguments, &block
+              spy.append_received_message_when_spying self, method_name, *arguments, &block
               returned_value
             end
           end
