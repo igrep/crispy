@@ -8,11 +8,12 @@ module Crispy
       @registry = {}
 
       def initialize klass, stubs_map = {}
-        super
-
         @received_messages_with_receiver = []
 
         prepend_features klass
+
+        super
+
         self.class.register spy: self, of_class: klass
       end
 
