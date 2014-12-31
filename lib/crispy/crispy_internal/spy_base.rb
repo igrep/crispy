@@ -102,9 +102,7 @@ module Crispy
         END
       end
 
-      NOT_SPECIFIED = ::Object.new
-
-      def stub method_name_or_hash, returned_value = NOT_SPECIFIED, &definition
+      def stub method_name_or_hash, returned_value = nil, &definition
         case method_name_or_hash
         when Hash
           hash = method_name_or_hash
