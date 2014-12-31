@@ -510,6 +510,12 @@ class TestCrispy < MiniTest::Test
         assert_equal(0, @subject.count_received_with_receiver(@object_instances[2], :baz))
       end
 
+      def test_spy_raises_error_given_non_symbol_as_method_name
+        assert_raises(::TypeError){ @subject.received_with_receiver?(@object_instances[0], nil) }
+        assert_raises(::TypeError){ @subject.received_once_with_receiver?(@object_instances[0], nil) }
+        assert_raises(::TypeError){ @subject.count_received_with_receiver(@object_instances[0], nil) }
+      end
+
     end
 
   end
