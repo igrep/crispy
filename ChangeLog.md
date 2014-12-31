@@ -1,4 +1,4 @@
-# Next version (Unreleased)
+# 0.3.0 (2014.12.31)
 
 - New Feature: Add stub feature to `ClassSpy`. [#23](https://github.com/igrep/crispy/pull/23)
 - New Feature: Now double is automatically spied without `spy_into`. [#21](https://github.com/igrep/crispy/pull/21)
