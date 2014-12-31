@@ -7,13 +7,10 @@ module Crispy
 
       @registry = {}
 
-      def initialize klass#, stubs_map = {}
+      def initialize klass, stubs_map = {}
         super
 
         @received_messages_with_receiver = []
-
-        #initialize_stubber stubs_map
-        #prepend_stubber klass
 
         prepend_features klass
         self.class.register spy: self, of_class: klass
@@ -77,7 +74,7 @@ module Crispy
       end
       private :define_wrapper
 
-      def self.new klass#, stubs_map = {}
+      def self.new klass
         spy = self.of_class(klass)
         if spy
           spy.restart
