@@ -102,7 +102,7 @@ Each argument is compared by `==` method.
 #### Get more detailed log
 
 You can check arbitrary received methods with the familliar Array's (and of course including Enumerable's!) methods such as `any?`, `all`, `first`, `[]`, `index`.
-Because `spy(object).received_messages` returns an array of `CrispyReceivedMessage` instances.
+Because `spy(object).received_messages` returns an array of `CrispyReceivedMessage` instances.  
 **You don't have to remember the tons of matchers for received arguments any more!!**
 
 ```ruby
