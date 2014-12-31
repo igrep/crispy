@@ -14,7 +14,7 @@ class TestCrispy < MiniTest::Test
     end
 
     def test_spy_raises_error_given_non_symbol_as_method_name
-      assert_raises(::TypeError){ @subject.received_once?(nil) }
+      assert_raises(::TypeError){ @subject.received?(nil) }
       assert_raises(::TypeError){ @subject.received_once?(nil) }
       assert_raises(::TypeError){ @subject.count_received(nil) }
     end
