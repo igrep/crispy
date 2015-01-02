@@ -21,14 +21,7 @@ module Crispy
 
       def self.new target, stubs_map = {}
         spy = self.of_target(target)
-        if spy
-          spy.restart
-          spy.erase_log
-          spy.reinitialize_stubber stubs_map
-          spy
-        else
-          super
-        end
+        spy ? spy.reinitialize(stubs_map) : super
       end
 
       def self.of_target target
@@ -49,6 +42,13 @@ module Crispy
 
       def append_received_message receiver, method_name, *arguments, &attached_block
         raise NotImplementedError
+      end
+
+      def reinitialize stubs_map = {}
+        restart
+        erase_log
+        reinitialize_stubber stubs_map
+        self
       end
 
       def stop

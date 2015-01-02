@@ -70,6 +70,10 @@ module Crispy
         @registry[of_class] = spy
       end
 
+      def self.reset_all
+        @registry.each_value {|spy| spy.reinitialize }
+      end
+
     end
   end
 end

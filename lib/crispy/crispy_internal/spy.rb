@@ -1,9 +1,13 @@
 require 'crispy/crispy_received_message'
 require 'crispy/crispy_internal/spy_base'
 
+require 'weakref'
+
 module Crispy
   module CrispyInternal
     class Spy < SpyBase
+
+      @spies_to_reset = []
 
       attr_reader :received_messages
 
@@ -15,6 +19,8 @@ module Crispy
 
         @received_messages = []
         super
+
+        self.class.remember_to_reset_later self
       end
 
       def target_to_class target
@@ -36,6 +42,17 @@ module Crispy
           ::Crispy::CrispyReceivedMessage.new(method_name, *arguments, &attached_block)
       end
       private :append_received_message
+
+      def self.remember_to_reset_later spy
+        @spies_to_reset << ::WeakRef.new(spy)
+      end
+
+      def self.reset_all
+        # get rid of spies of GCed objects
+        @spies_to_reset.select! {|spy| spy.weakref_alive? }
+
+        @spies_to_reset.each {|spy| spy.reinitialize }
+      end
 
     end
   end
