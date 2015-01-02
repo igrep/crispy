@@ -226,6 +226,17 @@ class TestCrispy < MiniTest::Test
       assert_equal 'xxx'             , ObjectClass.stubbed_method3
     end
 
+    def test_spy_resets_stubbed_methods_after_resetting
+      CrispyWorld.reset
+      assert_equal 'before stubbed 1', ObjectClass.stubbed_method1
+      assert_equal 'before stubbed 2', ObjectClass.stubbed_method2
+    end
+
+    def test_spy_forgets_received_messages_after_resetting
+      CrispyWorld.reset
+      assert_empty @subject.received_messages
+    end
+
   end
 
   class TestCrispySpyIntoInstances < TestCrispy
@@ -272,6 +283,22 @@ class TestCrispy < MiniTest::Test
           assert_equal 'xx'                               , object.method_to_stub2
           assert_equal 'xxx'                              , object.method_to_stub3
         end
+      end
+
+      def test_spy_resets_stubbed_methods_after_resetting
+        ::Crispy::CrispyWorld.reset
+
+        @object_instances.each do|object|
+          assert_equal 'method to stub 1 (before stubbed)', object.method_to_stub1
+          assert_equal 'method to stub 2 (before stubbed)', object.method_to_stub2
+          assert_equal 'method to stub 3 (before stubbed)', object.method_to_stub3
+        end
+      end
+
+      def test_spy_forgets_received_messages_after_resetting
+        ::Crispy::CrispyWorld.reset
+        assert_empty @subject.received_messages
+        assert_empty @subject.received_messages_with_receiver
       end
 
     end
