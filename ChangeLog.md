@@ -1,6 +1,7 @@
 # 0.3.1 (unreleased)
 
 - Enhancement: Forget every spy log and reset every stubbed method by resetting. [#25](https://github.com/igrep/crispy/pull/25)
+- Fix bug: Not spied anymore after removing the stubbed methods when resetting. [`cb38ddf`](https://github.com/igrep/crispy/commit/cb38ddf6f0affe2ea884e4a16d7622dca51c1f2d)
 
 # 0.3.0 (2014.12.31)
 
