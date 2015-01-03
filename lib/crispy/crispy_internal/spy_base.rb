@@ -126,6 +126,7 @@ module Crispy
 
       def reinitialize_stubber stubs_map = {}
         remove_method(*@stubbed_methods)
+        @stubbed_methods.each {|stubbed_method| define_wrapper stubbed_method }
         @stubbed_methods.clear
         stub stubs_map
       end

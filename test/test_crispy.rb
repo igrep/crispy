@@ -237,6 +237,13 @@ class TestCrispy < MiniTest::Test
       assert_empty @subject.received_messages
     end
 
+    def test_spy_still_logs_methods_stubbed_once_after_resetting
+      CrispyWorld.reset
+
+      ObjectClass.stubbed_method1
+      assert_equal 1, spy(ObjectClass).count_received(:stubbed_method1)
+    end
+
   end
 
   class TestCrispySpyIntoInstances < TestCrispy
