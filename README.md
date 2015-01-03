@@ -268,11 +268,24 @@ Specify the **fully qualified name of the constant** instead of the constant its
 => "more cool value!"
 ```
 
-Then you can recover the stubbed constant value by `CrispyWorld.reset`.
+### Embedding Crispy into your Testing Framework
+
+Remember to reset all the changes made by Crispy, call `CrispyWorld.reset`.
 
 ```ruby
 >> CrispyWorld.reset
 
+>> spy(object).count_received :your_cool_method
+=> 0
+>> spy(object).count_received :your_lovely_method
+=> 0
+>> spy(object).received? :your_finalizer
+=> false
+
+>> object.your_cool_method
+=> "cool!"
+>> object.your_lovely_method
+=> "lovely!"
 >> YourCoolClass::YOUR_COOL_CONST
 => "value before stubbed"
 ```
