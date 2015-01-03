@@ -1,3 +1,7 @@
+# 0.3.1 (unreleased)
+
+- Enhancement: Forget every spy log and reset every stubbed method by resetting. [#25](https://github.com/igrep/crispy/pull/25)
+
 # 0.3.0 (2014.12.31)
 
 - New Feature: Add stub feature to `ClassSpy`. [#23](https://github.com/igrep/crispy/pull/23)
