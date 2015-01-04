@@ -134,15 +134,17 @@ module Crispy
       def prepend_features klass
         super
 
-        klass.public_instance_methods.each do|method_name|
-          next if method_name == :__CRISPY_SPY__
-          self.module_eval { define_wrapper(method_name) }
-        end
-        klass.protected_instance_methods.each do|method_name|
-          self.module_eval { protected define_wrapper(method_name) }
-        end
-        klass.private_instance_methods.each do|method_name|
-          self.module_eval { private define_wrapper(method_name) }
+        self.module_eval do
+          klass.public_instance_methods.each do|method_name|
+            next if method_name == :__CRISPY_SPY__
+            define_wrapper(method_name)
+          end
+          klass.protected_instance_methods.each do|method_name|
+            protected define_wrapper(method_name)
+          end
+          klass.private_instance_methods.each do|method_name|
+            private define_wrapper(method_name)
+          end
         end
       end
       private :prepend_features
