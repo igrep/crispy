@@ -1,3 +1,7 @@
+# Next version (Unreleased)
+
+- Refactor: minor changes. [`701a051`](https://github.com/igrep/crispy/commit/701a051d3910e8b9f0470c0f3e9cb81ed643f8af)
+
 # 0.3.1 (2015.1.3)
 
 - Enhancement: Forget every spy log and reset every stubbed method by resetting. [#25](https://github.com/igrep/crispy/pull/25)
