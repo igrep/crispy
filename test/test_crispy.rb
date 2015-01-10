@@ -92,6 +92,20 @@ class TestCrispy < MiniTest::Test
 
   end
 
+  class TestCrispySpiedInstances < TestCrispy
+
+    def test_spied_instances_class_is_spied_instances
+      klass = Class.new
+      spy_into_instances klass
+      assert spied_instances?(klass)
+    end
+
+    def test_non_spied_instances_class_is_not_spied_instances
+      assert not(spied_instances?(Class.new))
+    end
+
+  end
+
   class TestCrispyStubConst < TestCrispy
 
     def setup
