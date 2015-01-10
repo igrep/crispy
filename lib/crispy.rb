@@ -39,4 +39,8 @@ module Crispy
     defined? object.__CRISPY_SPY__
   end
 
+  def spied_instances? klass
+    !!::Crispy::CrispyInternal::ClassSpy.of_target(klass)
+  end
+
 end
