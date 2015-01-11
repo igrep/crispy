@@ -5,7 +5,7 @@ require 'crispy/version'
 Gem::Specification.new do |spec|
   spec.name          = "crispy"
   spec.version       = Crispy::VERSION
-  spec.authors       = ["Yamamoto Yuji"]
+  spec.authors       = ["Yuji Yamamoto"]
   spec.email         = ["whosekiteneverfly@gmail.com"]
   spec.summary       = %q{Test spy for any object.}
   spec.description   =
