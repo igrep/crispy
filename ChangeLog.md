@@ -1,4 +1,4 @@
-# Next version (Unreleased)
+# 0.3.2 (2015.1.11)
 
 - New Feature: `spied_instances?`. [#28](https://github.com/igrep/crispy/pull/28)
 - Enhancement only for developers of crispy: reduce the number of gems we install by `bundle install`.
