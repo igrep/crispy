@@ -1,5 +1,6 @@
 # Next version (Unreleased)
 
+- New Feature: `spied_instances?`. [#28](https://github.com/igrep/crispy/pull/28)
 - Refactor: minor changes. [`701a051`](https://github.com/igrep/crispy/commit/701a051d3910e8b9f0470c0f3e9cb81ed643f8af)
 
 # 0.3.1 (2015.1.3)
