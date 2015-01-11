@@ -1,7 +1,7 @@
 language: ruby
 install:
   - gem install bundler
-  - bundle
+  - CODECLIMATE_REPO_TOKEN=fe75ea4329c1e131ef79de66f8ba2f605fa2fd352bbbd61fed5024cb6eaaba73 bundle
 rvm:
   - ruby-head
   - 2.2.0
