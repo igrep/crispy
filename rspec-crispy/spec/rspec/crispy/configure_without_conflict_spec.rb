@@ -12,6 +12,11 @@ RSpec.describe ::RSpec::Crispy do
     include ::RSpec::Crispy::CrispyFeatures
 
     describe '#spy_into' do
+      it 'makes a spy once.' do
+        spy_into(::Crispy::CrispyInternal::Spy)
+        spy_into(Object.new)
+        expect(spy(::Crispy::CrispyInternal::Spy).count_received :new).to eq 1
+      end
     end
 
     describe '#spy' do
