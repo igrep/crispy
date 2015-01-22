@@ -22,5 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
 
   spec.add_runtime_dependency "rspec", "~> 3.0"
-  spec.add_runtime_dependency "crispy", ">= 0.3.2"
+  spec.add_runtime_dependency "crispy", ">= 0.3.2" unless ENV['USE_CRISPY_IN_THIS_REPOSITORY'] == '1'
 end
