@@ -16,6 +16,10 @@ RSpec.describe ::RSpec::Crispy do
         expect(spy_into(Object.new)).to be_instance_of ::Crispy::CrispyInternal::Spy
       end
     end
+
+    describe '#spy_into_instances' do
+      it 'makes a Crispy\'s class spy.' do
+        expect(spy_into_instances(Class.new)).to be_instance_of ::Crispy::CrispyInternal::ClassSpy
       end
     end
 
