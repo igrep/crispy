@@ -24,6 +24,13 @@ RSpec.describe ::RSpec::Crispy do
     end
 
     describe '#spy' do
+      it 'returns a Crispy\'s spy.' do
+        object = Object.new
+        spy_into(object)
+        expect(spy(object)).to be_instance_of ::Crispy::CrispyInternal::Spy
+      end
+    end
+
     end
 
     describe '#double' do
