@@ -15,7 +15,7 @@ module RSpec
       end
 
       def have_received_once method_name, *arguments
-        CrispyHaveReceived::Once.new method_name, *arguments
+        CrispyHaveReceived::NTimes.new 1, method_name, *arguments
       end
 
       class CrispyExpectAnyInstanceOf
@@ -53,15 +53,11 @@ module RSpec
         end
 
         def once
-          Once.new @method_name, *@arguments
+          NTimes.new 1, @method_name, *@arguments
         end
 
         def times n
-          if n == 1
-            Once.new @method_name, *@arguments
-          else
-            NTimes.new n, @method_name, *@arguments
-          end
+          NTimes.new n, @method_name, *@arguments
         end
 
         def failure_message
@@ -97,28 +93,6 @@ module RSpec
             subject.get_spy_of_instances
           else
             raise CrispyError "#{subject.inspect} is not spied!"
-          end
-        end
-
-        class Once < self
-          def matched_spy? spy
-            spy.received_once? @method_name, *@arguments
-          end
-
-          def failure_message
-            result = "Expected #{@subject.inspect} to have received :#@method_name method"
-            result << "with #@arguments" unless @arguments.empty?
-            result << "ONLY ONCE.\n"
-            result << actually_received_messages_for_failure_message
-            result
-          end
-
-          def failure_message_when_negated
-            result = "Expected #{@subject.inspect} to have received :#@method_name method"
-            result << "with #@arguments" unless @arguments.empty?
-            result << "NOT ONCE.\n"
-            result << actually_received_messages_for_failure_message
-            result
           end
         end
 
