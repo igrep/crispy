@@ -6,6 +6,35 @@ RSpec.configure do|config|
   ::RSpec::Crispy.configure_without_conflict config
 end
 
+class ObjectClass
+
+  CONSTANT_TO_STUB = ::Crispy.double('value_before_stubbed')
+
+  def self.hoge a, b, c
+    private_foo a
+    [a, b, c]
+  end
+  def self.foo
+    123
+  end
+
+  def self.stubbed_method1
+    'before stubbed 1'
+  end
+  def self.stubbed_method2
+    'before stubbed 2'
+  end
+  def self.stubbed_method3
+    'before stubbed 3'
+  end
+
+  def self.private_foo a
+    :private_foo
+  end
+  private_class_method :private_foo
+
+end
+
 RSpec.describe ::RSpec::Crispy do
 
   context 'when including' do
