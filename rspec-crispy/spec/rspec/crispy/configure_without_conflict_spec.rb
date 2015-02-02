@@ -72,6 +72,20 @@ RSpec.describe ::RSpec::Crispy do
     end
 
     describe '#have_received' do
+      before do
+        spy_into(ObjectClass)
+      end
+
+      context 'without arguments' do
+        subject { have_received() }
+
+      end
+
+      context 'with arguments' do
+        subject { have_received() }
+
+      end
+
     end
 
     describe '#have_received_once' do
