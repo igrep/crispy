@@ -69,6 +69,9 @@ RSpec.describe ::RSpec::Crispy do
     end
 
     describe '#double' do
+      it 'returns a Crispy\'s double.' do
+        expect(double('name')).to be_instance_of ::Crispy::CrispyInternal::Double
+      end
     end
 
     describe '#have_received' do
