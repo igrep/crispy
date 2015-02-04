@@ -18,6 +18,10 @@ class ObjectClass
     123
   end
 
+  def self.never_called *_arguments
+    fail 'You should not call this method!'
+  end
+
   def self.stubbed_method1
     'before stubbed 1'
   end
