@@ -32,7 +32,7 @@ class ObjectClass
     'before stubbed 3'
   end
 
-  def self.private_foo a
+  def self.private_foo _
     :private_foo
   end
   private_class_method :private_foo
