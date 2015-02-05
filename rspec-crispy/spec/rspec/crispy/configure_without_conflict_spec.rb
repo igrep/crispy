@@ -79,17 +79,33 @@ RSpec.describe ::RSpec::Crispy do
     end
 
     describe '#have_received' do
+      let!(:non_used_object){ ObjectClass.new }
       before do
         spy_into(ObjectClass)
+        ObjectClass.hoge 1, 1, 1
+        ObjectClass.hoge 2, 2, 2
+
+        spy_into(non_used_object)
       end
 
+      subject { have_received(method_name, *arguments) }
+
       context 'without arguments' do
-        subject { have_received() }
+        let(:arguments){ [] }
+
+        context 'given a method ObjectClass actually called' do
+          let(:method_name){ :hoge }
+
+          it { is_expected.to be_matches(ObjectClass) }
+
+          it 'doesn\'t match object spy_into-ed but not used.' do
+            is_expected.not_to be_matches(non_used_object)
+          end
+        end
 
       end
 
       context 'with arguments' do
-        subject { have_received() }
 
       end
 
@@ -97,6 +113,10 @@ RSpec.describe ::RSpec::Crispy do
 
     describe '#have_received_once' do
     end
+
+    describe '#expect_any_instance_of' do
+    end
+
   end
 
   context 'when not including' do
