@@ -49,7 +49,7 @@ class TestCrispy < MiniTest::Test
       'method to stub 3 (before stubbed)'
     end
 
-    def private_foo a
+    def private_foo _
       :private_foo
     end
     private :private_foo
