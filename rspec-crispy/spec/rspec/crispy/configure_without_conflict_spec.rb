@@ -103,6 +103,11 @@ RSpec.describe ::RSpec::Crispy do
           end
         end
 
+        context 'given a method ObjectClass didn\'t call' do
+          let(:method_name){ :never_called }
+          it { is_expected.not_to be_matches(ObjectClass) }
+        end
+
       end
 
       context 'with arguments' do
