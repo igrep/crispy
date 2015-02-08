@@ -112,6 +112,13 @@ RSpec.describe ::RSpec::Crispy do
 
       context 'with arguments' do
 
+        context 'given a method and arguments ObjectClass actually called' do
+          let(:method_name){ :hoge }
+          let(:arguments){ [1, 1, 1] }
+
+          it { is_expected.to be_matches(ObjectClass) }
+        end
+
       end
 
     end
