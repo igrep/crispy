@@ -98,8 +98,35 @@ RSpec.describe ::RSpec::Crispy do
 
           it { is_expected.to be_matches(ObjectClass) }
 
-          it 'doesn\'t match object spy_into-ed but not used.' do
-            is_expected.not_to be_matches(non_used_object)
+          context 'given an object spy_into-ed but not used as matches?\'s argument' do
+            let!(:result){ subject.matches? non_used_object }
+
+            it 'doesn\'t match' do
+              expect(result).to be false
+            end
+
+            it 'it produces failure_message' do
+              # The received message should be checked by your own eyes. Is it easy to read?
+              puts subject.failure_message
+            end
+
+            it 'its failure_message tells the subject has received no messages' do
+              expect(subject.failure_message).to include("Actually, it has received no messages.\n")
+            end
+
+          end
+
+          context 'given an object spy_into-ed but not recieved the specified method' do
+            before do
+              non_used_object.instance_hoge :argument
+              non_used_object.instance_foo
+            end
+            let!(:result){ subject.matches? non_used_object }
+
+            it 'doesn\'t match' do
+              expect(result).to be false
+            end
+
           end
         end
 
