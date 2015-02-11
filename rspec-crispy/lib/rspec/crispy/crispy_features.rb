@@ -83,6 +83,7 @@ module RSpec
             @spy_of_subject.received_messages.each do|received_message|
               result << "  it.#{received_message.method_name}(#{received_message.arguments.join(', '.freeze)})\n"
             end
+            result
           end
         end
 
