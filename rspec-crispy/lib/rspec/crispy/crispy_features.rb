@@ -81,7 +81,7 @@ module RSpec
           else
             result = "Actually, it has received these messages:\n"
             @spy_of_subject.received_messages.each do|received_message|
-              result << "  it.#{received_message.method_name}(#{received_message.join(', '.freeze)})\n"
+              result << "  it.#{received_message.method_name}(#{received_message.arguments.join(', '.freeze)})\n"
             end
           end
         end
