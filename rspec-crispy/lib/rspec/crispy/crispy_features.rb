@@ -77,9 +77,9 @@ module RSpec
 
         def actually_received_messages_for_failure_message
           if @spy_of_subject.received_messages.empty?
-            result << "Actually, it has received no messages.\n"
+            "Actually, it has received no messages.\n"
           else
-            result << "Actually, it has received these messages:\n"
+            result = "Actually, it has received these messages:\n"
             @spy_of_subject.received_messages.each do|received_message|
               result << "  it.#{received_message.method_name}(#{received_message.join(', '.freeze)})\n"
             end
