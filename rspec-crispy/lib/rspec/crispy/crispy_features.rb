@@ -62,7 +62,7 @@ module RSpec
 
         def failure_message
           result = "Expected #{@subject.inspect} to have received :#@method_name method"
-          result << "with #@arguments" unless @arguments.empty?
+          result << " with #@arguments" unless @arguments.empty?
           result << ".\n"
           result << actually_received_messages_for_failure_message
           result
@@ -70,7 +70,7 @@ module RSpec
 
         def failure_message_when_negated
           result = "Expected #{@subject.inspect} NOT to have received :#@method_name method"
-          result << "with #@arguments" unless @arguments.empty?
+          result << " with #@arguments" unless @arguments.empty?
           result << ". But actually received.\n"
           result
         end
@@ -110,8 +110,8 @@ module RSpec
 
           def failure_message
             result = "Expected #{@subject.inspect} to have received :#@method_name method"
-            result << "with #@arguments" unless @arguments.empty?
-            result << "some particular times.\n"
+            result << " with #@arguments" unless @arguments.empty?
+            result << " some particular times.\n"
             result << "  Expected: #@n times.\n"
             result << "    Actual: #@actual_count times.\n"
             result << actually_received_messages_for_failure_message
@@ -120,8 +120,8 @@ module RSpec
 
           def failure_message_when_negated
             result = "Expected #{@subject.inspect} to have received :#@method_name method"
-            result << "with #@arguments" unless @arguments.empty?
-            result << "NOT #@n times.\n"
+            result << " with #@arguments" unless @arguments.empty?
+            result << " NOT #@n times.\n"
             result << actually_received_messages_for_failure_message
             result
           end
