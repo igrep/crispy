@@ -128,11 +128,28 @@ RSpec.describe ::RSpec::Crispy do
             end
 
           end
+
         end
 
         context 'given a method ObjectClass didn\'t call' do
           let(:method_name){ :never_called }
-          it { is_expected.not_to be_matches(ObjectClass) }
+          let!(:result){ subject.matches? ObjectClass }
+
+          it 'doesn\'t match' do
+            expect(result).to be false
+          end
+
+          it 'it produces failure_message' do
+            # The received message should be checked by your own eyes. Is it easy to read?
+            puts subject.failure_message
+          end
+
+          it 'its failure_message tells ObjectClass\'s received messages' do
+            expect(subject.failure_message).to(
+              include('hoge(1, 1, 1)') & include('hoge(2, 2, 2)')
+            )
+          end
+
         end
 
       end
