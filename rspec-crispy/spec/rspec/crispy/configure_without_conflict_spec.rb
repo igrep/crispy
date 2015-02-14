@@ -90,6 +90,18 @@ RSpec.describe ::RSpec::Crispy do
 
       subject { have_received(method_name, *arguments) }
 
+      shared_examples_for 'doesn\'match and then produces failure_message' do
+        it 'doesn\'t match' do
+          expect(result).to be false
+        end
+
+        it 'it produces failure_message' do
+          # The received message should be checked by your own eyes. Is it easy to read?
+          puts subject.failure_message
+        end
+      end
+
+
       context 'without arguments' do
         let(:arguments){ [] }
 
@@ -101,30 +113,10 @@ RSpec.describe ::RSpec::Crispy do
           context 'given an object spy_into-ed but not used as matches?\'s argument' do
             let!(:result){ subject.matches? non_used_object }
 
-            it 'doesn\'t match' do
-              expect(result).to be false
-            end
-
-            it 'it produces failure_message' do
-              # The received message should be checked by your own eyes. Is it easy to read?
-              puts subject.failure_message
-            end
+            it_should_behave_like 'doesn\'match and then produces failure_message'
 
             it 'its failure_message tells the subject has received no messages' do
               expect(subject.failure_message).to include("Actually, it has received no messages.\n")
-            end
-
-          end
-
-          context 'given an object spy_into-ed but not recieved the specified method' do
-            before do
-              non_used_object.instance_hoge :argument
-              non_used_object.instance_foo
-            end
-            let!(:result){ subject.matches? non_used_object }
-
-            it 'doesn\'t match' do
-              expect(result).to be false
             end
 
           end
@@ -135,14 +127,7 @@ RSpec.describe ::RSpec::Crispy do
           let(:method_name){ :never_called }
           let!(:result){ subject.matches? ObjectClass }
 
-          it 'doesn\'t match' do
-            expect(result).to be false
-          end
-
-          it 'it produces failure_message' do
-            # The received message should be checked by your own eyes. Is it easy to read?
-            puts subject.failure_message
-          end
+          it_should_behave_like 'doesn\'match and then produces failure_message'
 
           it 'its failure_message tells ObjectClass\'s received messages' do
             expect(subject.failure_message).to(
