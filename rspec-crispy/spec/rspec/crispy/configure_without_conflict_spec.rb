@@ -10,6 +10,13 @@ class ObjectClass
 
   CONSTANT_TO_STUB = ::Crispy.double('value_before_stubbed')
 
+  def instance_hoge _, _, _
+  end
+  def instance_foo
+  end
+  def instance_never_called *_arguments
+  end
+
   def self.hoge a, b, c
     private_foo a
     [a, b, c]
