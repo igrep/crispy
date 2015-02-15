@@ -148,9 +148,15 @@ RSpec.describe ::RSpec::Crispy do
           it { is_expected.to be_matches(ObjectClass) }
         end
 
-      end
+        context 'given a method ObjectClass actually called, and not received arguments' do
+          let(:method_name){ :hoge }
+          let(:arguments){ [3, 3, 3] }
+          let!(:result){ subject.matches? ObjectClass }
 
-    end
+          it_should_behave_like 'doesn\'match and then produces failure_message'
+        end
+
+      end
 
     describe '#have_received_once' do
     end
