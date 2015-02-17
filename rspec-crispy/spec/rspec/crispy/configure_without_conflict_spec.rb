@@ -85,6 +85,17 @@ RSpec.describe ::RSpec::Crispy do
       end
     end
 
+    shared_examples_for 'doesn\'match and then produces failure_message' do
+      it 'doesn\'t match' do
+        expect(result).to be false
+      end
+
+      it 'it produces failure_message' do
+        # The received message should be checked by your own eyes. Is it easy to read?
+        puts subject.failure_message
+      end
+    end
+
     describe '#have_received' do
       let!(:non_used_object){ ObjectClass.new }
       before do
@@ -96,18 +107,6 @@ RSpec.describe ::RSpec::Crispy do
       end
 
       subject { have_received(method_name, *arguments) }
-
-      shared_examples_for 'doesn\'match and then produces failure_message' do
-        it 'doesn\'t match' do
-          expect(result).to be false
-        end
-
-        it 'it produces failure_message' do
-          # The received message should be checked by your own eyes. Is it easy to read?
-          puts subject.failure_message
-        end
-      end
-
 
       context 'without arguments' do
         let(:arguments){ [] }
