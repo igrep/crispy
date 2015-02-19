@@ -1,2 +1,4 @@
 --format documentation
 --colour
+--order random
+--warnings
