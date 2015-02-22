@@ -61,6 +61,7 @@ module RSpec
         end
 
         def failure_message
+          @spy_of_subject.stop
           result = "Expected #{@subject.inspect} to have received :#@method_name method"
           result << " with #@arguments" unless @arguments.empty?
           result << ".\n"
@@ -69,6 +70,7 @@ module RSpec
         end
 
         def failure_message_when_negated
+          @spy_of_subject.stop
           result = "Expected #{@subject.inspect} NOT to have received :#@method_name method"
           result << " with #@arguments" unless @arguments.empty?
           result << ". But actually received.\n"
