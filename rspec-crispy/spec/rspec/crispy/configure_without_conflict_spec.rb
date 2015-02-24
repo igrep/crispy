@@ -164,7 +164,57 @@ RSpec.describe ::RSpec::Crispy do
 
       end
 
-    describe '#have_received_once' do
+    end
+
+    describe '.have_received.once' do
+      before do
+        spy_into(ObjectClass)
+        ObjectClass.hoge 1, 1, 1
+        ObjectClass.hoge 2, 2, 2
+
+        spy_into(non_used_object)
+      end
+
+      subject { have_received(method_name, *arguments).once }
+
+      context 'without arguments' do
+        let(:arguments){ [] }
+
+        # TODO: WIP
+        context 'given a method ObjectClass\'s instances actually called' do
+          let(:method_name){ :instance_hoge }
+
+          it { is_expected.to be_matches(subject_of_matcher) }
+        end
+
+        # TODO: WIP
+        context 'given a method none of the ObjectClass\'s instances called' do
+          let(:method_name){ :instance_never_called }
+          let!(:result){ subject.matches? subject_of_matcher }
+
+          it_should_behave_like 'doesn\'match and then produces failure_message'
+        end
+
+      end
+
+      context 'with arguments' do
+
+        context 'given a method and arguments ObjectClass\'s instances actually called' do
+          let(:method_name){ :instance_hoge }
+          let(:arguments){ [9, 9, 9] }
+
+          it { is_expected.to be_matches(subject_of_matcher) }
+        end
+
+        context 'given a method ObjectClass\'s instances actually called, but given not received arguments' do
+          let(:method_name){ :instance_hoge }
+          let(:arguments){ [7, 7, 7] }
+          let!(:result){ subject.matches? subject_of_matcher }
+
+          it_should_behave_like 'doesn\'match and then produces failure_message'
+        end
+
+      end
     end
 
     describe '#expect_any_instance_of' do
