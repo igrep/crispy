@@ -73,13 +73,13 @@ module RSpec
           @spy_of_subject.stop
           result = "Expected #{@subject.inspect} NOT to have received :#@method_name method"
           result << " with #@arguments" unless @arguments.empty?
-          result << ". But actually received.\n"
+          result << ". But actually received.\n".freeze
           result
         end
 
         def actually_received_messages_for_failure_message
           if @spy_of_subject.received_messages.empty?
-            "Actually, it has received no messages.\n"
+            "Actually, it has received no messages.\n".freeze
           else
             result = "Actually, it has received these messages:\n"
             @spy_of_subject.received_messages.each do|received_message|
