@@ -167,6 +167,7 @@ RSpec.describe ::RSpec::Crispy do
     end
 
     describe '.have_received.once' do
+      let!(:non_used_object){ ObjectClass.new }
       before do
         spy_into(ObjectClass)
         ObjectClass.hoge 1, 1, 1
