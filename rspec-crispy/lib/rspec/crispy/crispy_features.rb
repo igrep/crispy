@@ -84,6 +84,7 @@ module RSpec
             result = "Actually, it has received these messages:\n"
             @spy_of_subject.received_messages.each do|received_message|
               arguments_for_message = received_message.arguments.map(&:inspect).join(', '.freeze)
+              # TODO: which instance actually received the message for ClassSpy
               result << "  it.#{received_message.method_name}(#{arguments_for_message})\n"
             end
             result
