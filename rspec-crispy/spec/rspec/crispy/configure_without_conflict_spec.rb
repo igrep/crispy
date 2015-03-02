@@ -170,6 +170,7 @@ RSpec.describe ::RSpec::Crispy do
       let!(:non_used_object){ ObjectClass.new }
       before do
         spy_into(ObjectClass)
+        ObjectClass.foo
         ObjectClass.hoge 1, 1, 1
         ObjectClass.hoge 2, 2, 2
 
@@ -182,16 +183,23 @@ RSpec.describe ::RSpec::Crispy do
         let(:arguments){ [] }
 
         # TODO: WIP
-        context 'given a method ObjectClass\'s instances actually called' do
-          let(:method_name){ :instance_hoge }
+        context 'given a method ObjectClass actually called once' do
+          let(:method_name){ :foo }
 
-          it { is_expected.to be_matches(subject_of_matcher) }
+          it { is_expected.to be_matches(ObjectClass) }
+        end
+
+        context 'given a method ObjectClass actually called more than once' do
+          let(:method_name){ :hoge }
+          let!(:result){ subject.matches? ObjectClass }
+
+          it_should_behave_like 'doesn\'match and then produces failure_message'
         end
 
         # TODO: WIP
-        context 'given a method none of the ObjectClass\'s instances called' do
-          let(:method_name){ :instance_never_called }
-          let!(:result){ subject.matches? subject_of_matcher }
+        context 'given a method ObjectClass didn\'t call' do
+          let(:method_name){ :never_called }
+          let!(:result){ subject.matches? ObjectClass }
 
           it_should_behave_like 'doesn\'match and then produces failure_message'
         end
@@ -204,13 +212,13 @@ RSpec.describe ::RSpec::Crispy do
           let(:method_name){ :instance_hoge }
           let(:arguments){ [9, 9, 9] }
 
-          it { is_expected.to be_matches(subject_of_matcher) }
+          it { is_expected.to be_matches(ObjectClass) }
         end
 
         context 'given a method ObjectClass\'s instances actually called, but given not received arguments' do
           let(:method_name){ :instance_hoge }
           let(:arguments){ [7, 7, 7] }
-          let!(:result){ subject.matches? subject_of_matcher }
+          let!(:result){ subject.matches? ObjectClass }
 
           it_should_behave_like 'doesn\'match and then produces failure_message'
         end
