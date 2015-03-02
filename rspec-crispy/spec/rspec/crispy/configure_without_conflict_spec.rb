@@ -173,6 +173,7 @@ RSpec.describe ::RSpec::Crispy do
         ObjectClass.foo
         ObjectClass.hoge 1, 1, 1
         ObjectClass.hoge 2, 2, 2
+        ObjectClass.hoge 2, 2, 2
 
         spy_into(non_used_object)
       end
@@ -208,16 +209,16 @@ RSpec.describe ::RSpec::Crispy do
 
       context 'with arguments' do
 
-        context 'given a method and arguments ObjectClass\'s instances actually called' do
-          let(:method_name){ :instance_hoge }
-          let(:arguments){ [9, 9, 9] }
+        context 'given a method and arguments ObjectClass\'s instances actually called once' do
+          let(:method_name){ :hoge }
+          let(:arguments){ [1, 1, 1] }
 
           it { is_expected.to be_matches(ObjectClass) }
         end
 
-        context 'given a method ObjectClass\'s instances actually called, but given not received arguments' do
-          let(:method_name){ :instance_hoge }
-          let(:arguments){ [7, 7, 7] }
+        context 'given a method ObjectClass\'s instances actually called once, but given arguments received twice' do
+          let(:method_name){ :hoge }
+          let(:arguments){ [2, 2, 2] }
           let!(:result){ subject.matches? ObjectClass }
 
           it_should_behave_like 'doesn\'match and then produces failure_message'
