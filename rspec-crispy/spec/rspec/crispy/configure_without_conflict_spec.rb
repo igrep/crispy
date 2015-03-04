@@ -183,7 +183,6 @@ RSpec.describe ::RSpec::Crispy do
       context 'without arguments' do
         let(:arguments){ [] }
 
-        # TODO: WIP
         context 'given a method ObjectClass actually called once' do
           let(:method_name){ :foo }
 
@@ -197,7 +196,6 @@ RSpec.describe ::RSpec::Crispy do
           it_should_behave_like 'doesn\'match and then produces failure_message'
         end
 
-        # TODO: WIP
         context 'given a method ObjectClass didn\'t call' do
           let(:method_name){ :never_called }
           let!(:result){ subject.matches? ObjectClass }
