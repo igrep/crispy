@@ -92,9 +92,8 @@ module RSpec
         end
 
         def spy_of_subject subject
-          if ::Crispy.spied? subject
-            ::Crispy.spy(subject)
-          elsif subject.instance_of? ExpectAnyInstanceOf
+          # Don't use instance_of? method. it records received_messages.
+          if CrispyExpectAnyInstanceOf === subject
             subject.get_spy_of_instances
           else
             raise CrispyError "#{subject.inspect} is not spied!"
@@ -114,6 +113,7 @@ module RSpec
           end
 
           def failure_message
+            @spy_of_subject.stop
             result = "Expected #{@subject.inspect} to have received :#@method_name method"
             result << " with #@arguments" unless @arguments.empty?
             result << " some particular times.\n"
@@ -124,6 +124,7 @@ module RSpec
           end
 
           def failure_message_when_negated
+            @spy_of_subject.stop
             result = "Expected #{@subject.inspect} to have received :#@method_name method"
             result << " with #@arguments" unless @arguments.empty?
             result << " NOT #@n times.\n"
