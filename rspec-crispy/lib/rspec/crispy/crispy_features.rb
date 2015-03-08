@@ -14,10 +14,6 @@ module RSpec
         CrispyHaveReceived.new method_name, *arguments
       end
 
-      def have_received_once method_name, *arguments
-        CrispyHaveReceived::NTimes.new 1, method_name, *arguments
-      end
-
       class CrispyExpectAnyInstanceOf
 
         def initialize klass
