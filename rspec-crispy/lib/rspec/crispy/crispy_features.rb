@@ -25,6 +25,10 @@ module RSpec
           ::Crispy.spy_of_instances(@klass)
         end
 
+        def inspect
+          "<Some Instances of #@klass>"
+        end
+
       end
 
       class CrispyHaveReceived
