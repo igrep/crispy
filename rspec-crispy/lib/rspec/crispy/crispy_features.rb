@@ -53,7 +53,7 @@ module RSpec
         end
 
         def once
-          NTimes.new 1, @method_name, *@arguments
+          times 1
         end
 
         def times n
