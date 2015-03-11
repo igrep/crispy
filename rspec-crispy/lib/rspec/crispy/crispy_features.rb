@@ -21,7 +21,6 @@ module RSpec
         end
 
         def get_spy_of_instances
-          raise CrispyError "#{klass} does not have its instances spied!" unless ::Crispy.spied_instances? klass
           ::Crispy.spy_of_instances(@klass)
         end
 
@@ -96,7 +95,7 @@ module RSpec
           if CrispyExpectAnyInstanceOf === subject
             subject.get_spy_of_instances
           else
-            raise CrispyError "#{subject.inspect} is not spied!"
+            ::Crispy.spy(subject)
           end
         end
 
@@ -136,9 +135,6 @@ module RSpec
 
       end
 
-    end
-
-    class CrispyError < ::Exception
     end
 
   end
