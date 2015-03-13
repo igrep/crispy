@@ -204,6 +204,10 @@ class TestCrispy < MiniTest::Test
       assert_equal(:stubbed2, @object.method_to_stub2)
     end
 
+    def test_spy_raises_an_error_given_non_spied_object
+      assert_raises(::Crispy::CrispyError){ spy(ObjectClass.new) }
+    end
+
   end
 
   class TestCrispySpyIntoClass < TestCrispy
@@ -257,6 +261,10 @@ class TestCrispy < MiniTest::Test
 
       ObjectClass.stubbed_method1
       assert_equal 1, spy(ObjectClass).count_received(:stubbed_method1)
+    end
+
+    def test_spy_of_instances_raises_an_error_given_non_spied_instances_object
+      assert_raises(::Crispy::CrispyError){ spy_of_instances(Class.new) }
     end
 
   end
