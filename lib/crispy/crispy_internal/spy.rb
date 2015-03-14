@@ -49,9 +49,12 @@ module Crispy
 
       def self.reset_all
         # get rid of spies of GCed objects
-        @spies_to_reset.select! {|spy| spy.weakref_alive? }
-
-        @spies_to_reset.each {|spy| spy.reinitialize }
+        @spies_to_reset.select! do|spy|
+          if alive = spy.weakref_alive?
+            spy.reinitialize
+          end
+          alive
+        end
       end
 
     end
