@@ -24,10 +24,14 @@ module Crispy
 
   def spy object
     object.__CRISPY_SPY__
+  rescue ::NoMethodError
+    object_string = object.inspect rescue 'object' # BasicObject can't inspect!
+    raise ::Crispy::CrispyError, "#{object_string} is not spied!"
   end
 
   def spy_of_instances klass
-    ::Crispy::CrispyInternal::ClassSpy.of_target(klass)
+    ::Crispy::CrispyInternal::ClassSpy.of_target(klass) \
+      || raise(::Crispy::CrispyError, "#{klass} does not have its instances spied!")
   end
 
   def stub_const full_const_name, value
@@ -41,6 +45,9 @@ module Crispy
 
   def spied_instances? klass
     !!::Crispy::CrispyInternal::ClassSpy.of_target(klass)
+  end
+
+  class CrispyError < ::Exception
   end
 
 end
