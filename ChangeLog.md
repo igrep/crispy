@@ -1,7 +1,12 @@
+# 0.3.3 (2015.3.27)
+
+- Fix Bug: Causes a crash when some of `@spies_to_reset` gets GCed just before `reinitialize`. [3a1ce2d](https://github.com/igrep/crispy/commit/3a1ce2dfc25ba48d07505b6ed1d7125f393e9579)
+- Enhancement: raise error when given some non spied object (or class) by mistake. [4719652](https://github.com/igrep/crispy/commit/4719652d35292749b76fd2531bfec83a4d383a66 )
+
 # 0.3.2 (2015.1.11)
 
 - New Feature: `spied_instances?`. [#28](https://github.com/igrep/crispy/pull/28)
-- Enhancement only for developers of crispy: reduce the number of gems we install by `bundle install`.
+- Enhancement: only for developers of crispy: reduce the number of gems we install by `bundle install`.
 - Refactor: minor changes. [`701a051`](https://github.com/igrep/crispy/commit/701a051d3910e8b9f0470c0f3e9cb81ed643f8af)
 
 # 0.3.1 (2015.1.3)
