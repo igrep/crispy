@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "minitest", "~> 5"
   spec.add_development_dependency "rubydoctest", ">= 1.1.5"
-  spec.add_development_dependency "github-changelog-generator"
+  spec.add_development_dependency "github_changelog_generator"
 
   spec.required_ruby_version = '>= 2.0'
 end
