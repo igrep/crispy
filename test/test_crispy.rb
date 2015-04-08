@@ -633,7 +633,7 @@ class TestCrispy < MiniTest::Test
       assert_same @expected_baz, @actual_baz
     end
 
-    def test_double_can_be_spied
+    def test_double_is_spied
       assert spied? @double
 
       assert_same @double.received_messages, spy(@double).received_messages
@@ -657,6 +657,23 @@ class TestCrispy < MiniTest::Test
       assert not(@double.received?(:non_used_method))
       assert not(@double.received_once?(:non_used_method))
       assert_equal 0, @double.count_received(:non_used_method)
+    end
+
+    def test_double_doesnt_spy_spy_methods
+      @double.stub(a: 0)
+      @double.received? :hoge
+      @double.received_once? :hoge
+      @double.count_received :hoge
+
+      should_not_logged = %i[
+        received? received_once? count_received
+        stub received_messages
+      ]
+
+      assert_empty(
+        @double.received_messages.select {|received_messages| should_not_logged.include? received_messages.method_name }
+      )
+
     end
 
   end
