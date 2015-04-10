@@ -9,8 +9,8 @@ module Crispy
   module_function
 
   # Returns a Spy object to wrap all methods of the object.
-  def spy_into object, stubs_map = {}
-    ::Crispy::CrispyInternal::Spy.new object, stubs_map
+  def spy_into object, except: []
+    ::Crispy::CrispyInternal::Spy.new object, except: except
   end
 
   def double name_or_stubs_map = nil, stubs_map = {}
@@ -18,8 +18,8 @@ module Crispy
   end
 
   # Make and returns a Crispy::ClassSpy's instance to spy all instances of a class.
-  def spy_into_instances klass, stubs_map = {}
-    ::Crispy::CrispyInternal::ClassSpy.new klass, stubs_map
+  def spy_into_instances klass, except: []
+    ::Crispy::CrispyInternal::ClassSpy.new klass, except: except
   end
 
   def spy object

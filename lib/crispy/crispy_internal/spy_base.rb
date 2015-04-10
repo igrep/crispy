@@ -10,18 +10,19 @@ module Crispy
         :__CRISPY_SPY__,
       ]
 
-      def initialize target, stubs_map = {}
+      def initialize target, except: []
+        @exceptions = except
+
         prepend_features target_to_class(target)
 
         @stubbed_methods = []
-        stub stubs_map
 
         @spying = true
       end
 
-      def self.new target, stubs_map = {}
+      def self.new target, except: []
         spy = self.of_target(target)
-        spy ? spy.reinitialize(stubs_map) : super
+        spy ? spy.reinitialize(except: except) : super
       end
 
       def self.of_target target
@@ -44,10 +45,10 @@ module Crispy
         raise NotImplementedError
       end
 
-      def reinitialize stubs_map = {}
+      def reinitialize except: []
         restart
         erase_log
-        reinitialize_stubber stubs_map
+        reinitialize_stubber
         self
       end
 
@@ -124,11 +125,10 @@ module Crispy
         self
       end
 
-      def reinitialize_stubber stubs_map = {}
+      def reinitialize_stubber
         remove_method(*@stubbed_methods)
         @stubbed_methods.each {|stubbed_method| define_wrapper stubbed_method }
         @stubbed_methods.clear
-        stub stubs_map
       end
 
       def prepend_features klass
@@ -136,7 +136,7 @@ module Crispy
 
         self.module_eval do
           klass.public_instance_methods.each do|method_name|
-            next if method_name == :__CRISPY_SPY__
+            next if method_name == :__CRISPY_SPY__ || @exceptions.include?(method_name)
             define_wrapper(method_name)
           end
           klass.protected_instance_methods.each do|method_name|

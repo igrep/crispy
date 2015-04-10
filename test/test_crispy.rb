@@ -132,9 +132,8 @@ class TestCrispy < MiniTest::Test
     def setup
       @object = ObjectClass.new
 
-      @returned_spy = spy_into(
-        @object, method_to_stub1: :stubbed1, method_to_stub2: :stubbed2
-      )
+      @returned_spy = spy_into(@object)
+      @returned_spy.stub(method_to_stub1: :stubbed1, method_to_stub2: :stubbed2)
 
       @object.hoge 1, 2, 3
       @object.foo
@@ -213,7 +212,7 @@ class TestCrispy < MiniTest::Test
   class TestCrispySpyIntoClass < TestCrispy
 
     def setup
-      spy_into ObjectClass, stubbed_method1: 1, stubbed_method2: 2
+      spy_into(ObjectClass).stub(stubbed_method1: 1, stubbed_method2: 2)
 
       ObjectClass.hoge 1, 2, 3
       ObjectClass.foo
@@ -238,7 +237,7 @@ class TestCrispy < MiniTest::Test
     end
 
     def test_spy_overrides_stubbed_methods
-      spy_into ObjectClass, stubbed_method2: 'xx', stubbed_method3: 'xxx'
+      spy_into(ObjectClass).stub(stubbed_method2: 'xx', stubbed_method3: 'xxx')
 
       assert_equal 'before stubbed 1', ObjectClass.stubbed_method1
       assert_equal 'xx'              , ObjectClass.stubbed_method2
@@ -276,9 +275,8 @@ class TestCrispy < MiniTest::Test
     end
 
     def setup
-      @returned_spy = spy_into_instances(
-        object_class, method_to_stub1: :stubbed_instance_method1, method_to_stub2: :stubbed_instance_method2
-      )
+      @returned_spy = spy_into_instances(object_class)
+      @returned_spy.stub(method_to_stub1: :stubbed_instance_method1, method_to_stub2: :stubbed_instance_method2)
 
       @subject = spy_of_instances(object_class)
       @object_instances = Array.new(3){ object_class.new }
@@ -306,7 +304,7 @@ class TestCrispy < MiniTest::Test
       end
 
       def test_spy_overrides_stubbed_methods
-        spy_into_instances object_class, method_to_stub2: 'xx', method_to_stub3: 'xxx'
+        spy_into_instances(object_class).stub(method_to_stub2: 'xx', method_to_stub3: 'xxx')
 
         @object_instances.each do|object|
           assert_equal 'method to stub 1 (before stubbed)', object.method_to_stub1
