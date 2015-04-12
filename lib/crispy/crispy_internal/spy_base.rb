@@ -11,7 +11,7 @@ module Crispy
       ]
 
       def initialize target, except: []
-        @exceptions = except
+        @exceptions = except.map(&:to_sym)
 
         prepend_features target_to_class(target)
 
@@ -46,6 +46,7 @@ module Crispy
       end
 
       def reinitialize except: []
+        @exceptions.replace except.map(&:to_sym)
         restart
         erase_log
         reinitialize_stubber
