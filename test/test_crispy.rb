@@ -62,6 +62,11 @@ class TestCrispy < MiniTest::Test
       123
     end
 
+    def self.non_spied1
+    end
+    def self.non_spied2
+    end
+
     def self.stubbed_method1
       'before stubbed 1'
     end
@@ -212,11 +217,12 @@ class TestCrispy < MiniTest::Test
   class TestCrispySpyIntoClass < TestCrispy
 
     def setup
-      spy_into(ObjectClass).stub(stubbed_method1: 1, stubbed_method2: 2)
+      spy_into(ObjectClass, except: :non_spied1).stub(stubbed_method1: 1, stubbed_method2: 2)
 
       ObjectClass.hoge 1, 2, 3
       ObjectClass.foo
       ObjectClass.hoge 3, 4, 5
+      ObjectClass.non_spied1
 
       @subject = spy(ObjectClass)
     end
@@ -264,6 +270,10 @@ class TestCrispy < MiniTest::Test
 
     def test_spy_of_instances_raises_an_error_given_non_spied_instances_object
       assert_raises(::Crispy::CrispyError){ spy_of_instances(Class.new) }
+    end
+
+    def test_spy_ignores_exceptions
+      assert not(spy(ObjectClass).received? :non_spied1)
     end
 
   end
