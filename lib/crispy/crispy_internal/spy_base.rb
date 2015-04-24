@@ -151,9 +151,11 @@ module Crispy
             define_wrapper(method_name)
           end
           klass.protected_instance_methods.each do|method_name|
+            next if @exceptions.include?(method_name)
             protected define_wrapper(method_name)
           end
           klass.private_instance_methods.each do|method_name|
+            next if @exceptions.include?(method_name)
             private define_wrapper(method_name)
           end
         end
