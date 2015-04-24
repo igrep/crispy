@@ -276,6 +276,18 @@ class TestCrispy < MiniTest::Test
       assert not(spy(ObjectClass).received? :non_spied1)
     end
 
+    def test_spy_overwrites_exceptions_by_spy_into_again
+      assert not(spy(ObjectClass).received? :non_spied1)
+
+      spy_into(ObjectClass, except: :non_spied2)
+
+      ObjectClass.non_spied1
+      ObjectClass.non_spied2
+
+      assert spy(ObjectClass).received? :non_spied1
+      assert not(spy(ObjectClass).received? :non_spied2)
+    end
+
   end
 
   class TestCrispySpyIntoInstances < TestCrispy
