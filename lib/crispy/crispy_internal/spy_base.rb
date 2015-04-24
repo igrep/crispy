@@ -155,16 +155,13 @@ module Crispy
 
         self.module_eval do
           klass.public_instance_methods.each do|method_name|
-            next if method_name == :__CRISPY_SPY__ || @exceptions.include?(method_name)
-            define_wrapper(method_name)
+            define_wrapper(method_name) if method_name != :__CRISPY_SPY__ && !(@exceptions.include?(method_name))
           end
           klass.protected_instance_methods.each do|method_name|
-            next if @exceptions.include?(method_name)
-            protected define_wrapper(method_name)
+            protected define_wrapper(method_name) unless @exceptions.include?(method_name)
           end
           klass.private_instance_methods.each do|method_name|
-            next if @exceptions.include?(method_name)
-            private define_wrapper(method_name)
+            private define_wrapper(method_name) unless @exceptions.include?(method_name)
           end
         end
       end
@@ -173,16 +170,13 @@ module Crispy
       def redefine_wrappers klass, method_names
         self.module_eval do
           klass.public_instance_methods.each do|method_name|
-            next if method_name == :__CRISPY_SPY__ || !(method_names.include?(method_name))
-            define_wrapper(method_name)
+            define_wrapper(method_name) if method_name != :__CRISPY_SPY__ && method_names.include?(method_name)
           end
           klass.protected_instance_methods.each do|method_name|
-            next unless method_names.include?(method_name)
-            protected define_wrapper(method_name)
+            protected define_wrapper(method_name) if method_names.include?(method_name)
           end
           klass.private_instance_methods.each do|method_name|
-            next unless method_names.include?(method_name)
-            private define_wrapper(method_name)
+            private define_wrapper(method_name) if method_names.include?(method_name)
           end
         end
       end
