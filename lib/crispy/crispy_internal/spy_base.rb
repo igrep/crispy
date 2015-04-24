@@ -150,34 +150,35 @@ module Crispy
         @stubbed_methods.clear
       end
 
+      %w[only except].each do|inclusion|
+        not_sign = inclusion == 'except'.freeze ? '!'.freeze : ''.freeze
+        %w[public protected private].each do|visibility|
+          binding.eval(<<-END, __FILE__, (__LINE__ + 1))
+            def define_#{visibility}_wrappers_#{inclusion} klass, targets
+              klass.#{visibility}_instance_methods.each do|method_name|
+                #{visibility} define_wrapper(method_name) if method_name != :__CRISPY_SPY__ && #{not_sign}targets.include?(method_name)
+              end
+            end
+          END
+        end
+      end
+
       def prepend_features klass
         super
 
         self.module_eval do
-          klass.public_instance_methods.each do|method_name|
-            define_wrapper(method_name) if method_name != :__CRISPY_SPY__ && !(@exceptions.include?(method_name))
-          end
-          klass.protected_instance_methods.each do|method_name|
-            protected define_wrapper(method_name) unless @exceptions.include?(method_name)
-          end
-          klass.private_instance_methods.each do|method_name|
-            private define_wrapper(method_name) unless @exceptions.include?(method_name)
-          end
+          define_public_wrappers_except(klass, @exceptions)
+          define_protected_wrappers_except(klass, @exceptions)
+          define_private_wrappers_except(klass, @exceptions)
         end
       end
       private :prepend_features
 
       def redefine_wrappers klass, method_names
         self.module_eval do
-          klass.public_instance_methods.each do|method_name|
-            define_wrapper(method_name) if method_name != :__CRISPY_SPY__ && method_names.include?(method_name)
-          end
-          klass.protected_instance_methods.each do|method_name|
-            protected define_wrapper(method_name) if method_names.include?(method_name)
-          end
-          klass.private_instance_methods.each do|method_name|
-            private define_wrapper(method_name) if method_names.include?(method_name)
-          end
+          define_public_wrappers_only(klass, method_names)
+          define_protected_wrappers_only(klass, method_names)
+          define_private_wrappers_only(klass, method_names)
         end
       end
 
