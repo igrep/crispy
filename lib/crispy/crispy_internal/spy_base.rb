@@ -22,7 +22,7 @@ module Crispy
 
       def self.new target, except: []
         spy = self.of_target(target)
-        spy ? spy.reinitialize(except: except) : super
+        spy ? spy.reinitialize(target, except: except) : super
       end
 
       def self.of_target target
@@ -45,8 +45,18 @@ module Crispy
         raise NotImplementedError
       end
 
-      def reinitialize except: []
-        @exceptions.replace Array(except).map(&:to_sym)
+      def reinitialize target = nil, except: []
+        if target
+          given_exceptions = Array(except).map(&:to_sym)
+
+          new_exceptions = given_exceptions - @exceptions
+          remove_method(*new_exceptions)
+
+          old_exceptions = @exceptions - given_exceptions
+          redefine_wrappers target_to_class(target), old_exceptions
+
+          @exceptions.replace given_exceptions
+        end
         restart
         erase_log
         reinitialize_stubber
@@ -149,6 +159,23 @@ module Crispy
         end
       end
       private :prepend_features
+
+      def redefine_wrappers klass, method_names
+        self.module_eval do
+          klass.public_instance_methods.each do|method_name|
+            next if method_name == :__CRISPY_SPY__ || !(method_names.include?(method_name))
+            define_wrapper(method_name)
+          end
+          klass.protected_instance_methods.each do|method_name|
+            next unless method_names.include?(method_name)
+            protected define_wrapper(method_name)
+          end
+          klass.private_instance_methods.each do|method_name|
+            next unless method_names.include?(method_name)
+            private define_wrapper(method_name)
+          end
+        end
+      end
 
       def assert_symbol! maybe_symbol
         unless maybe_symbol.respond_to?(:to_sym) && maybe_symbol.to_sym.instance_of?(::Symbol)
