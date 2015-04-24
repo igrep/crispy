@@ -22,7 +22,12 @@ module Crispy
 
       def self.new target, except: []
         spy = self.of_target(target)
-        spy ? spy.reinitialize(target, except: except) : super
+        if spy
+          spy.update_exceptions(target, except)
+          spy.reinitialize
+        else
+          super
+        end
       end
 
       def self.of_target target
@@ -45,22 +50,25 @@ module Crispy
         raise NotImplementedError
       end
 
-      def reinitialize target = nil, except: []
-        if target
-          given_exceptions = Array(except).map(&:to_sym)
-
-          new_exceptions = given_exceptions - @exceptions
-          remove_method(*new_exceptions)
-
-          old_exceptions = @exceptions - given_exceptions
-          redefine_wrappers target_to_class(target), old_exceptions
-
-          @exceptions.replace given_exceptions
-        end
+      def reinitialize
         restart
         erase_log
         reinitialize_stubber
         self
+      end
+
+      def update_exceptions target, exceptions
+        return if exceptions.empty?
+
+        given_exceptions = Array(exceptions).map(&:to_sym)
+
+        new_exceptions = given_exceptions - @exceptions
+        remove_method(*new_exceptions)
+
+        old_exceptions = @exceptions - given_exceptions
+        redefine_wrappers target_to_class(target), old_exceptions
+
+        @exceptions.replace given_exceptions
       end
 
       def stop
