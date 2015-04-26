@@ -10,18 +10,24 @@ module Crispy
         :__CRISPY_SPY__,
       ]
 
-      def initialize target, stubs_map = {}
+      def initialize target, except: []
+        @exceptions = Array(except).map(&:to_sym)
+
         prepend_features target_to_class(target)
 
         @stubbed_methods = []
-        stub stubs_map
 
         @spying = true
       end
 
-      def self.new target, stubs_map = {}
+      def self.new target, except: []
         spy = self.of_target(target)
-        spy ? spy.reinitialize(stubs_map) : super
+        if spy
+          spy.update_exceptions(target, except)
+          spy.reinitialize
+        else
+          super
+        end
       end
 
       def self.of_target target
@@ -44,11 +50,25 @@ module Crispy
         raise NotImplementedError
       end
 
-      def reinitialize stubs_map = {}
+      def reinitialize
         restart
         erase_log
-        reinitialize_stubber stubs_map
+        reinitialize_stubber
         self
+      end
+
+      def update_exceptions target, exceptions
+        return if exceptions.empty?
+
+        given_exceptions = Array(exceptions).map(&:to_sym)
+
+        new_exceptions = given_exceptions - @exceptions
+        remove_method(*new_exceptions)
+
+        old_exceptions = @exceptions - given_exceptions
+        redefine_wrappers target_to_class(target), old_exceptions
+
+        @exceptions.replace given_exceptions
       end
 
       def stop
@@ -124,30 +144,43 @@ module Crispy
         self
       end
 
-      def reinitialize_stubber stubs_map = {}
+      def reinitialize_stubber
         remove_method(*@stubbed_methods)
         @stubbed_methods.each {|stubbed_method| define_wrapper stubbed_method }
         @stubbed_methods.clear
-        stub stubs_map
+      end
+
+      %w[only except].each do|inclusion|
+        not_sign = inclusion == 'except'.freeze ? '!'.freeze : ''.freeze
+        %w[public protected private].each do|visibility|
+          binding.eval(<<-END, __FILE__, (__LINE__ + 1))
+            def define_#{visibility}_wrappers_#{inclusion} klass, targets
+              klass.#{visibility}_instance_methods.each do|method_name|
+                #{visibility} define_wrapper(method_name) if method_name != :__CRISPY_SPY__ && #{not_sign}targets.include?(method_name)
+              end
+            end
+          END
+        end
       end
 
       def prepend_features klass
         super
 
         self.module_eval do
-          klass.public_instance_methods.each do|method_name|
-            next if method_name == :__CRISPY_SPY__
-            define_wrapper(method_name)
-          end
-          klass.protected_instance_methods.each do|method_name|
-            protected define_wrapper(method_name)
-          end
-          klass.private_instance_methods.each do|method_name|
-            private define_wrapper(method_name)
-          end
+          define_public_wrappers_except(klass, @exceptions)
+          define_protected_wrappers_except(klass, @exceptions)
+          define_private_wrappers_except(klass, @exceptions)
         end
       end
       private :prepend_features
+
+      def redefine_wrappers klass, method_names
+        self.module_eval do
+          define_public_wrappers_only(klass, method_names)
+          define_protected_wrappers_only(klass, method_names)
+          define_private_wrappers_only(klass, method_names)
+        end
+      end
 
       def assert_symbol! maybe_symbol
         unless maybe_symbol.respond_to?(:to_sym) && maybe_symbol.to_sym.instance_of?(::Symbol)

@@ -10,6 +10,10 @@ class YourCoolClass
   end
   def your_finalizer *args
   end
+  def method_to_ignore1
+  end
+  def method_to_ignore2
+  end
 
   class Again < self
     def your_another_method *args

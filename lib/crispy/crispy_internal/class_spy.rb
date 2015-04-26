@@ -7,7 +7,7 @@ module Crispy
 
       @registry = {}
 
-      def initialize klass, stubs_map = {}
+      def initialize klass, except: []
         @received_messages_with_receiver = []
 
         super

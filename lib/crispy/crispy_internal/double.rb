@@ -2,13 +2,15 @@ module Crispy
   module CrispyInternal
     class Double
 
+      SPY_METHODS = %i[received_messages stub] + SpyBase::COMMON_RECEIVED_MESSAGE_METHODS_DEFINITION.keys
+
       def initialize name_or_stubs_map = nil, stubs_map = {}
         if name_or_stubs_map.is_a? ::Hash
           @name = ''.freeze
-          @spy = ::Crispy.spy_into(self, name_or_stubs_map)
+          spy_into_self_as_double(name_or_stubs_map)
         else
           @name = name_or_stubs_map
-          @spy = ::Crispy.spy_into(self, stubs_map)
+          spy_into_self_as_double(stubs_map)
         end
       end
 
@@ -27,6 +29,11 @@ module Crispy
           end
         END
       end
+
+      def spy_into_self_as_double stubs_map
+        @spy = ::Crispy.spy_into(self, except: SPY_METHODS).stub(stubs_map)
+      end
+      private :spy_into_self_as_double
 
     end
   end

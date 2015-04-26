@@ -11,7 +11,7 @@ module Crispy
 
       attr_reader :received_messages
 
-      def initialize target, stubs_map = {}
+      def initialize target, except: []
         spy = self
         module_eval do
           define_method(:__CRISPY_SPY__) { spy }

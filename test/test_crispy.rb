@@ -62,6 +62,11 @@ class TestCrispy < MiniTest::Test
       123
     end
 
+    def self.non_spied1
+    end
+    def self.non_spied2
+    end
+
     def self.stubbed_method1
       'before stubbed 1'
     end
@@ -132,9 +137,8 @@ class TestCrispy < MiniTest::Test
     def setup
       @object = ObjectClass.new
 
-      @returned_spy = spy_into(
-        @object, method_to_stub1: :stubbed1, method_to_stub2: :stubbed2
-      )
+      @returned_spy = spy_into(@object)
+      @returned_spy.stub(method_to_stub1: :stubbed1, method_to_stub2: :stubbed2)
 
       @object.hoge 1, 2, 3
       @object.foo
@@ -213,11 +217,12 @@ class TestCrispy < MiniTest::Test
   class TestCrispySpyIntoClass < TestCrispy
 
     def setup
-      spy_into ObjectClass, stubbed_method1: 1, stubbed_method2: 2
+      spy_into(ObjectClass, except: :non_spied1).stub(stubbed_method1: 1, stubbed_method2: 2)
 
       ObjectClass.hoge 1, 2, 3
       ObjectClass.foo
       ObjectClass.hoge 3, 4, 5
+      ObjectClass.non_spied1
 
       @subject = spy(ObjectClass)
     end
@@ -238,7 +243,7 @@ class TestCrispy < MiniTest::Test
     end
 
     def test_spy_overrides_stubbed_methods
-      spy_into ObjectClass, stubbed_method2: 'xx', stubbed_method3: 'xxx'
+      spy_into(ObjectClass).stub(stubbed_method2: 'xx', stubbed_method3: 'xxx')
 
       assert_equal 'before stubbed 1', ObjectClass.stubbed_method1
       assert_equal 'xx'              , ObjectClass.stubbed_method2
@@ -267,6 +272,22 @@ class TestCrispy < MiniTest::Test
       assert_raises(::Crispy::CrispyError){ spy_of_instances(Class.new) }
     end
 
+    def test_spy_ignores_exceptions
+      assert not(spy(ObjectClass).received? :non_spied1)
+    end
+
+    def test_spy_overwrites_exceptions_by_spy_into_again
+      assert not(spy(ObjectClass).received? :non_spied1)
+
+      spy_into(ObjectClass, except: :non_spied2)
+
+      ObjectClass.non_spied1
+      ObjectClass.non_spied2
+
+      assert spy(ObjectClass).received? :non_spied1
+      assert not(spy(ObjectClass).received? :non_spied2)
+    end
+
   end
 
   class TestCrispySpyIntoInstances < TestCrispy
@@ -276,9 +297,8 @@ class TestCrispy < MiniTest::Test
     end
 
     def setup
-      @returned_spy = spy_into_instances(
-        object_class, method_to_stub1: :stubbed_instance_method1, method_to_stub2: :stubbed_instance_method2
-      )
+      @returned_spy = spy_into_instances(object_class)
+      @returned_spy.stub(method_to_stub1: :stubbed_instance_method1, method_to_stub2: :stubbed_instance_method2)
 
       @subject = spy_of_instances(object_class)
       @object_instances = Array.new(3){ object_class.new }
@@ -306,7 +326,7 @@ class TestCrispy < MiniTest::Test
       end
 
       def test_spy_overrides_stubbed_methods
-        spy_into_instances object_class, method_to_stub2: 'xx', method_to_stub3: 'xxx'
+        spy_into_instances(object_class).stub(method_to_stub2: 'xx', method_to_stub3: 'xxx')
 
         @object_instances.each do|object|
           assert_equal 'method to stub 1 (before stubbed)', object.method_to_stub1
@@ -633,7 +653,7 @@ class TestCrispy < MiniTest::Test
       assert_same @expected_baz, @actual_baz
     end
 
-    def test_double_can_be_spied
+    def test_double_is_spied
       assert spied? @double
 
       assert_same @double.received_messages, spy(@double).received_messages
@@ -657,6 +677,23 @@ class TestCrispy < MiniTest::Test
       assert not(@double.received?(:non_used_method))
       assert not(@double.received_once?(:non_used_method))
       assert_equal 0, @double.count_received(:non_used_method)
+    end
+
+    def test_double_doesnt_spy_spy_methods
+      @double.stub(a: 0)
+      @double.received? :hoge
+      @double.received_once? :hoge
+      @double.count_received :hoge
+
+      should_not_logged = %i[
+        received? received_once? count_received
+        stub received_messages
+      ]
+
+      assert_empty(
+        @double.received_messages.select {|received_messages| should_not_logged.include? received_messages.method_name }
+      )
+
     end
 
   end
