@@ -268,6 +268,25 @@ Specify the **fully qualified name of the constant** instead of the constant its
 => "more cool value!"
 ```
 
+### Configure Methods which Spy Should NOT Log
+
+Sometimes, you may want to make a spy ignore some methods.
+
+```ruby
+>> x = YourCoolClass.new
+>> spy_into x, except: [:method_to_ignore1, :method_to_ignore2]
+>> x.method_to_ignore1
+>> x.method_to_ignore2
+>> x.your_cool_method
+
+>> spy(x).received? :method_to_ignore1
+=> false
+>> spy(x).received? :method_to_ignore2
+=> false
+>> spy(x).received? :your_cool_method
+=> true
+```
+
 ### Embedding Crispy into your Testing Framework
 
 Remember to reset all the changes made by Crispy, call `CrispyWorld.reset`.
