@@ -1,3 +1,12 @@
+# 0.4.0 (2015.4.29)
+
+- New Feature: Spy blacklist [\#37](https://github.com/igrep/crispy/pull/37).
+    - **Important**: Adding this feature changes the keyword arguments of Crispy.spy_into into `except` optional argument instead of stubbed methods.  
+      If you specify stubbed methods, use `stub` methods of a spy.
+- Fix Bug: Spy spy-methods of double unintentionally [\#30](https://github.com/igrep/crispy/issues/30), [\#37](https://github.com/igrep/crispy/pull/37).
+- Minor Enhancement: Update Ruby versions to test on Travis CI [\#36](https://github.com/igrep/crispy/pull/36).
+- Minor Enhancement: Specify minimum rubydoctest version. [da3ddaa](https://github.com/igrep/crispy/commit/da3ddaa37d912b81aa3a23f366765cc9fd47c387)
+
 # 0.3.3 (2015.3.27)
 
 - Fix Bug: Causes a crash when some of `@spies_to_reset` gets GCed just before `reinitialize`. [3a1ce2d](https://github.com/igrep/crispy/commit/3a1ce2dfc25ba48d07505b6ed1d7125f393e9579)
